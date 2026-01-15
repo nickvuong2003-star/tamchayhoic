@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Nhặt Đồng Nhỏ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+<style>
+body{margin:0;background:#000;overflow:hidden;font-family:system-ui}
+
+/* START */
+#start{position:fixed;inset:0;z-index:10}
+#start img{width:100%;height:100%;object-fit:cover}
+
+/* HUD */
+#hud{
+ position:fixed;top:12px;left:12px;
+ color:#fff;font-weight:bold;
+ text-shadow:0 2px 4px rgba(0,0,0,.8);
+ z-index:5
+}
+
+/* PROGRESS BAR */
+#progressBox{
+ position:fixed;top:70px;left:12px;
+ width:160px;height:12px;
+ background:#333;border-radius:8px;
+ overflow:hidden
+}
+#progress{
+ height:100%;width:0%;
+ background:linear-gradient(90deg,#ffd166,#ff8c00)
+}
+
+/* CANVAS */
+#game{
+ position:fixed;
+ top:50%;left:50%;
+ transform:translate(-50%,-50%)
+}
+
+/* ÔNG BỤT */
+#but{
+ position:fixed;
+ top:-160px;left:50%;
+ transform:translateX(-50%);
+ width:120px;
+ opacity:0;
+ transition:.5s ease;
+ z-index:8
+}
+#but.show{top:80px;opacity:1}
+
+/* RỔ CÁ */
+#basketDrop{
+ position:fixed;
+ top:140px;left:50%;
+ transform:translateX(-50%) scale(.5);
+ width:60px;
+ opacity:0;
+ transition:.6s cubic-bezier(.2,.8,.3,1);
+ z-index:9;
+ pointer-events:none
+}
+
+/* GAME OVER */
+#over{
+ position:fixed;inset:0;
+ display:none;
+ align-items:center;
+ justify-content:center;
+ flex-direction:column;
+ background:rgba(0,0,0,.9);
+ color:#fff;
+ z-index:10;
+ padding:20px
+}
+
+#summary{
+ background:#111;
+ padding:14px;
+ border-radius:12px;
+ width:100%;
+ max-width:320px;
+ margin-bottom:12px;
+ text-align:left
+}
+
+/* NAME INPUT */
+#nameBox{
+ background:#111;
+ padding:14px;
+ border-radius:12px;
+ width:100%;
+ max-width:320px;
+ margin-bottom:12px
+}
+#nameBox input{
+ width:100%;
+ padding:10px;
+ border-radius:8px;
+ border:none;
+ margin-top:6px
+}
+
+/* LEADERBOARD */
+#leaderboard{
+ display:none;
+ background:#fff;
+ color:#000;
+ border-radius:12px;
+ width:100%;
+ max-width:320px;
+ padding:14px
+}
+.rank{display:flex;justify-content:space-between}
+.rank.you{font-weight:bold;color:#d97706}
+
+button{
+ margin-top:10px;
+ padding:12px 28px;
+ border:none;border-radius:16px;
+ font-size:17px;font-weight:bold;
+ background:#ffb703
+}
+</style>
+</head>
+
+<body>
+
+<div id="start" onclick="startGame()">
+ <img src="assets/start.png">
+</div>
+
+<img id="but" src="assets/but.png">
+<img id="basketDrop" src="assets/basket.png">
+
+<div id="hud">
+ 💰 Xu: <span id="coinEl">0</span><br>
+ 🧺 Giỏ cá: <span id="basketEl">0</span>
+</div>
+
+<div id="progressBox"><div id="progress"></div></div>
+
+<div id="over">
+ <h2>🏁 KẾT THÚC</h2>
+
+ <div id="summary"></div>
+
+ <div id="nameBox">
+  <label>🏷 Tên người chơi</label>
+  <input id="playerName" placeholder="Nhập tên">
+  <button onclick="saveScore()">LƯU ĐIỂM</button>
+ </div>
+
+ <div id="leaderboard">
+  <h3>🏆 Bảng xếp hạng (💰 Xu)</h3>
+  <div id="rankList"></div>
+ </div>
+
+ <button onclick="location.reload()">CHƠI LẠI</button>
+</div>
+
+<canvas id="game" width="360" height="640"></canvas>
+
+<script>
+/* ===== AUTO CLEAR LEADERBOARD (VERSIONING) ===== */
+const GAME_VERSION = "1.3-coin-only";
+const savedVersion = localStorage.getItem("game_version");
+
+if (savedVersion !== GAME_VERSION) {
+    console.log("🧹 Clearing old leaderboard data");
+    localStorage.removeItem("leaderboard");
+    localStorage.setItem("game_version", GAME_VERSION);
+}
+
+/* CANVAS SCALE */
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
+function resize(){
+ const s=Math.min(innerWidth/360,innerHeight/640);
+ canvas.style.width=360*s+"px";
+ canvas.style.height=640*s+"px";
+}
+resize(); addEventListener("resize",resize);
+
+/* IMAGES */
+const roadImg=new Image(); roadImg.src="assets/road.png";
+const playerImg=new Image(); playerImg.src="assets/cotam-run.png";
+const coinImg=new Image(); coinImg.src="assets/coin.png";
+
+/* SOUND */
+const sCoin=new Audio("assets/coin.mp3");
+const sBasket=new Audio("assets/basket.mp3");
+const sHit=new Audio("assets/hit.mp3");
+
+/* GAME STATE */
+let run=false, coin=0, basket=0;
+let speed=4, roadY=0;
+const lanes=[60,180,300];
+let player={lane:1,y:520};
+
+let coins=[], obstacles=[];
+let coinTimer=0, obstacleTimer=0;
+
+/* SPRITE */
+const RUN_FRAMES=4;
+let runFrame=0, runTick=0;
+let SPRITE_W=0, SPRITE_H=0;
+playerImg.onload=()=>{
+ SPRITE_W=playerImg.width/RUN_FRAMES;
+ SPRITE_H=playerImg.height;
+};
+
+/* START */
+function startGame(){
+ start.style.display="none";
+ run=true; loop();
+}
+
+/* CONTROL */
+canvas.addEventListener("touchstart",e=>{
+ const x=e.touches[0].clientX;
+ player.lane = x < innerWidth/2
+  ? Math.max(0,player.lane-1)
+  : Math.min(2,player.lane+1);
+});
+
+/* SPAWN */
+const spawnCoin=()=>coins.push({lane:Math.floor(Math.random()*3),y:-20});
+const spawnObstacleWave=()=>{
+ const free=Math.floor(Math.random()*3);
+ for(let l=0;l<3;l++)
+  if(l!==free && Math.random()<0.7)
+   obstacles.push({lane:l,y:-40});
+};
+
+/* ÔNG BỤT + RỔ CÁ */
+function dropBasket(){
+ but.classList.add("show");
+ basketDrop.style.opacity=1;
+ basketDrop.style.top="140px";
+ basketDrop.style.transform="translateX(-50%) scale(.5)";
+ setTimeout(()=>{
+  basketDrop.style.top="20px";
+  basketDrop.style.transform="translateX(-50%) scale(1)";
+  sBasket.play();
+  basket++;
+  basketEl.innerText=basket;
+ },300);
+ setTimeout(()=>{
+  basketDrop.style.opacity=0;
+  but.classList.remove("show");
+ },1200);
+}
+
+/* LOOP */
+function loop(){
+ if(!run)return;
+ ctx.clearRect(0,0,360,640);
+
+ roadY+=speed;
+ if(roadY>=640)roadY=0;
+ ctx.drawImage(roadImg,0,roadY-640,360,640);
+ ctx.drawImage(roadImg,0,roadY,360,640);
+
+ runTick++; if(runTick%6===0)runFrame=(runFrame+1)%RUN_FRAMES;
+ if(SPRITE_W){
+  ctx.drawImage(
+   playerImg,runFrame*SPRITE_W,0,SPRITE_W,SPRITE_H,
+   lanes[player.lane]-22,player.y-50,44,66
+  );
+ }
+
+ for(let i=coins.length-1;i>=0;i--){
+  const c=coins[i];
+  c.y+=speed;
+  ctx.drawImage(coinImg,lanes[c.lane]-12,c.y-12,24,24);
+  if(c.lane===player.lane && Math.abs(c.y-player.y)<20){
+   coins.splice(i,1);
+   coin++; sCoin.play();
+   coinEl.innerText=coin;
+   progress.style.width=(coin%50)/50*100+"%";
+   if(coin%50===0){
+    progress.style.width="0%";
+    dropBasket();
+   }
+  }
+ }
+
+ for(let i=obstacles.length-1;i>=0;i--){
+  const o=obstacles[i];
+  o.y+=speed;
+  ctx.fillStyle="#c0392b";
+  ctx.fillRect(lanes[o.lane]-16,o.y,32,32);
+  if(o.lane===player.lane && Math.abs(o.y-player.y)<24){
+   endGame(); return;
+  }
+ }
+
+ coinTimer++; obstacleTimer++;
+ if(coinTimer>30){spawnCoin();coinTimer=0}
+ if(obstacleTimer>90){spawnObstacleWave();obstacleTimer=0}
+
+ requestAnimationFrame(loop);
+}
+
+/* END */
+function endGame(){
+ run=false; sHit.play();
+ const v=Math.floor(basket/3);
+ let text=`💰 Xu: ${coin}\n🧺 Giỏ cá: ${basket}`;
+ if(v>0) text+=`\n🎟 Voucher: ${v}`;
+ summary.innerText=text;
+ over.style.display="flex";
+}
+
+/* SAVE LEADERBOARD (THEO XU) */
+function saveScore(){
+ const name = playerName.value || "Player";
+ let lb = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+ lb.push({ name, coin });
+ lb.sort((a,b)=>b.coin - a.coin);
+ lb = lb.slice(0,5);
+ localStorage.setItem("leaderboard", JSON.stringify(lb));
+
+ nameBox.style.display="none";
+ leaderboard.style.display="block";
+ rankList.innerHTML="";
+ lb.forEach((r,i)=>{
+  const d=document.createElement("div");
+  d.className="rank"+(r.name===name&&r.coin===coin?" you":"");
+  d.innerHTML=`#${i+1} ${r.name} <span>💰 ${r.coin}</span>`;
+  rankList.appendChild(d);
+ });
+}
+</script>
+</body>
+</html>
