@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Nhặt Đồng Nhỏ - Ví MoMo</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, viewport-fit=cover">
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -15,10 +15,16 @@ body{
  display:flex;
  align-items:center;
  justify-content:center;
- height:100svh;
+ height:100vh;
  background: linear-gradient(135deg, #1a0033 0%, #330066 50%, #4d0099 100%);
- position: relative;
- overflow: hidden;
+ position: fixed;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ width: 100%;
+ height: 100%;
+ -webkit-tap-highlight-color: transparent;
 }
 
 /* GAME WRAPPER */
@@ -28,18 +34,23 @@ body{
  height:640px;
  transform-origin: center center;
  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
+ touch-action: manipulation;
+ -webkit-user-select: none;
+ user-select: none;
 }
 
-/* INTRO SCREEN - GIỮ NGUYÊN NHƯ CŨ */
+/* INTRO SCREEN */
 #start{
  position:absolute;
  inset:0;
  z-index:50;
+ cursor: pointer;
 }
 #start img{
  width:100%;
  height:100%;
  object-fit:cover;
+ pointer-events: none;
 }
 
 /* INSTRUCTION SCREEN */
@@ -59,6 +70,7 @@ body{
 #instructionBox{
  background: rgba(255, 255, 255, 0.15);
  backdrop-filter: blur(20px);
+ -webkit-backdrop-filter: blur(20px);
  border: 2px solid rgba(255, 255, 255, 0.25);
  padding:30px;
  border-radius:25px;
@@ -146,6 +158,7 @@ body{
  border: 2px solid rgba(255, 215, 0, 0.3);
  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
  backdrop-filter: blur(10px);
+ -webkit-backdrop-filter: blur(10px);
 }
 .hud-item {
  display: flex;
@@ -204,9 +217,10 @@ canvas{
  box-shadow: 
   0 20px 40px rgba(0, 0, 0, 0.4),
   0 0 0 2px rgba(255, 215, 0, 0.2);
+ -webkit-touch-callout: none;
 }
 
-/* BUTTONS */
+/* BUTTONS - FIX LỖI CHỮ */
 .btn-momo{
  margin-top:20px;
  padding:16px 36px;
@@ -224,6 +238,8 @@ canvas{
  position: relative;
  overflow: hidden;
  z-index: 1;
+ -webkit-appearance: none;
+ text-transform: uppercase; /* THÊM CHỮ IN HOA */
 }
 .btn-momo::before {
  content: '';
@@ -258,12 +274,16 @@ canvas{
  transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
  z-index:15;
  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+ pointer-events: none;
 }
 #but.show{
  top:100px;
  opacity:1;
  transform: translateX(-50%) scale(1.1);
  animation: butFloat 3s ease-in-out infinite;
+}
+#but.hide{
+ animation: butHide 0.5s ease forwards;
 }
 
 /* RỔ CÁ */
@@ -285,13 +305,13 @@ canvas{
  animation: basketBounce 0.6s ease;
 }
 
-/* GAME OVER */
+/* GAME OVER - FIX SCROLL */
 #over{
  position:absolute;
  inset:0;
  display:none;
  align-items:center;
- justify-content:center;
+ justify-content:flex-start;
  flex-direction:column;
  background: linear-gradient(135deg, rgba(165, 0, 100, 0.95) 0%, rgba(214, 0, 110, 0.95) 30%, rgba(255, 0, 119, 0.95) 100%);
  color:#fff;
@@ -299,14 +319,26 @@ canvas{
  padding:30px;
  text-align:center;
  backdrop-filter: blur(10px);
+ -webkit-backdrop-filter: blur(10px);
+ overflow-y: auto;
+ padding-bottom: 100px;
+ -webkit-overflow-scrolling: touch;
+}
+#over-content {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ width: 100%;
+ max-width: 340px;
+ margin: 0 auto;
 }
 #summary{
  background: rgba(255, 255, 255, 0.15);
  backdrop-filter: blur(20px);
+ -webkit-backdrop-filter: blur(20px);
  padding:25px;
  border-radius:25px;
  width:100%;
- max-width:340px;
  margin-bottom:20px;
  text-align:center;
  border: 2px solid rgba(255, 255, 255, 0.25);
@@ -339,8 +371,8 @@ canvas{
  color: #A50064;
  padding:25px;
  border-radius:25px;
- max-width:340px;
- margin-bottom:25px;
+ width:100%;
+ margin-bottom:20px;
  text-align:center;
  border: 3px solid rgba(255, 255, 255, 0.7);
  box-shadow: 
@@ -382,18 +414,54 @@ canvas{
  animation: codePulse 2s ease-in-out infinite;
 }
 
-/* LEADERBOARD */
+/* NAME BOX */
+#nameBox{
+ background: rgba(255, 255, 255, 0.15);
+ backdrop-filter: blur(20px);
+ -webkit-backdrop-filter: blur(20px);
+ padding:25px;
+ border-radius:25px;
+ width:100%;
+ margin-bottom:20px;
+ text-align:center;
+ border: 2px solid rgba(255, 255, 255, 0.25);
+ box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+#nameBox label{
+ display: block;
+ margin-bottom: 10px;
+ color: #FFD700;
+ font-weight: bold;
+ font-size: 18px;
+}
+#playerName{
+ width: 100%;
+ padding: 15px;
+ border-radius: 15px;
+ border: 2px solid rgba(255, 215, 0, 0.5);
+ background: rgba(255, 255, 255, 0.9);
+ margin: 10px 0 20px;
+ font-size: 16px;
+ color: #A50064;
+ font-weight: bold;
+ text-align: center;
+ -webkit-appearance: none;
+}
+
+/* LEADERBOARD - BỎ SCROLL */
 #leaderboard{
  display:none;
  background: rgba(255, 255, 255, 0.95);
  color: #A50064;
  border-radius:25px;
  width:100%;
- max-width:340px;
  padding:25px;
  margin: 20px 0;
  border: 3px solid #FFD700;
  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+ /* BỎ CÁC DÒNG NÀY:
+   max-height: 300px;
+   overflow-y: auto; */
 }
 #leaderboard h3{
  margin-top: 0;
@@ -408,16 +476,11 @@ canvas{
  display:flex;
  justify-content:space-between;
  align-items: center;
- padding: 15px;
- margin: 10px 0;
- border-radius: 15px;
+ padding: 12px 15px;
+ margin: 8px 0;
+ border-radius: 12px;
  background: rgba(255, 215, 0, 0.1);
  border-left: 5px solid transparent;
- transition: transform 0.3s ease, background 0.3s ease;
-}
-.rank:hover {
- transform: translateX(10px);
- background: rgba(255, 215, 0, 0.2);
 }
 .rank.you{
  font-weight:bold;
@@ -426,21 +489,18 @@ canvas{
  border-left: 5px solid #FFD700;
 }
 .rank-medal {
- font-size: 24px;
+ font-size: 20px;
  margin-right: 10px;
 }
 
-/* COIN EFFECTS */
-.coin-effect {
- position: absolute;
- width: 20px;
- height: 20px;
- background: radial-gradient(circle, #FFD700 30%, #FFB300 70%);
- border-radius: 50%;
- pointer-events: none;
- z-index: 5;
- filter: drop-shadow(0 0 10px #FFD700);
- animation: coinSparkle 1s ease-out forwards;
+/* NÚT CHƠI LẠI - FIX LỖI CHỮ */
+#playAgainBtn {
+ margin-top: 20px;
+ margin-bottom: 10px;
+ position: relative;
+ z-index: 10;
+ width: 100%;
+ max-width: 340px;
 }
 
 /* ANIMATIONS */
@@ -452,6 +512,17 @@ canvas{
 @keyframes butFloat {
   0%, 100% { transform: translateX(-50%) translateY(0) scale(1.1); }
   50% { transform: translateX(-50%) translateY(-10px) scale(1.15); }
+}
+
+@keyframes butHide {
+  0% { 
+    transform: translateX(-50%) translateY(0) scale(1.1);
+    opacity: 1;
+  }
+  100% { 
+    transform: translateX(-50%) translateY(-100px) scale(0.5);
+    opacity: 0;
+  }
 }
 
 @keyframes basketBounce {
@@ -471,32 +542,59 @@ canvas{
   }
 }
 
-@keyframes coinSparkle {
-  0% {
-    transform: scale(0) rotate(0deg);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.5) rotate(180deg);
-    opacity: 0.8;
-  }
-  100% {
-    transform: scale(0) rotate(360deg);
-    opacity: 0;
-  }
-}
-
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
   20%, 40%, 60%, 80% { transform: translateX(5px); }
 }
 
-/* RESPONSIVE */
+/* RESPONSIVE FIX CHO MOBILE SAFARI */
 @media (max-width: 400px) {
  #gameWrapper {
-   transform: scale(0.9);
+   transform: scale(0.85);
  }
+ 
+ #over {
+   padding: 20px;
+   padding-bottom: 80px;
+ }
+ 
+ #instructionBox {
+   padding: 20px;
+   max-width: 300px;
+ }
+ 
+ /* Điều chỉnh kích thước chữ cho mobile */
+ .btn-momo {
+   font-size: 16px;
+   padding: 14px 28px;
+ }
+ 
+ #playAgainBtn {
+   font-size: 16px;
+   padding: 14px 28px;
+ }
+}
+
+/* Fix cho iPhone notch và safe areas */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: min(0vmin, env(safe-area-inset-left));
+    padding-right: min(0vmin, env(safe-area-inset-right));
+    padding-top: min(0vmin, env(safe-area-inset-top));
+    padding-bottom: min(0vmin, env(safe-area-inset-bottom));
+  }
+  
+  #gameWrapper {
+    margin-top: env(safe-area-inset-top);
+    margin-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Prevent text size adjustment on orientation change */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 </style>
 </head>
@@ -505,7 +603,7 @@ canvas{
 
 <div id="gameWrapper">
 
-<!-- START SCREEN - GIỮ NGUYÊN NHƯ CŨ -->
+<!-- START SCREEN -->
 <div id="start" onclick="showInstruction()">
  <img src="assets/start.png" alt="MoMo Game">
 </div>
@@ -545,71 +643,111 @@ canvas{
 
 <!-- GAME OVER -->
 <div id="over">
- <h2 style="
-  color: #FFD700; 
-  font-size: 36px;
-  text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-  margin-bottom: 30px;
- ">🏁 KẾT THÚC</h2>
- 
- <div id="summary">
-  <div class="summary-item">
-   <span>💰 XU THU ĐƯỢC:</span>
-   <span id="finalCoins" class="summary-value">0</span>
+ <div id="over-content">
+  <h2 style="
+   color: #FFD700; 
+   font-size: 36px;
+   text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+   margin-bottom: 30px;
+  ">🏁 KẾT THÚC</h2>
+  
+  <div id="summary">
+   <div class="summary-item">
+    <span>💰 XU THU ĐƯỢC:</span>
+    <span id="finalCoins" class="summary-value">0</span>
+   </div>
+   <div class="summary-item">
+    <span>🧺 GIỎ CÁ:</span>
+    <span id="finalBaskets" class="summary-value">0</span>
+   </div>
+   <div class="summary-item">
+    <span>⚡ TỐC ĐỘ CAO NHẤT:</span>
+    <span id="finalSpeed" class="summary-value">0</span>
+   </div>
   </div>
-  <div class="summary-item">
-   <span>🧺 GIỎ CÁ:</span>
-   <span id="finalBaskets" class="summary-value">0</span>
+
+  <!-- VOUCHER POPUP -->
+  <div id="voucherPopup">
+   <h3>🎉 CHÚC MỪNG!</h3>
+   <p>Bạn đã đạt đủ <b>3 Giỏ Cá</b> 🎯</p>
+   <div class="voucher-code">MOMO-TET-2026</div>
+   <small>Sử dụng mã trong ví MoMo để nhận ưu đãi đặc biệt! 🧧</small>
   </div>
-  <div class="summary-item">
-   <span>⚡ TỐC ĐỘ CAO NHẤT:</span>
-   <span id="finalSpeed" class="summary-value">0</span>
+
+  <div id="nameBox">
+   <label>🏷 NHẬP TÊN CỦA BẠN</label>
+   <input id="playerName" placeholder="Tên người chơi">
+   <button class="btn-momo" onclick="saveScore()">💾 LƯU KẾT QUẢ</button>
   </div>
- </div>
 
- <!-- VOUCHER POPUP -->
- <div id="voucherPopup">
-  <h3>🎉 CHÚC MỪNG!</h3>
-  <p>Bạn đã đạt đủ <b>3 Giỏ Cá</b> 🎯</p>
-  <div class="voucher-code">MOMO-TET-2026</div>
-  <small>Sử dụng mã trong ví MoMo để nhận ưu đãi đặc biệt! 🧧</small>
- </div>
+  <div id="leaderboard">
+   <h3>🏆 BẢNG XẾP HẠNG</h3>
+   <div id="rankList"></div>
+  </div>
 
- <div id="nameBox">
-  <label style="
-   display: block;
-   color: #FFD700;
-   font-weight: bold;
-   margin-bottom: 10px;
-   font-size: 18px;
-  ">🏷 NHẬP TÊN CỦA BẠN</label>
-  <input id="playerName" placeholder="Tên người chơi" style="
-   width: 100%;
-   padding: 15px;
-   border-radius: 15px;
-   border: 2px solid rgba(255, 215, 0, 0.5);
-   background: rgba(255, 255, 255, 0.9);
-   margin: 10px 0 20px;
-   font-size: 16px;
-   color: #A50064;
-   font-weight: bold;
-   text-align: center;
-  ">
-  <button class="btn-momo" onclick="saveScore()">💾 LƯU KẾT QUẢ</button>
+  <!-- NÚT CHƠI LẠI - ĐẢM BẢO LUÔN HIỂN THỊ -->
+  <button class="btn-momo" id="playAgainBtn" onclick="location.reload()">🔄 CHƠI LẠI</button>
  </div>
-
- <div id="leaderboard">
-  <h3>🏆 BẢNG XẾP HẠNG</h3>
-  <div id="rankList"></div>
- </div>
-
- <button class="btn-momo" onclick="location.reload()">🔄 CHƠI LẠI</button>
 </div>
 
 <canvas id="game" width="360" height="640"></canvas>
 </div>
 
 <script>
+/* ===== FIX CHO SAFARI MOBILE ===== */
+// Ngăn chặn double tap zoom
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function(event) {
+  const now = (new Date()).getTime();
+  if (now - lastTouchEnd <= 300) {
+    event.preventDefault();
+  }
+  lastTouchEnd = now;
+}, false);
+
+// Ngăn chặn pull-to-refresh
+document.addEventListener('touchmove', function(event) {
+  if (event.scale !== 1) {
+    event.preventDefault();
+  }
+}, { passive: false });
+
+// Khởi tạo kích thước game
+function initializeGameSize() {
+  const gameWrapper = document.getElementById('gameWrapper');
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
+  
+  // Tính toán scale factor dựa trên kích thước màn hình
+  let scale = Math.min(windowWidth / 360, windowHeight / 640);
+  
+  // Điều chỉnh scale cho các kích thước màn hình khác nhau
+  if (windowWidth < 400) {
+    scale = Math.min(scale, 0.85);
+  } else if (windowWidth < 768) {
+    scale = Math.min(scale, 0.9);
+  }
+  
+  // Áp dụng scale
+  gameWrapper.style.transform = `scale(${scale})`;
+  
+  // Tính toán và áp dụng margin để căn giữa
+  const scaledWidth = 360 * scale;
+  const scaledHeight = 640 * scale;
+  const marginTop = (windowHeight - scaledHeight) / 2;
+  const marginLeft = (windowWidth - scaledWidth) / 2;
+  
+  gameWrapper.style.marginTop = `${marginTop}px`;
+  gameWrapper.style.marginLeft = `${marginLeft}px`;
+}
+
+// Gọi hàm resize khi tải trang và khi thay đổi kích thước
+window.addEventListener('load', initializeGameSize);
+window.addEventListener('resize', initializeGameSize);
+window.addEventListener('orientationchange', function() {
+  setTimeout(initializeGameSize, 100);
+});
+
 /* ===== INTRO → INSTRUCTION ===== */
 function showInstruction(){
  document.getElementById('start').style.display = 'none';
@@ -617,7 +755,7 @@ function showInstruction(){
 }
 
 /* ===== AUTO CLEAR ===== */
-const GAME_VERSION = "visual-2.1";
+const GAME_VERSION = "mobile-fixed-2.4";
 if(localStorage.getItem("game_version") !== GAME_VERSION){
  localStorage.removeItem("leaderboard");
  localStorage.setItem("game_version", GAME_VERSION);
@@ -627,13 +765,8 @@ if(localStorage.getItem("game_version") !== GAME_VERSION){
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 
-/* SCALE GAME */
-function resize(){
- const s = Math.min(innerWidth / 360, innerHeight / 640);
- gameWrapper.style.transform = `scale(${s})`;
-}
-resize(); 
-addEventListener("resize", resize);
+canvas.style.width = '360px';
+canvas.style.height = '640px';
 
 /* ===== IMAGES ===== */
 const roadImg = new Image(); 
@@ -654,15 +787,24 @@ obstacleTypes[0].img.src = "assets/obs-rock.png";
 obstacleTypes[1].img.src = "assets/obs-log.png";
 obstacleTypes[2].img.src = "assets/obs-pot.png";
 
+const imagesToLoad = [roadImg, playerImg, coinImg, 
+                     obstacleTypes[0].img, obstacleTypes[1].img, obstacleTypes[2].img];
+
 /* ===== SOUNDS ===== */
 const sCoin = new Audio("assets/coin.mp3");
 const sBasket = new Audio("assets/basket.mp3");
 const sHit = new Audio("assets/hit.mp3");
 
-// Set volume
 sCoin.volume = 0.3;
 sBasket.volume = 0.4;
 sHit.volume = 0.5;
+
+// Fix cho audio trên mobile
+document.addEventListener('touchstart', function() {
+  const silentAudio = new Audio();
+  silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==';
+  silentAudio.play();
+}, { once: true });
 
 /* ===== GAME STATE ===== */
 let run = false, coin = 0, basket = 0;
@@ -672,8 +814,8 @@ const lanes = [60, 180, 300];
 let player = { lane: 1, y: 520 };
 let coins = [], obstacles = [];
 let coinTimer = 0, obstacleTimer = 0;
-let particles = []; // For visual effects
 let frameCount = 0;
+let butTimeout = null;
 
 /* SPRITE ANIMATION */
 const RUN_FRAMES = 4;
@@ -684,85 +826,23 @@ playerImg.onload = () => {
  SH = playerImg.height;
 };
 
-/* ===== VISUAL EFFECTS ===== */
-function createCoinEffect(x, y) {
- const effect = {
-  x, y,
-  size: 10,
-  alpha: 1,
-  life: 1,
-  color: '#FFD700'
- };
- particles.push(effect);
-}
-
-function createBasketEffect(x, y) {
- for(let i = 0; i < 8; i++) {
-  const angle = (i / 8) * Math.PI * 2;
-  const effect = {
-   x, y,
-   vx: Math.cos(angle) * 3,
-   vy: Math.sin(angle) * 3,
-   size: 8,
-   alpha: 1,
-   life: 1,
-   color: '#FF9100'
-  };
-  particles.push(effect);
- }
-}
-
-function updateParticles() {
- for(let i = particles.length - 1; i >= 0; i--) {
-  const p = particles[i];
-  p.x += p.vx || 0;
-  p.y += p.vy || 0;
-  p.life -= 0.02;
-  p.alpha = p.life;
-  p.size *= 0.95;
-  
-  if(p.life <= 0) {
-   particles.splice(i, 1);
-  }
- }
-}
-
-function drawParticles() {
- particles.forEach(p => {
-  ctx.save();
-  ctx.globalAlpha = p.alpha;
-  ctx.fillStyle = p.color;
-  ctx.beginPath();
-  ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
- });
-}
-
 /* ===== START GAME ===== */
 function startGame(){
  document.getElementById('instruction').style.display = 'none';
  run = true;
  
- // Add starting effect
- createCoinEffect(180, 320);
- 
  loop();
 }
 
 /* CONTROL */
-canvas.addEventListener("touchstart", e => {
- const x = e.touches[0].clientX;
+canvas.addEventListener("touchstart", function(e) {
+ e.preventDefault();
+ const touch = e.touches[0];
  const rect = canvas.getBoundingClientRect();
- const touchX = x - rect.left;
+ const touchX = touch.clientX - rect.left;
  
  const oldLane = player.lane;
- player.lane = touchX < 180 ? Math.max(0, player.lane - 1) : Math.min(2, player.lane + 1);
- 
- // Lane change effect
- if(oldLane !== player.lane) {
-  createCoinEffect(lanes[player.lane], player.y);
- }
+ player.lane = touchX < rect.width / 2 ? Math.max(0, player.lane - 1) : Math.min(2, player.lane + 1);
 });
 
 /* SPAWN COINS */
@@ -829,12 +909,11 @@ function loop(){
  }
  ctx.setLineDash([]);
  
- /* DRAW PLAYER - KHÔNG CÓ SHADOW */
+ /* DRAW PLAYER */
  runTick++;
  if(runTick % 6 === 0) runFrame = (runFrame + 1) % RUN_FRAMES;
  
  if(SW){
-  // Vẽ nhân vật không có shadow
   ctx.drawImage(
    playerImg,
    runFrame * SW, 0, SW, SH,
@@ -856,42 +935,53 @@ function loop(){
   ctx.rotate(c.angle);
   ctx.scale(c.scale + pulseScale, c.scale + pulseScale);
   
-  // Coin glow
   ctx.shadowColor = '#FFD700';
   ctx.shadowBlur = 20;
   ctx.drawImage(coinImg, -15, -15, 30, 30);
   ctx.restore();
   
-  // Coin collection
   if(c.lane === player.lane && Math.abs(c.y - player.y) < 40){
    coins.splice(i, 1);
    coin++;
    document.getElementById('coinEl').innerText = coin;
    
-   // Coin collection effect
-   createCoinEffect(lanes[c.lane], c.y);
    sCoin.currentTime = 0;
    sCoin.play();
    
-   // Check for basket milestone
    const milestone = Math.floor(coin / 50);
    if(milestone > basket){
     basket = milestone;
     document.getElementById('basketEl').innerText = basket;
     
-    // Basket achievement effect
     sBasket.currentTime = 0;
     sBasket.play();
-    document.getElementById('but').classList.add('show');
-    document.getElementById('basketDrop').classList.add('show');
-    createBasketEffect(180, 200);
+    
+    const butElement = document.getElementById('but');
+    butElement.classList.add('show');
+    
+    if (butTimeout) {
+      clearTimeout(butTimeout);
+    }
+    
+    butTimeout = setTimeout(() => {
+      butElement.classList.add('hide');
+      setTimeout(() => {
+        butElement.classList.remove('show', 'hide');
+        butElement.style.top = '-200px';
+        butElement.style.opacity = '0';
+      }, 500);
+    }, 2000);
+    
+    const basketElement = document.getElementById('basketDrop');
+    basketElement.classList.add('show');
     
     setTimeout(() => {
-     document.getElementById('basketDrop').classList.remove('show');
+      basketElement.classList.remove('show');
+      basketElement.style.opacity = '0';
+      basketElement.style.transform = 'translateX(-50%) scale(0)';
     }, 1000);
    }
    
-   // Increase speed
    speed = Math.min(baseSpeed + milestone * speedStep, maxSpeed);
    document.getElementById('progress').style.width = ((coin % 50) / 50 * 100) + "%";
   }
@@ -904,11 +994,9 @@ function loop(){
   o.y += speed;
   o.phase += o.shakeSpeed;
   
-  // Shake effect
   const shakeX = Math.sin(o.phase) * o.shakeIntensity;
   const shakeY = Math.cos(o.phase * 1.5) * (o.shakeIntensity * 0.8);
   
-  // Blink effect for new obstacles
   const age = frameCount - o.spawnTime;
   const blink = age < 60 ? (Math.sin(age * 0.3) * 0.5 + 0.5) : 1;
   
@@ -918,32 +1006,25 @@ function loop(){
   ctx.scale(o.scale, o.scale);
   ctx.globalAlpha = blink;
   
-  // Obstacle with glow
   ctx.shadowColor = t.color;
   ctx.shadowBlur = 15;
   ctx.drawImage(t.img, -t.size/2, -t.size/2, t.size, t.size);
   ctx.restore();
   
-  // Collision detection
   if(o.lane === player.lane && Math.abs(o.y - player.y) < 35){
    endGame(); 
    return;
   }
  }
  
- /* UPDATE VISUAL EFFECTS */
- updateParticles();
- drawParticles();
- 
- /* SPAWNING LOGIC */
  coinTimer++; 
  obstacleTimer++;
  
- if(coinTimer > 25){ // More frequent coins
+ if(coinTimer > 25){
   spawnCoin(); 
   coinTimer = 0;
  }
- if(obstacleTimer > 75){ // More frequent obstacles
+ if(obstacleTimer > 75){
   spawnObstacleWave(); 
   obstacleTimer = 0;
  }
@@ -955,22 +1036,34 @@ function endGame(){
  run = false;
  sHit.play();
  
- // Update final scores
  document.getElementById('finalCoins').textContent = coin;
  document.getElementById('finalBaskets').textContent = basket;
  document.getElementById('finalSpeed').textContent = speed.toFixed(1);
  
- // Shake effect
+ const butElement = document.getElementById('but');
+ if (butElement.classList.contains('show')) {
+   butElement.classList.remove('show');
+   butElement.classList.add('hide');
+   setTimeout(() => {
+     butElement.classList.remove('hide');
+     butElement.style.top = '-200px';
+     butElement.style.opacity = '0';
+   }, 500);
+ }
+ 
+ if (butTimeout) {
+   clearTimeout(butTimeout);
+   butTimeout = null;
+ }
+ 
  gameWrapper.style.animation = 'shake 0.5s ease';
  setTimeout(() => {
   gameWrapper.style.animation = '';
  }, 500);
  
- // Show game over screen
  setTimeout(() => {
   document.getElementById('over').style.display = 'flex';
   
-  // Show voucher if eligible
   if(basket >= 3){
    document.getElementById('voucherPopup').style.display = 'block';
   }
@@ -982,7 +1075,6 @@ function saveScore(){
  const name = document.getElementById('playerName').value.trim() || "Người Chơi";
  let lb = JSON.parse(localStorage.getItem("leaderboard") || "[]");
  
- // Add current score
  lb.push({
   name, 
   coin,
@@ -991,18 +1083,16 @@ function saveScore(){
   date: new Date().toLocaleDateString('vi-VN')
  });
  
- // Sort by coins
  lb.sort((a, b) => b.coin - a.coin);
  
- // Keep top 8
  lb = lb.slice(0, 8);
  
- // Save
  localStorage.setItem("leaderboard", JSON.stringify(lb));
  
- // Update UI
  document.getElementById('nameBox').style.display = 'none';
  document.getElementById('leaderboard').style.display = 'block';
+ 
+ document.getElementById('playAgainBtn').style.display = 'block';
  
  const rankList = document.getElementById('rankList');
  rankList.innerHTML = '';
@@ -1010,12 +1100,13 @@ function saveScore(){
  // Header
  const header = document.createElement('div');
  header.className = 'rank';
- header.innerHTML = `
-  <span><b>TÊN</b></span>
-  <span><b>XU</b></span>
-  <span><b>GIỎ</b></span>
- `;
  header.style.background = 'rgba(255, 215, 0, 0.3)';
+ header.style.fontWeight = 'bold';
+ header.innerHTML = `
+  <span>TÊN</span>
+  <span>XU</span>
+  <span>GIỎ</span>
+ `;
  rankList.appendChild(header);
  
  // Ranks
@@ -1023,7 +1114,6 @@ function saveScore(){
   const rankDiv = document.createElement('div');
   rankDiv.className = `rank ${r.name === name && r.coin === coin ? 'you' : ''}`;
   
-  // Medal emoji
   let medal = '';
   if(i === 0) medal = '🥇';
   else if(i === 1) medal = '🥈';
@@ -1037,6 +1127,28 @@ function saveScore(){
   rankList.appendChild(rankDiv);
  });
 }
+
+// Khởi tạo khi trang được tải
+window.addEventListener('load', function() {
+  initializeGameSize();
+  
+  // Preload images
+  let loadedImages = 0;
+  const totalImages = imagesToLoad.length;
+  
+  imagesToLoad.forEach(img => {
+    img.onload = function() {
+      loadedImages++;
+      if (loadedImages === totalImages) {
+        console.log('Tất cả hình ảnh đã được tải');
+      }
+    };
+    
+    img.onerror = function() {
+      console.error('Lỗi khi tải hình ảnh:', img.src);
+    };
+  });
+});
 </script>
 </body>
 </html>
