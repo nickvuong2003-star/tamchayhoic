@@ -15,7 +15,7 @@ body{
  display:flex;
  align-items:center;
  justify-content:center;
- height:100vh;
+ min-height:100vh;
  background: linear-gradient(135deg, #1a0033 0%, #330066 50%, #4d0099 100%);
  position: fixed;
  top: 0;
@@ -53,11 +53,10 @@ body{
  pointer-events: none;
 }
 
-/* INSTRUCTION SCREEN */
+/* INSTRUCTION SCREEN - THÊM ANIMATION BACKGROUND */
 #instruction{
  position:absolute;
  inset:0;
- background: linear-gradient(135deg, #A50064 0%, #D6006E 30%, #FF0077 100%);
  color:#fff;
  display:none;
  flex-direction:column;
@@ -66,7 +65,19 @@ body{
  padding:20px;
  z-index:40;
  text-align:center;
+ /* BACKGROUND ANIMATION */
+ background: linear-gradient(-45deg, 
+  #A50064, #D6006E, #FF0077, #FF3399,
+  #A50064, #D6006E, #FF0077, #FF3399);
+ background-size: 400% 400%;
+ animation: gradientFlow 8s ease infinite;
 }
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 #instructionBox{
  background: rgba(255, 255, 255, 0.15);
  backdrop-filter: blur(20px);
@@ -182,7 +193,7 @@ body{
 /* PROGRESS */
 #progressBox{
  position:absolute;
- top:120px;
+ top:145px;
  left:20px;
  width:200px;
  height:16px;
@@ -220,7 +231,7 @@ canvas{
  -webkit-touch-callout: none;
 }
 
-/* BUTTONS - FIX LỖI CHỮ */
+/* BUTTONS */
 .btn-momo{
  margin-top:20px;
  padding:16px 36px;
@@ -239,7 +250,6 @@ canvas{
  overflow: hidden;
  z-index: 1;
  -webkit-appearance: none;
- text-transform: uppercase; /* THÊM CHỮ IN HOA */
 }
 .btn-momo::before {
  content: '';
@@ -305,7 +315,7 @@ canvas{
  animation: basketBounce 0.6s ease;
 }
 
-/* GAME OVER - FIX SCROLL */
+/* GAME OVER - THÊM ANIMATION BACKGROUND */
 #over{
  position:absolute;
  inset:0;
@@ -313,7 +323,6 @@ canvas{
  align-items:center;
  justify-content:flex-start;
  flex-direction:column;
- background: linear-gradient(135deg, rgba(165, 0, 100, 0.95) 0%, rgba(214, 0, 110, 0.95) 30%, rgba(255, 0, 119, 0.95) 100%);
  color:#fff;
  z-index:50;
  padding:30px;
@@ -323,6 +332,18 @@ canvas{
  overflow-y: auto;
  padding-bottom: 100px;
  -webkit-overflow-scrolling: touch;
+ /* BACKGROUND ANIMATION */
+ background: linear-gradient(-45deg, 
+  rgba(165, 0, 100, 0.95),
+  rgba(214, 0, 110, 0.95),
+  rgba(255, 0, 119, 0.95),
+  rgba(255, 51, 153, 0.95),
+  rgba(165, 0, 100, 0.95),
+  rgba(214, 0, 110, 0.95),
+  rgba(255, 0, 119, 0.95),
+  rgba(255, 51, 153, 0.95));
+ background-size: 400% 400%;
+ animation: gradientFlow 8s ease infinite;
 }
 #over-content {
  display: flex;
@@ -448,7 +469,7 @@ canvas{
  -webkit-appearance: none;
 }
 
-/* LEADERBOARD - BỎ SCROLL */
+/* LEADERBOARD */
 #leaderboard{
  display:none;
  background: rgba(255, 255, 255, 0.95);
@@ -459,9 +480,6 @@ canvas{
  margin: 20px 0;
  border: 3px solid #FFD700;
  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
- /* BỎ CÁC DÒNG NÀY:
-   max-height: 300px;
-   overflow-y: auto; */
 }
 #leaderboard h3{
  margin-top: 0;
@@ -493,7 +511,7 @@ canvas{
  margin-right: 10px;
 }
 
-/* NÚT CHƠI LẠI - FIX LỖI CHỮ */
+/* NÚT CHƠI LẠI */
 #playAgainBtn {
  margin-top: 20px;
  margin-bottom: 10px;
@@ -542,37 +560,59 @@ canvas{
   }
 }
 
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
   20%, 40%, 60%, 80% { transform: translateX(5px); }
 }
 
-/* RESPONSIVE FIX CHO MOBILE SAFARI */
-@media (max-width: 400px) {
+/* FIX SCALE CHO MOBILE */
+@media (max-width: 768px) {
+ body {
+   padding: 10px;
+   box-sizing: border-box;
+ }
+ 
  #gameWrapper {
-   transform: scale(0.85);
+   width: 100vw;
+   height: calc(100vw * (640/360));
+   max-width: 360px;
+   max-height: 640px;
+   transform: none !important;
+   margin: auto;
+ }
+ 
+ canvas {
+   width: 100% !important;
+   height: 100% !important;
+   border-radius: 15px;
  }
  
  #over {
-   padding: 20px;
+   padding: 15px;
    padding-bottom: 80px;
  }
  
  #instructionBox {
    padding: 20px;
-   max-width: 300px;
+   max-width: 90%;
  }
  
- /* Điều chỉnh kích thước chữ cho mobile */
  .btn-momo {
    font-size: 16px;
    padding: 14px 28px;
  }
  
- #playAgainBtn {
-   font-size: 16px;
-   padding: 14px 28px;
+ /* ĐIỀU CHỈNH THANH PROGRESS TRÊN MOBILE */
+ #progressBox {
+   top: 135px;
+   width: 180px;
  }
 }
 
@@ -639,6 +679,8 @@ html {
   <span>Giỏ cá: <span id="basketEl" class="hud-value">0</span></span>
  </div>
 </div>
+
+<!-- THANH PROGRESS -->
 <div id="progressBox"><div id="progress"></div></div>
 
 <!-- GAME OVER -->
@@ -685,7 +727,7 @@ html {
    <div id="rankList"></div>
   </div>
 
-  <!-- NÚT CHƠI LẠI - ĐẢM BẢO LUÔN HIỂN THỊ -->
+  <!-- NÚT CHƠI LẠI -->
   <button class="btn-momo" id="playAgainBtn" onclick="location.reload()">🔄 CHƠI LẠI</button>
  </div>
 </div>
@@ -694,54 +736,22 @@ html {
 </div>
 
 <script>
-/* ===== FIX CHO SAFARI MOBILE ===== */
-// Ngăn chặn double tap zoom
-let lastTouchEnd = 0;
-document.addEventListener('touchend', function(event) {
-  const now = (new Date()).getTime();
-  if (now - lastTouchEnd <= 300) {
-    event.preventDefault();
-  }
-  lastTouchEnd = now;
-}, false);
-
-// Ngăn chặn pull-to-refresh
-document.addEventListener('touchmove', function(event) {
-  if (event.scale !== 1) {
-    event.preventDefault();
-  }
-}, { passive: false });
-
-// Khởi tạo kích thước game
+/* ===== FIX SCALE CHO MOBILE ===== */
 function initializeGameSize() {
   const gameWrapper = document.getElementById('gameWrapper');
   const windowWidth = window.innerWidth;
   const windowHeight = window.innerHeight;
   
-  // Tính toán scale factor dựa trên kích thước màn hình
-  let scale = Math.min(windowWidth / 360, windowHeight / 640);
-  
-  // Điều chỉnh scale cho các kích thước màn hình khác nhau
-  if (windowWidth < 400) {
-    scale = Math.min(scale, 0.85);
-  } else if (windowWidth < 768) {
-    scale = Math.min(scale, 0.9);
+  if (windowWidth >= 768) {
+    const scale = Math.min(windowWidth / 360, windowHeight / 640) * 0.95;
+    gameWrapper.style.transform = `scale(${scale})`;
+    gameWrapper.style.margin = 'auto';
+  } else {
+    gameWrapper.style.transform = 'none';
+    gameWrapper.style.margin = 'auto';
   }
-  
-  // Áp dụng scale
-  gameWrapper.style.transform = `scale(${scale})`;
-  
-  // Tính toán và áp dụng margin để căn giữa
-  const scaledWidth = 360 * scale;
-  const scaledHeight = 640 * scale;
-  const marginTop = (windowHeight - scaledHeight) / 2;
-  const marginLeft = (windowWidth - scaledWidth) / 2;
-  
-  gameWrapper.style.marginTop = `${marginTop}px`;
-  gameWrapper.style.marginLeft = `${marginLeft}px`;
 }
 
-// Gọi hàm resize khi tải trang và khi thay đổi kích thước
 window.addEventListener('load', initializeGameSize);
 window.addEventListener('resize', initializeGameSize);
 window.addEventListener('orientationchange', function() {
@@ -755,7 +765,7 @@ function showInstruction(){
 }
 
 /* ===== AUTO CLEAR ===== */
-const GAME_VERSION = "mobile-fixed-2.4";
+const GAME_VERSION = "animation-background-2.8";
 if(localStorage.getItem("game_version") !== GAME_VERSION){
  localStorage.removeItem("leaderboard");
  localStorage.setItem("game_version", GAME_VERSION);
@@ -765,8 +775,8 @@ if(localStorage.getItem("game_version") !== GAME_VERSION){
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 
-canvas.style.width = '360px';
-canvas.style.height = '640px';
+canvas.width = 360;
+canvas.height = 640;
 
 /* ===== IMAGES ===== */
 const roadImg = new Image(); 
@@ -799,7 +809,6 @@ sCoin.volume = 0.3;
 sBasket.volume = 0.4;
 sHit.volume = 0.5;
 
-// Fix cho audio trên mobile
 document.addEventListener('touchstart', function() {
   const silentAudio = new Audio();
   silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==';
