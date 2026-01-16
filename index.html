@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Nhặt Đồng Nhỏ - Ví MoMo</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, viewport-fit=cover">
-<!-- Thêm các meta tags cho fullscreen -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
@@ -14,10 +13,13 @@
 /* CSS Variables */
 :root {
   --vh: 1vh;
+  --lane1: 16.6667%;  /* 60/360 = 16.6667% */
+  --lane2: 50%;       /* 180/360 = 50% */
+  --lane3: 83.3333%;  /* 300/360 = 83.3333% */
 }
 
 /* Reset */
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0; -webkit-tap-highlight-color:transparent;}
 
 /* Body - Fullscreen */
 body{
@@ -26,59 +28,63 @@ body{
  background:#000;
  overflow:hidden;
  font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
- display:flex;
- align-items:center;
- justify-content:center;
- min-height:100vh;
- min-height:calc(var(--vh, 1vh) * 100);
+ width:100vw;
+ height:100vh;
+ height:calc(var(--vh, 1vh) * 100);
  background: linear-gradient(135deg, #1a0033 0%, #330066 50%, #4d0099 100%);
  position:fixed;
  top:0;
  left:0;
- right:0;
- bottom:0;
- width:100vw;
- height:100vh;
- height:calc(var(--vh, 1vh) * 100);
- -webkit-tap-highlight-color:transparent;
- touch-action:none;
  -webkit-user-select:none;
  user-select:none;
+ touch-action:none;
 }
 
-/* GAME WRAPPER */
+/* GAME WRAPPER - GIÃN FULLSCREEN */
 #gameWrapper{
- position:relative;
- width:100vw;
- height:calc(var(--vh, 1vh) * 100);
- max-width:360px;
- max-height:640px;
- margin:auto;
+ position:absolute;
+ top:0;
+ left:0;
+ width:100%;
+ height:100%;
  transform-origin:center center;
  filter:drop-shadow(0 10px 30px rgba(0,0,0,0.5));
- touch-action:manipulation;
  overflow:hidden;
+ display:flex;
+ align-items:center;
+ justify-content:center;
 }
 
-/* INTRO SCREEN */
+/* INTRO SCREEN - COVER FIX */
 #start{
  position:absolute;
- inset:0;
+ top:0;
+ left:0;
+ width:100%;
+ height:100%;
  z-index:50;
  cursor:pointer;
  background:#000;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ overflow:hidden;
 }
 #start img{
  width:100%;
  height:100%;
- object-fit:contain;
+ object-fit:cover; /* ĐÃ SỬA: cover thay vì contain */
  pointer-events:none;
+ display:block;
 }
 
 /* INSTRUCTION SCREEN */
 #instruction{
  position:absolute;
- inset:0;
+ top:0;
+ left:0;
+ width:100%;
+ height:100%;
  color:#fff;
  display:none;
  flex-direction:column;
@@ -231,15 +237,13 @@ body{
  transition:width 0.3s ease;
 }
 
-/* CANVAS */
+/* CANVAS - TỰ ĐỘNG CO GIÃN */
 canvas{
  display:block;
  width:100%;
  height:100%;
- border-radius:20px;
- overflow:hidden;
- box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 0 2px rgba(255,215,0,0.2);
  -webkit-touch-callout:none;
+ touch-action:none;
 }
 
 /* BUTTONS */
@@ -329,7 +333,10 @@ canvas{
 /* GAME OVER */
 #over{
  position:absolute;
- inset:0;
+ top:0;
+ left:0;
+ width:100%;
+ height:100%;
  display:none;
  align-items:center;
  justify-content:flex-start;
@@ -555,24 +562,6 @@ canvas{
 }
 
 /* ===== RESPONSIVE FIXES ===== */
-/* Mobile Landscape */
-@media (max-height: 500px) and (orientation: landscape) {
-  #gameWrapper {
-    max-height: 500px;
-    transform: scale(0.8);
-  }
-  
-  #hud {
-    transform: scale(0.8);
-    transform-origin: top left;
-  }
-  
-  #progressBox {
-    transform: scale(0.8);
-    transform-origin: top left;
-  }
-}
-
 /* iOS Safari 100vh fix */
 @supports (-webkit-touch-callout: none) {
   body {
@@ -586,16 +575,26 @@ canvas{
 
 /* Safe area support */
 @supports (padding: max(0px)) {
-  #gameWrapper {
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
+  body {
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
   
   #over {
     padding-top: calc(env(safe-area-inset-top) + 30px);
     padding-bottom: calc(env(safe-area-inset-bottom) + 100px);
+  }
+  
+  #hud {
+    top: calc(env(safe-area-inset-top) + 20px);
+    left: calc(env(safe-area-inset-left) + 20px);
+  }
+  
+  #progressBox {
+    top: calc(env(safe-area-inset-top) + 145px);
+    left: calc(env(safe-area-inset-left) + 20px);
   }
 }
 
@@ -606,6 +605,20 @@ html {
   height: 100%;
   overflow: hidden;
 }
+
+/* For landscape mode */
+@media (orientation: landscape) {
+  #gameWrapper {
+    max-width: 100vh;
+    max-height: 100vw;
+    transform: rotate(90deg) translateY(-100%);
+    transform-origin: top left;
+  }
+  
+  body {
+    overflow: hidden;
+  }
+}
 </style>
 </head>
 
@@ -615,7 +628,7 @@ html {
 
 <!-- START SCREEN -->
 <div id="start" onclick="showInstruction()">
- <img src="assets/start.png" alt="MoMo Game">
+ <img src="assets/start.png" alt="MoMo Game" id="startImage">
 </div>
 
 <!-- INSTRUCTION SCREEN -->
@@ -697,7 +710,7 @@ html {
  </div>
 </div>
 
-<canvas id="game" width="360" height="640"></canvas>
+<canvas id="game"></canvas>
 </div>
 
 <script>
@@ -708,45 +721,81 @@ function setVH() {
   document.documentElement.style.setProperty('--vh', `${vh}px`);
 }
 
-// Scale game cho phù hợp
-function initializeGameSize() {
-  const gameWrapper = document.getElementById('gameWrapper');
-  const windowWidth = window.innerWidth;
-  const windowHeight = window.innerHeight;
-  
-  if (windowWidth >= 768) {
-    // Desktop: scale để vừa màn hình
-    const scale = Math.min(windowWidth / 360, windowHeight / 640) * 0.95;
-    gameWrapper.style.transform = `scale(${scale})`;
-    gameWrapper.style.margin = 'auto';
-  } else {
-    // Mobile: giữ nguyên kích thước
-    gameWrapper.style.transform = 'none';
-    gameWrapper.style.margin = 'auto';
-  }
+// Lấy kích thước màn hình thực tế
+function getScreenDimensions() {
+  return {
+    width: window.innerWidth,
+    height: window.innerHeight
+  };
+}
+
+// Tính toán lane positions theo % màn hình
+function calculateLanePositions() {
+  const screen = getScreenDimensions();
+  return {
+    lane1: screen.width * 0.1667, // 16.67%
+    lane2: screen.width * 0.5,    // 50%
+    lane3: screen.width * 0.8333  // 83.33%
+  };
 }
 
 /* ===== INITIALIZE ===== */
-window.addEventListener('load', function() {
+let lanePositions = [];
+let canvasSize = { width: 0, height: 0 };
+
+function initializeGame() {
   setVH();
-  initializeGameSize();
   
-  // Trigger resize để fix iOS
+  const screen = getScreenDimensions();
+  const canvas = document.getElementById('game');
+  
+  // Set canvas kích thước thực tế của màn hình
+  canvas.width = screen.width;
+  canvas.height = screen.height;
+  canvasSize = { width: screen.width, height: screen.height };
+  
+  // Tính toán vị trí lanes
+  lanePositions = calculateLanePositions();
+  
+  // Điều chỉnh kích thước các element HUD cho phù hợp
+  adjustHUDForScreen(screen);
+}
+
+function adjustHUDForScreen(screen) {
+  const hud = document.getElementById('hud');
+  const progressBox = document.getElementById('progressBox');
+  
+  // Scale HUD theo kích thước màn hình
+  const baseWidth = 360;
+  const scale = Math.min(screen.width / baseWidth, 1.2); // Giới hạn scale tối đa 1.2
+  
+  hud.style.transform = `scale(${scale})`;
+  hud.style.transformOrigin = 'top left';
+  
+  progressBox.style.transform = `scale(${scale})`;
+  progressBox.style.transformOrigin = 'top left';
+  
+  // Điều chỉnh kích thước progress box
+  progressBox.style.width = `${200 * scale}px`;
+}
+
+window.addEventListener('load', function() {
+  initializeGame();
+  
+  // Fix cho iOS
   setTimeout(() => {
-    setVH();
-    initializeGameSize();
+    initializeGame();
   }, 100);
 });
 
 window.addEventListener('resize', function() {
   setVH();
-  initializeGameSize();
+  initializeGame();
 });
 
 window.addEventListener('orientationchange', function() {
   setTimeout(() => {
-    setVH();
-    initializeGameSize();
+    initializeGame();
   }, 150);
 });
 
@@ -770,7 +819,7 @@ function showInstruction(){
 }
 
 /* ===== AUTO CLEAR ===== */
-const GAME_VERSION = "fullscreen-fix-3.0";
+const GAME_VERSION = "fullscreen-fix-4.0";
 if(localStorage.getItem("game_version") !== GAME_VERSION){
  localStorage.removeItem("leaderboard");
  localStorage.setItem("game_version", GAME_VERSION);
@@ -779,9 +828,6 @@ if(localStorage.getItem("game_version") !== GAME_VERSION){
 /* ===== CANVAS SETUP ===== */
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
-
-canvas.width = 360;
-canvas.height = 640;
 
 /* ===== IMAGES ===== */
 const roadImg = new Image(); 
@@ -818,15 +864,14 @@ sHit.volume = 0.5;
 document.addEventListener('touchstart', function() {
   const silentAudio = new Audio();
   silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==';
-  silentAudio.play();
+  silentAudio.play().catch(e => console.log("Audio unlock error"));
 }, { once: true });
 
 /* ===== GAME STATE ===== */
 let run = false, coin = 0, basket = 0;
 let baseSpeed = 3.5, speed = baseSpeed, speedStep = 0.7, maxSpeed = 9;
 let roadY = 0;
-const lanes = [60, 180, 300];
-let player = { lane: 1, y: 520 };
+let player = { lane: 1, y: 0 };
 let coins = [], obstacles = [];
 let coinTimer = 0, obstacleTimer = 0;
 let frameCount = 0;
@@ -846,21 +891,28 @@ function startGame(){
  document.getElementById('instruction').style.display = 'none';
  run = true;
  
+ // Set player position tính theo % chiều cao
+ player.y = canvasSize.height * 0.8125; // 520/640 = 0.8125
+ 
  // Khởi động audio
  if (sCoin) sCoin.play().catch(e => console.log("Audio error:", e));
  
  loop();
 }
 
-/* CONTROL */
+/* CONTROL - CẬP NHẬT THEO MÀN HÌNH THỰC */
 canvas.addEventListener("touchstart", function(e) {
  e.preventDefault();
  const touch = e.touches[0];
  const rect = canvas.getBoundingClientRect();
  const touchX = touch.clientX - rect.left;
  
- const oldLane = player.lane;
- player.lane = touchX < rect.width / 2 ? Math.max(0, player.lane - 1) : Math.min(2, player.lane + 1);
+ // Tính lane mới dựa trên vị trí tap
+ const laneWidth = canvasSize.width / 3;
+ const newLane = Math.floor(touchX / laneWidth);
+ 
+ // Giới hạn lane từ 0-2
+ player.lane = Math.max(0, Math.min(2, newLane));
 });
 
 /* SPAWN COINS */
@@ -897,49 +949,55 @@ const spawnObstacleWave = () => {
  }
 };
 
-/* MAIN GAME LOOP */
+/* MAIN GAME LOOP - CẬP NHẬT CHO MÀN HÌNH LỚN */
 function loop(){
  if(!run) return;
  frameCount++;
  
- ctx.clearRect(0, 0, 360, 640);
+ ctx.clearRect(0, 0, canvasSize.width, canvasSize.height);
  
- /* DRAW ROAD */
+ /* DRAW ROAD - TỰ ĐỘNG GIÃN */
  roadY += speed;
- if(roadY >= 640) roadY = 0;
+ if(roadY >= canvasSize.height) roadY = 0;
  
- ctx.drawImage(roadImg, 0, roadY - 640, 360, 640);
- ctx.drawImage(roadImg, 0, roadY, 360, 640);
+ ctx.drawImage(roadImg, 0, roadY - canvasSize.height, canvasSize.width, canvasSize.height);
+ ctx.drawImage(roadImg, 0, roadY, canvasSize.width, canvasSize.height);
  
- /* DRAW LANE MARKERS */
+ /* DRAW LANE MARKERS - TỰ TÍNH THEO LANE POSITIONS */
  ctx.strokeStyle = 'rgba(255, 215, 0, 0.3)';
  ctx.lineWidth = 2;
  ctx.setLineDash([20, 20]);
- for(let i = 0; i < lanes.length; i++) {
+ 
+ lanePositions.forEach((laneX) => {
+  const laneMarkerWidth = canvasSize.width * 0.1667; // ~60px/360px
   ctx.beginPath();
-  ctx.moveTo(lanes[i] - 60, 0);
-  ctx.lineTo(lanes[i] - 60, 640);
+  ctx.moveTo(laneX - laneMarkerWidth, 0);
+  ctx.lineTo(laneX - laneMarkerWidth, canvasSize.height);
   ctx.stroke();
   ctx.beginPath();
-  ctx.moveTo(lanes[i] + 60, 0);
-  ctx.lineTo(lanes[i] + 60, 640);
+  ctx.moveTo(laneX + laneMarkerWidth, 0);
+  ctx.lineTo(laneX + laneMarkerWidth, canvasSize.height);
   ctx.stroke();
- }
+ });
  ctx.setLineDash([]);
  
- /* DRAW PLAYER */
+ /* DRAW PLAYER - TỰ ĐỘNG SCALE */
  runTick++;
  if(runTick % 6 === 0) runFrame = (runFrame + 1) % RUN_FRAMES;
  
  if(SW){
+  const playerX = lanePositions[player.lane];
+  const playerWidth = canvasSize.width * 0.1222; // 44/360
+  const playerHeight = canvasSize.height * 0.1031; // 66/640
+  
   ctx.drawImage(
    playerImg,
    runFrame * SW, 0, SW, SH,
-   lanes[player.lane] - 22, player.y - 50, 44, 66
+   playerX - (playerWidth/2), player.y - playerHeight, playerWidth, playerHeight
   );
  }
  
- /* DRAW COINS */
+ /* DRAW COINS - TỰ ĐỘNG SCALE */
  for(let i = coins.length - 1; i >= 0; i--){
   const c = coins[i];
   c.y += speed;
@@ -947,18 +1005,21 @@ function loop(){
   c.pulse += 0.1;
   
   const pulseScale = 0.1 * Math.sin(c.pulse);
+  const coinSize = canvasSize.width * 0.0833; // 30/360
   
   ctx.save();
-  ctx.translate(lanes[c.lane], c.y);
+  ctx.translate(lanePositions[c.lane], c.y);
   ctx.rotate(c.angle);
   ctx.scale(c.scale + pulseScale, c.scale + pulseScale);
   
   ctx.shadowColor = '#FFD700';
   ctx.shadowBlur = 20;
-  ctx.drawImage(coinImg, -15, -15, 30, 30);
+  ctx.drawImage(coinImg, -coinSize/2, -coinSize/2, coinSize, coinSize);
   ctx.restore();
   
-  if(c.lane === player.lane && Math.abs(c.y - player.y) < 40){
+  // Collision detection với player
+  const collisionDistance = canvasSize.width * 0.1111; // 40/360
+  if(c.lane === player.lane && Math.abs(c.y - player.y) < collisionDistance){
    coins.splice(i, 1);
    coin++;
    document.getElementById('coinEl').innerText = coin;
@@ -1005,7 +1066,7 @@ function loop(){
   }
  }
  
- /* DRAW OBSTACLES */
+ /* DRAW OBSTACLES - TỰ ĐỘNG SCALE */
  for(let i = obstacles.length - 1; i >= 0; i--){
   const o = obstacles[i];
   const t = obstacleTypes[o.type];
@@ -1018,18 +1079,22 @@ function loop(){
   const age = frameCount - o.spawnTime;
   const blink = age < 60 ? (Math.sin(age * 0.3) * 0.5 + 0.5) : 1;
   
+  const obstacleSize = canvasSize.width * (t.size / 360);
+  
   ctx.save();
-  ctx.translate(lanes[o.lane] + shakeX, o.y + shakeY);
+  ctx.translate(lanePositions[o.lane] + shakeX, o.y + shakeY);
   ctx.rotate(o.rotation);
   ctx.scale(o.scale, o.scale);
   ctx.globalAlpha = blink;
   
   ctx.shadowColor = t.color;
   ctx.shadowBlur = 15;
-  ctx.drawImage(t.img, -t.size/2, -t.size/2, t.size, t.size);
+  ctx.drawImage(t.img, -obstacleSize/2, -obstacleSize/2, obstacleSize, obstacleSize);
   ctx.restore();
   
-  if(o.lane === player.lane && Math.abs(o.y - player.y) < 35){
+  // Collision detection
+  const collisionDistance = canvasSize.height * 0.0547; // 35/640
+  if(o.lane === player.lane && Math.abs(o.y - player.y) < collisionDistance){
    endGame(); 
    return;
   }
