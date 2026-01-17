@@ -224,6 +224,35 @@ body{
  text-shadow:0 0 10px rgba(255,215,0,0.5);
 }
 
+/* NÚT ÂM THANH */
+#soundBtn{
+ position:absolute;
+ top:20px;
+ right:20px;
+ width:44px;
+ height:44px;
+ background:rgba(165,0,100,0.85);
+ border-radius:50%;
+ border:2px solid rgba(255,215,0,0.3);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ cursor:pointer;
+ z-index:11;
+ backdrop-filter:blur(10px);
+ -webkit-backdrop-filter:blur(10px);
+ box-shadow:0 5px 15px rgba(0,0,0,0.3);
+ transition:all 0.3s ease;
+}
+#soundBtn:hover{
+ transform:scale(1.1);
+}
+#soundIcon{
+ font-size:22px;
+ color:#FFD700;
+ filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
 /* PROGRESS */
 #progressBox{
  position:absolute;
@@ -586,6 +615,11 @@ canvas{
     transform-origin: top left;
   }
   
+  #soundBtn {
+    transform: scale(0.8);
+    transform-origin: top right;
+  }
+  
   #progressBox {
     transform: scale(0.8);
     transform-origin: top left;
@@ -615,6 +649,11 @@ canvas{
   #over {
     padding-top: calc(env(safe-area-inset-top) + 30px);
     padding-bottom: calc(env(safe-area-inset-bottom) + 100px);
+  }
+  
+  #soundBtn {
+    top: calc(env(safe-area-inset-top) + 20px);
+    right: calc(env(safe-area-inset-right) + 20px);
   }
 }
 
@@ -665,6 +704,11 @@ html {
  <img src="assets/start.png" alt="MoMo Game" id="startImage">
 </div>
 
+<!-- NÚT ÂM THANH -->
+<div id="soundBtn" onclick="toggleSound()">
+ <span id="soundIcon">🔊</span>
+</div>
+
 <!-- INSTRUCTION SCREEN -->
 <div id="instruction">
  <div id="instructionBox">
@@ -674,7 +718,7 @@ html {
    <li><b>🪙 Thu thập Xu</b> - Tích luỹ đổi quà MoMo</li>
    <li><b>🧺 Mỗi 50 Xu</b> nhận <b>1 Giỏ Cá</b></li>
    <li><b>⚡ Càng nhiều Xu</b> → Tốc độ càng nhanh</li>
-   <li><b>❌ Tránh chướng ngại vật</b> (đồ ăn, coffe, cosmestic)</li>
+   <li><b>❌ Tránh chướng ngại vật</b> (đá, gỗ, chậu)</li>
    <li><b>🎁 Đạt 3 Giỏ Cá</b> để nhận Voucher MoMo</li>
   </ul>
   <button class="btn-momo" onclick="startGame()">🎮 BẮT ĐẦU CHƠI</button>
@@ -845,10 +889,12 @@ document.addEventListener('contextmenu', function(e) {
 function showInstruction(){
  document.getElementById('start').style.display = 'none';
  document.getElementById('instruction').style.display = 'flex';
+ // Bắt đầu nhạc nền khi vào màn hình hướng dẫn
+ playBackgroundMusic();
 }
 
 /* ===== AUTO CLEAR ===== */
-const GAME_VERSION = "stable-5.0";
+const GAME_VERSION = "music-enhanced-6.0";
 if(localStorage.getItem("game_version") !== GAME_VERSION){
  localStorage.removeItem("leaderboard");
  localStorage.setItem("game_version", GAME_VERSION);
@@ -883,20 +929,94 @@ obstacleTypes[2].img.src = "assets/obs-pot.png";
 const imagesToLoad = [roadImg, playerImg, coinImg, 
                      obstacleTypes[0].img, obstacleTypes[1].img, obstacleTypes[2].img];
 
-/* ===== SOUNDS ===== */
+/* ===== ÂM THANH ===== */
+// Nhạc nền
+const bgMusic = new Audio();
+bgMusic.src = "assets/background.mp3";
+bgMusic.loop = true;
+bgMusic.volume = 0.5;
+
+// Hiệu ứng âm thanh
 const sCoin = new Audio("assets/coin.mp3");
 const sBasket = new Audio("assets/basket.mp3");
 const sHit = new Audio("assets/hit.mp3");
+const sClick = new Audio("assets/click.mp3");
+const sSpeedUp = new Audio("assets/speedup.mp3");
 
+// Thiết lập volume
 sCoin.volume = 0.3;
 sBasket.volume = 0.4;
 sHit.volume = 0.5;
+sClick.volume = 0.3;
+sSpeedUp.volume = 0.4;
+
+// Biến kiểm soát âm thanh
+let soundEnabled = true;
+
+// Hàm phát nhạc nền
+function playBackgroundMusic() {
+  if (soundEnabled && bgMusic) {
+    bgMusic.play().catch(e => {
+      console.log("Nhạc nền cần tương tác người dùng:", e);
+      // Thử lại khi người dùng click
+      document.addEventListener('click', function playOnce() {
+      bgMusic.play().catch(e => console.log("Vẫn không thể phát nhạc nền"));
+        document.removeEventListener('click', playOnce);
+      }, { once: true });
+    });
+  }
+}
+
+// Hàm dừng nhạc nền
+function stopBackgroundMusic() {
+  if (bgMusic) {
+    bgMusic.pause();
+    bgMusic.currentTime = 0;
+  }
+}
+
+// Hàm bật/tắt âm thanh
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  
+  // Cập nhật icon
+  const soundIcon = document.getElementById('soundIcon');
+  soundIcon.textContent = soundEnabled ? '🔊' : '🔇';
+  
+  // Áp dụng trạng thái âm thanh
+  if (soundEnabled) {
+    bgMusic.volume = 0.5;
+    playBackgroundMusic();
+  } else {
+    bgMusic.volume = 0;
+    sCoin.volume = 0;
+    sBasket.volume = 0;
+    sHit.volume = 0;
+    sClick.volume = 0;
+    sSpeedUp.volume = 0;
+  }
+}
+
+// Hàm phát âm thanh an toàn
+function playSound(sound) {
+  if (!soundEnabled) return;
+  
+  try {
+    // Nếu âm thanh đang phát, reset để phát lại
+    sound.currentTime = 0;
+    sound.play().catch(e => console.log("Lỗi âm thanh:", e));
+  } catch (e) {
+    console.log("Không thể phát âm thanh:", e);
+  }
+}
 
 // Unlock audio trên mobile
 document.addEventListener('touchstart', function() {
   const silentAudio = new Audio();
   silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==';
-  silentAudio.play().catch(e => console.log("Audio unlock error"));
+  silentAudio.play().then(() => {
+    console.log("Audio đã được mở khóa");
+  }).catch(e => console.log("Audio unlock error"));
 }, { once: true });
 
 /* ===== GAME STATE ===== */
@@ -921,11 +1041,14 @@ playerImg.onload = () => {
 
 /* ===== START GAME ===== */
 function startGame(){
+ playSound(sClick);
  document.getElementById('instruction').style.display = 'none';
  run = true;
  
- // Khởi động audio
- if (sCoin) sCoin.play().catch(e => console.log("Audio error:", e));
+ // Tăng tốc độ nhạc nền khi bắt đầu game
+ if (bgMusic) {
+   bgMusic.playbackRate = 1.0;
+ }
  
  loop();
 }
@@ -939,6 +1062,11 @@ canvas.addEventListener("touchstart", function(e) {
  
  const oldLane = player.lane;
  player.lane = touchX < rect.width / 2 ? Math.max(0, player.lane - 1) : Math.min(2, player.lane + 1);
+ 
+ // Phát âm thanh khi chuyển lane
+ if (oldLane !== player.lane) {
+   playSound(sClick);
+ }
 });
 
 /* SPAWN COINS */
@@ -1041,16 +1169,14 @@ function loop(){
    coin++;
    document.getElementById('coinEl').innerText = coin;
    
-   sCoin.currentTime = 0;
-   sCoin.play().catch(e => console.log("Audio error:", e));
+   playSound(sCoin);
    
    const milestone = Math.floor(coin / 50);
    if(milestone > basket){
     basket = milestone;
     document.getElementById('basketEl').innerText = basket;
     
-    sBasket.currentTime = 0;
-    sBasket.play().catch(e => console.log("Audio error:", e));
+    playSound(sBasket);
     
     const butElement = document.getElementById('but');
     butElement.classList.add('show');
@@ -1078,7 +1204,21 @@ function loop(){
     }, 1000);
    }
    
+   // Tăng tốc độ
+   const oldSpeed = speed;
    speed = Math.min(baseSpeed + milestone * speedStep, maxSpeed);
+   
+   // Phát âm thanh tăng tốc nếu có sự thay đổi tốc độ
+   if (Math.abs(speed - oldSpeed) > 0.5 && milestone > 0) {
+     playSound(sSpeedUp);
+     
+     // Tăng tốc độ nhạc nền theo tốc độ game
+     if (bgMusic) {
+       const musicSpeed = 1.0 + (speed - baseSpeed) / (maxSpeed - baseSpeed) * 0.3;
+       bgMusic.playbackRate = Math.min(musicSpeed, 1.3);
+     }
+   }
+   
    document.getElementById('progress').style.width = ((coin % 50) / 50 * 100) + "%";
   }
  }
@@ -1130,7 +1270,8 @@ function loop(){
 
 function endGame(){
  run = false;
- sHit.play().catch(e => console.log("Audio error:", e));
+ playSound(sHit);
+ stopBackgroundMusic();
  
  document.getElementById('finalCoins').textContent = coin;
  document.getElementById('finalBaskets').textContent = basket;
@@ -1163,6 +1304,12 @@ function endGame(){
   
   if(basket >= 3){
    document.getElementById('voucherPopup').style.display = 'block';
+   // Phát âm thanh chiến thắng
+   if (soundEnabled) {
+     const winSound = new Audio("assets/win.mp3");
+     winSound.volume = 0.5;
+     winSound.play().catch(e => console.log("Lỗi âm thanh chiến thắng"));
+   }
   }
  }, 1000);
 }
@@ -1230,9 +1377,6 @@ window.addEventListener('load', function() {
   let loadedImages = 0;
   const totalImages = imagesToLoad.length;
   
-  // Debug log
-  console.log('Bắt đầu tải hình ảnh...');
-  
   imagesToLoad.forEach(img => {
     // Thiết lập onload
     img.onload = function() {
@@ -1246,21 +1390,8 @@ window.addEventListener('load', function() {
     // Thiết lập onerror
     img.onerror = function() {
       console.error(`❌ Lỗi khi tải hình ảnh: ${img.src}`);
-      // Thử tải lại với đường dẫn thay thế
-      console.log(`Thử tải lại: ${img.src}`);
     };
   });
-  
-  // Kiểm tra sau 3 giây nếu hình ảnh chưa tải xong
-  setTimeout(() => {
-    if (loadedImages < totalImages) {
-      console.warn(`Cảnh báo: Chỉ tải được ${loadedImages}/${totalImages} hình ảnh`);
-      console.log('Danh sách hình ảnh cần tải:');
-      imagesToLoad.forEach(img => {
-        console.log(`- ${img.src}: ${img.complete ? '✓ Đã tải' : '✗ Chưa tải'}`);
-      });
-    }
-  }, 3000);
 });
 
 // Fix lỗi touch trên canvas cho mobile
@@ -1271,13 +1402,77 @@ function handleTouch(e) {
   if (e.cancelable) e.preventDefault();
 }
 
-// Đảm bảo game chạy ngay cả khi có lỗi nhỏ
-window.addEventListener('error', function(e) {
-  console.error('Lỗi JavaScript:', e.message);
-  console.error('Tại dòng:', e.lineno);
-  console.error('Trong file:', e.filename);
+// Kiểm tra và tải file âm thanh
+window.addEventListener('load', function() {
+  // Danh sách file âm thanh cần kiểm tra
+  const audioFiles = [
+    'assets/background.mp3',
+    'assets/coin.mp3',
+    'assets/basket.mp3',
+    'assets/hit.mp3',
+    'assets/click.mp3',
+    'assets/speedup.mp3',
+    'assets/win.mp3'
+  ];
+  
+  console.log('Kiểm tra file âm thanh...');
+  
+  // Kiểm tra từng file
+  audioFiles.forEach(file => {
+    fetch(file, { method: 'HEAD' })
+      .then(response => {
+        if (response.ok) {
+          console.log(`✓ ${file} tồn tại`);
+        } else {
+          console.warn(`⚠ ${file} không tồn tại`);
+        }
+      })
+      .catch(() => {
+        console.warn(`✗ Không thể truy cập ${file}`);
+      });
+  });
 });
+
+// Tạo file âm thanh mẫu nếu không có
+function createFallbackAudio() {
+  console.log('Tạo âm thanh mẫu...');
+  
+  // Tạo âm thanh coin đơn giản
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  
+  // Âm thanh coin
+  function createCoinSound() {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.1);
+    
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+    
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.3);
+  }
+  
+  // Âm thanh nền đơn giản
+  function createBackgroundMusic() {
+    // Tạo âm thanh nền đơn giản bằng Web Audio API
+    console.log('Tạo nhạc nền mẫu...');
+  }
+  
+  // Kiểm tra nếu âm thanh không tải được, sử dụng fallback
+  sCoin.onerror = function() {
+    console.log('Sử dụng âm thanh coin mẫu');
+    sCoin.onplay = createCoinSound;
+  };
+}
+
+// Gọi hàm tạo âm thanh mẫu
+setTimeout(createFallbackAudio, 1000);
 </script>
 </body>
 </html>
-
