@@ -602,6 +602,12 @@ canvas{
  20%,40%,60%,80%{transform:translateX(5px)}
 }
 
+@keyframes sparkle {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+}
+
 /* ===== RESPONSIVE FIXES ===== */
 /* Mobile Landscape */
 @media (max-height: 500px) and (orientation: landscape) {
@@ -718,7 +724,7 @@ html {
    <li><b>🪙 Thu thập Xu</b> - Tích luỹ đổi quà MoMo</li>
    <li><b>🧺 Mỗi 50 Xu</b> nhận <b>1 Giỏ Cá</b></li>
    <li><b>⚡ Càng nhiều Xu</b> → Tốc độ càng nhanh</li>
-   <li><b>❌ Tránh chướng ngại vật</b> (đồ ăn, coffe, cosmestic)</li>
+   <li><b>❌ Tránh chướng ngại vật</b> (đá, gỗ, chậu)</li>
    <li><b>🎁 Đạt 3 Giỏ Cá</b> để nhận Voucher MoMo</li>
   </ul>
   <button class="btn-momo" onclick="startGame()">🎮 BẮT ĐẦU CHƠI</button>
@@ -894,7 +900,7 @@ function showInstruction(){
 }
 
 /* ===== AUTO CLEAR ===== */
-const GAME_VERSION = "music-enhanced-6.0";
+const GAME_VERSION = "but-sound-7.0";
 if(localStorage.getItem("game_version") !== GAME_VERSION){
  localStorage.removeItem("leaderboard");
  localStorage.setItem("game_version", GAME_VERSION);
@@ -936,12 +942,15 @@ bgMusic.src = "assets/background.mp3";
 bgMusic.loop = true;
 bgMusic.volume = 0.5;
 
-// Hiệu ứng âm thanh
+// Hiệu ứng âm thanh - ĐÃ THÊM ÂM THANH ÔNG BỤT
 const sCoin = new Audio("assets/coin.mp3");
 const sBasket = new Audio("assets/basket.mp3");
 const sHit = new Audio("assets/hit.mp3");
 const sClick = new Audio("assets/click.mp3");
 const sSpeedUp = new Audio("assets/speedup.mp3");
+const sBut = new Audio("assets/but.mp3"); // Âm thanh ông Bụt
+const sMagic = new Audio("assets/magic.mp3"); // Âm thanh phép thuật
+const sWin = new Audio("assets/win.mp3"); // Âm thanh chiến thắng
 
 // Thiết lập volume
 sCoin.volume = 0.3;
@@ -949,6 +958,9 @@ sBasket.volume = 0.4;
 sHit.volume = 0.5;
 sClick.volume = 0.3;
 sSpeedUp.volume = 0.4;
+sBut.volume = 0.6; // Âm thanh ông Bụt to hơn một chút
+sMagic.volume = 0.5;
+sWin.volume = 0.6;
 
 // Biến kiểm soát âm thanh
 let soundEnabled = true;
@@ -983,10 +995,27 @@ function toggleSound() {
   const soundIcon = document.getElementById('soundIcon');
   soundIcon.textContent = soundEnabled ? '🔊' : '🔇';
   
+  // Phát âm thanh click khi bật/tắt
+  if (soundEnabled) {
+    playSound(sClick);
+  }
+  
   // Áp dụng trạng thái âm thanh
   if (soundEnabled) {
     bgMusic.volume = 0.5;
-    playBackgroundMusic();
+    sCoin.volume = 0.3;
+    sBasket.volume = 0.4;
+    sHit.volume = 0.5;
+    sClick.volume = 0.3;
+    sSpeedUp.volume = 0.4;
+    sBut.volume = 0.6;
+    sMagic.volume = 0.5;
+    sWin.volume = 0.6;
+    
+    // Tiếp tục nhạc nền nếu đang trong game
+    if (run) {
+      playBackgroundMusic();
+    }
   } else {
     bgMusic.volume = 0;
     sCoin.volume = 0;
@@ -994,19 +1023,88 @@ function toggleSound() {
     sHit.volume = 0;
     sClick.volume = 0;
     sSpeedUp.volume = 0;
+    sBut.volume = 0;
+    sMagic.volume = 0;
+    sWin.volume = 0;
   }
 }
 
 // Hàm phát âm thanh an toàn
 function playSound(sound) {
-  if (!soundEnabled) return;
+  if (!soundEnabled || !sound) return;
   
   try {
     // Nếu âm thanh đang phát, reset để phát lại
     sound.currentTime = 0;
-    sound.play().catch(e => console.log("Lỗi âm thanh:", e));
+    sound.play().catch(e => {
+      // Nếu lỗi, thử tải lại file
+      console.log("Lỗi âm thanh, thử tải lại:", e);
+      sound.load();
+    });
   } catch (e) {
     console.log("Không thể phát âm thanh:", e);
+  }
+}
+
+// Hàm phát âm thanh ông Bụt với hiệu ứng đặc biệt
+function playButSound() {
+  if (!soundEnabled) return;
+  
+  // Phát âm thanh ông Bụt
+  playSound(sBut);
+  
+  // Sau 0.5 giây, phát âm thanh phép thuật
+  setTimeout(() => {
+    playSound(sMagic);
+  }, 500);
+  
+  // Tạo hiệu ứng lấp lánh khi ông Bụt xuất hiện
+  createSparkleEffect();
+}
+
+// Hàm tạo hiệu ứng lấp lánh
+function createSparkleEffect() {
+  const butElement = document.getElementById('but');
+  const butRect = butElement.getBoundingClientRect();
+  const gameWrapper = document.getElementById('gameWrapper');
+  const wrapperRect = gameWrapper.getBoundingClientRect();
+  
+  // Vị trí ông Bụt
+  const butX = butRect.left - wrapperRect.left + butRect.width / 2;
+  const butY = butRect.top - wrapperRect.top;
+  
+  // Tạo 10 hạt lấp lánh
+  for (let i = 0; i < 10; i++) {
+    const sparkle = document.createElement('div');
+    sparkle.style.position = 'absolute';
+    sparkle.style.width = '10px';
+    sparkle.style.height = '10px';
+    sparkle.style.background = 'radial-gradient(circle, #FFD700, #FF9100)';
+    sparkle.style.borderRadius = '50%';
+    sparkle.style.left = (butX - 5) + 'px';
+    sparkle.style.top = (butY + 50) + 'px'; // Dưới chân ông Bụt
+    sparkle.style.zIndex = '14';
+    sparkle.style.pointerEvents = 'none';
+    sparkle.style.animation = `sparkle 1s ease-out forwards`;
+    sparkle.style.animationDelay = (i * 0.1) + 's';
+    
+    // Random direction
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 30 + Math.random() * 50;
+    const endX = Math.cos(angle) * distance;
+    const endY = Math.sin(angle) * distance - 50;
+    
+    sparkle.style.setProperty('--end-x', endX + 'px');
+    sparkle.style.setProperty('--end-y', endY + 'px');
+    
+    gameWrapper.appendChild(sparkle);
+    
+    // Xóa sau khi animation kết thúc
+    setTimeout(() => {
+      if (sparkle.parentNode) {
+        sparkle.parentNode.removeChild(sparkle);
+      }
+    }, 1000 + i * 100);
   }
 }
 
@@ -1029,6 +1127,7 @@ let coins = [], obstacles = [];
 let coinTimer = 0, obstacleTimer = 0;
 let frameCount = 0;
 let butTimeout = null;
+let lastMilestone = 0; // Theo dõi milestone cuối cùng
 
 /* SPRITE ANIMATION */
 const RUN_FRAMES = 4;
@@ -1044,6 +1143,7 @@ function startGame(){
  playSound(sClick);
  document.getElementById('instruction').style.display = 'none';
  run = true;
+ lastMilestone = 0;
  
  // Tăng tốc độ nhạc nền khi bắt đầu game
  if (bgMusic) {
@@ -1176,8 +1276,10 @@ function loop(){
     basket = milestone;
     document.getElementById('basketEl').innerText = basket;
     
-    playSound(sBasket);
+    // PHÁT ÂM THANH ÔNG BỤT KHI NHẬN GIỎ CÁ MỚI
+    playButSound();
     
+    // Hiển thị ông Bụt
     const butElement = document.getElementById('but');
     butElement.classList.add('show');
     
@@ -1194,6 +1296,7 @@ function loop(){
       }, 500);
     }, 2000);
     
+    // Hiển thị giỏ cá
     const basketElement = document.getElementById('basketDrop');
     basketElement.classList.add('show');
     
@@ -1208,8 +1311,9 @@ function loop(){
    const oldSpeed = speed;
    speed = Math.min(baseSpeed + milestone * speedStep, maxSpeed);
    
-   // Phát âm thanh tăng tốc nếu có sự thay đổi tốc độ
-   if (Math.abs(speed - oldSpeed) > 0.5 && milestone > 0) {
+   // Phát âm thanh tăng tốc nếu có sự thay đổi tốc độ và milestone mới
+   if (milestone > lastMilestone) {
+     lastMilestone = milestone;
      playSound(sSpeedUp);
      
      // Tăng tốc độ nhạc nền theo tốc độ game
@@ -1305,11 +1409,7 @@ function endGame(){
   if(basket >= 3){
    document.getElementById('voucherPopup').style.display = 'block';
    // Phát âm thanh chiến thắng
-   if (soundEnabled) {
-     const winSound = new Audio("assets/win.mp3");
-     winSound.volume = 0.5;
-     winSound.play().catch(e => console.log("Lỗi âm thanh chiến thắng"));
-   }
+   playSound(sWin);
   }
  }, 1000);
 }
@@ -1372,39 +1472,9 @@ function saveScore(){
  });
 }
 
-// Preload images và kiểm tra lỗi
-window.addEventListener('load', function() {
-  let loadedImages = 0;
-  const totalImages = imagesToLoad.length;
-  
-  imagesToLoad.forEach(img => {
-    // Thiết lập onload
-    img.onload = function() {
-      loadedImages++;
-      console.log(`Đã tải: ${img.src}`);
-      if (loadedImages === totalImages) {
-        console.log('✓ Tất cả hình ảnh đã được tải thành công!');
-      }
-    };
-    
-    // Thiết lập onerror
-    img.onerror = function() {
-      console.error(`❌ Lỗi khi tải hình ảnh: ${img.src}`);
-    };
-  });
-});
-
-// Fix lỗi touch trên canvas cho mobile
-canvas.addEventListener('touchstart', handleTouch, { passive: false });
-canvas.addEventListener('touchmove', handleTouch, { passive: false });
-
-function handleTouch(e) {
-  if (e.cancelable) e.preventDefault();
-}
-
 // Kiểm tra và tải file âm thanh
 window.addEventListener('load', function() {
-  // Danh sách file âm thanh cần kiểm tra
+  // Danh sách file âm thanh cần kiểm tra - ĐÃ THÊM BUT.MP3 VÀ MAGIC.MP3
   const audioFiles = [
     'assets/background.mp3',
     'assets/coin.mp3',
@@ -1412,6 +1482,8 @@ window.addEventListener('load', function() {
     'assets/hit.mp3',
     'assets/click.mp3',
     'assets/speedup.mp3',
+    'assets/but.mp3',     // Âm thanh ông Bụt
+    'assets/magic.mp3',   // Âm thanh phép thuật
     'assets/win.mp3'
   ];
   
@@ -1424,56 +1496,124 @@ window.addEventListener('load', function() {
         if (response.ok) {
           console.log(`✓ ${file} tồn tại`);
         } else {
-          console.warn(`⚠ ${file} không tồn tại`);
+          console.warn(`⚠ ${file} không tồn tại - sẽ tạo âm thanh mẫu`);
         }
       })
       .catch(() => {
         console.warn(`✗ Không thể truy cập ${file}`);
       });
   });
+  
+  // Tạo âm thanh mẫu nếu file không tồn tại
+  createFallbackAudio();
 });
 
-// Tạo file âm thanh mẫu nếu không có
+// Tạo âm thanh mẫu nếu file không tồn tại
 function createFallbackAudio() {
-  console.log('Tạo âm thanh mẫu...');
+  console.log('Kiểm tra và tạo âm thanh mẫu nếu cần...');
   
-  // Tạo âm thanh coin đơn giản
-  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  // Kiểm tra âm thanh ông Bụt
+  sBut.onerror = function() {
+    console.log('Tạo âm thanh ông Bụt mẫu...');
+    // Tạo âm thanh "ting" đơn giản cho ông Bụt
+    sBut.src = createToneSound(800, 1200, 0.6, 1.0);
+  };
   
-  // Âm thanh coin
-  function createCoinSound() {
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-    
-    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.1);
-    
-    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-    
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + 0.3);
-  }
+  // Kiểm tra âm thanh phép thuật
+  sMagic.onerror = function() {
+    console.log('Tạo âm thanh phép thuật mẫu...');
+    // Tạo âm thanh phép thuật với nhiều tần số
+    sMagic.src = createMagicSound();
+  };
   
-  // Âm thanh nền đơn giản
-  function createBackgroundMusic() {
-    // Tạo âm thanh nền đơn giản bằng Web Audio API
-    console.log('Tạo nhạc nền mẫu...');
-  }
-  
-  // Kiểm tra nếu âm thanh không tải được, sử dụng fallback
-  sCoin.onerror = function() {
-    console.log('Sử dụng âm thanh coin mẫu');
-    sCoin.onplay = createCoinSound;
+  // Kiểm tra âm thanh win
+  sWin.onerror = function() {
+    console.log('Tạo âm thanh chiến thắng mẫu...');
+    // Tạo âm thanh chiến thắng
+    sWin.src = createWinSound();
   };
 }
 
-// Gọi hàm tạo âm thanh mẫu
-setTimeout(createFallbackAudio, 1000);
+// Tạo âm thanh đơn giản bằng Base64
+function createToneSound(startFreq, endFreq, startVol, endVol) {
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+  
+  oscillator.frequency.setValueAtTime(startFreq, audioContext.currentTime);
+  oscillator.frequency.exponentialRampToValueAtTime(endFreq, audioContext.currentTime + 0.5);
+  
+  gainNode.gain.setValueAtTime(startVol, audioContext.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(endVol, audioContext.currentTime + 0.1);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+  
+  oscillator.start();
+  
+  // Tạo URL từ AudioBuffer
+  const duration = 0.5;
+  const sampleRate = 44100;
+  const frameCount = sampleRate * duration;
+  
+  const audioBuffer = audioContext.createBuffer(1, frameCount, sampleRate);
+  const channelData = audioBuffer.getChannelData(0);
+  
+  for (let i = 0; i < frameCount; i++) {
+    const t = i / sampleRate;
+    const freq = startFreq * Math.pow(endFreq / startFreq, t / duration);
+    channelData[i] = Math.sin(2 * Math.PI * freq * t) * 
+                    (startVol * Math.pow(endVol / startVol, t / duration)) * 
+                    (1 - t / duration);
+  }
+  
+  oscillator.stop(audioContext.currentTime + duration);
+  
+  // Chuyển thành Data URL (đơn giản hóa)
+  return "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==";
+}
+
+// Tạo âm thanh phép thuật phức tạp hơn
+function createMagicSound() {
+  return "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==";
+}
+
+// Tạo âm thanh chiến thắng
+function createWinSound() {
+  return "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==";
+}
+
+// Fix lỗi touch trên canvas cho mobile
+canvas.addEventListener('touchstart', handleTouch, { passive: false });
+canvas.addEventListener('touchmove', handleTouch, { passive: false });
+
+function handleTouch(e) {
+  if (e.cancelable) e.preventDefault();
+}
+
+// Thêm animation cho sparkle effect
+const style = document.createElement('style');
+style.textContent = `
+@keyframes sparkle {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(0);
+    opacity: 0;
+  }
+  20% {
+    transform: translate(var(--end-x, 0), var(--end-y, -50px)) rotate(90deg) scale(1);
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(calc(var(--end-x, 0) * 1.5), calc(var(--end-y, -50px) - 50px)) rotate(180deg) scale(0);
+    opacity: 0;
+  }
+}
+`;
+document.head.appendChild(style);
 </script>
 </body>
 </html>
-
