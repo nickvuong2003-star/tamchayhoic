@@ -435,7 +435,7 @@ canvas{
  text-shadow:0 0 10px rgba(255,215,0,0.5);
 }
 
-/* VOUCHER POPUP */
+/* VOUCHER POPUP - ĐÃ CẬP NHẬT VỚI HÌNH ẢNH */
 #voucherPopup{
  display:none;
  background:linear-gradient(135deg,#FFD700 0%,#FFB300 100%);
@@ -468,19 +468,54 @@ canvas{
  font-size:26px;
  margin-bottom:15px;
 }
+.voucher-image-container{
+ width:100%;
+ height:180px;
+ margin:15px 0;
+ border-radius:15px;
+ overflow:hidden;
+ box-shadow:0 10px 25px rgba(165,0,100,0.4);
+ border:3px solid rgba(255,255,255,0.8);
+ position:relative;
+ background:rgba(255,255,255,0.9);
+}
+.voucher-image{
+ width:100%;
+ height:100%;
+ object-fit:contain;
+ display:block;
+}
+.voucher-sticker{
+ position:absolute;
+ top:10px;
+ right:10px;
+ background:#FFD700;
+ color:#A50064;
+ padding:5px 10px;
+ border-radius:20px;
+ font-weight:bold;
+ font-size:14px;
+ animation:pulse 2s infinite;
+}
 .voucher-code{
- font-size:32px;
+ font-size:28px;
  font-weight:900;
  letter-spacing:3px;
  background:rgba(255,255,255,0.95);
- padding:20px;
+ padding:15px;
  border-radius:15px;
- margin:20px 0;
+ margin:15px 0;
  color:#A50064;
  border:3px dashed #A50064;
  font-family:'Courier New',monospace;
  text-shadow:0 2px 4px rgba(0,0,0,0.1);
  animation:codePulse 2s ease-in-out infinite;
+}
+.voucher-desc{
+ font-size:14px;
+ margin-top:10px;
+ color:#A50064;
+ font-weight:bold;
 }
 
 /* NAME BOX */
@@ -608,6 +643,37 @@ canvas{
   100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
 }
 
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes rotateCoin {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* NHÂN VẬT LỚN HƠN */
+.player-shadow {
+  position: absolute;
+  bottom: 505px; /* Vị trí thấp hơn để phù hợp với kích thước mới */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px; /* Bóng rộng hơn */
+  height: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  filter: blur(5px);
+  z-index: 5;
+  pointer-events: none;
+}
+
 /* ===== RESPONSIVE FIXES ===== */
 /* Mobile Landscape */
 @media (max-height: 500px) and (orientation: landscape) {
@@ -629,6 +695,10 @@ canvas{
   #progressBox {
     transform: scale(0.8);
     transform-origin: top left;
+  }
+  
+  .voucher-image-container {
+    height: 140px;
   }
 }
 
@@ -689,6 +759,10 @@ html {
     max-width: 100vw;
     max-height: calc(100vw * (640/360));
   }
+  
+  .voucher-image-container {
+    height: 150px;
+  }
 }
 
 /* For very tall screens */
@@ -696,6 +770,10 @@ html {
   #gameWrapper {
     max-height: 100vh;
     max-width: calc(100vh * (360/640));
+  }
+  
+  .voucher-image-container {
+    height: 160px;
   }
 }
 </style>
@@ -724,7 +802,7 @@ html {
    <li><b>🪙 Thu thập Xu</b> - Tích luỹ đổi quà MoMo</li>
    <li><b>🧺 Mỗi 50 Xu</b> nhận <b>1 Giỏ Cá</b></li>
    <li><b>⚡ Càng nhiều Xu</b> → Tốc độ càng nhanh</li>
-   <li><b>❌ Tránh chướng ngại vật</b> (đồ ăn, cà phê, mỹ phẩm)</li>
+   <li><b>❌ Tránh chướng ngại vật</b> (coffe, bắp)</li>
    <li><b>🎁 Đạt 3 Giỏ Cá</b> để nhận Voucher MoMo</li>
   </ul>
   <button class="btn-momo" onclick="startGame()">🎮 BẮT ĐẦU CHƠI</button>
@@ -753,7 +831,7 @@ html {
 <!-- GAME OVER -->
 <div id="over">
  <div id="over-content">
-  <h2 style="color:#FFD700;font-size:36px;text-shadow:0 0 20px rgba(255,215,0,0.8);margin-bottom:30px;">🏁 KẾT THÚC</h2>
+  <h2 style="color:#FFD700;font-size:36px;text-shadow:0 0 20px rgba(255,215,0,0.8);margin-bottom:30px;">✨🧙‍♂️ KẾT THÚC</h2>
   
   <div id="summary">
    <div class="summary-item">
@@ -774,8 +852,19 @@ html {
   <div id="voucherPopup">
    <h3>🎉 CHÚC MỪNG!</h3>
    <p>Bạn đã đạt đủ <b>3 Giỏ Cá</b> 🎯</p>
-   <div class="voucher-code">MOMO-TET-2026</div>
-   <small>Sử dụng mã trong ví MoMo để nhận ưu đãi đặc biệt! 🧧</small>
+   
+   <div class="voucher-image-container">
+     <img id="voucherImage" class="voucher-image" src="" alt="Voucher MoMo">
+     <div class="voucher-sticker">HOT 🔥</div>
+   </div>
+   
+   <div class="voucher-code" id="voucherCode">MOMO-TET-2026</div>
+   
+   <div class="voucher-desc" id="voucherDesc">
+     Sử dụng mã trong ví MoMo để nhận ưu đãi đặc biệt! 🧧
+   </div>
+   
+   <small id="voucherExpiry">Hạn sử dụng: 31/12/2026</small>
   </div>
 
   <div id="nameBox">
@@ -856,6 +945,9 @@ window.addEventListener('load', function() {
   initializeGameSize();
   fixIntroSize();
   
+  // Preload voucher images
+  preloadVoucherImages();
+  
   // Fix cho iOS
   setTimeout(() => {
     setVH();
@@ -900,10 +992,134 @@ function showInstruction(){
 }
 
 /* ===== AUTO CLEAR ===== */
-const GAME_VERSION = "but-sound-7.0";
+const GAME_VERSION = "big-player-9.0";
 if(localStorage.getItem("game_version") !== GAME_VERSION){
  localStorage.removeItem("leaderboard");
  localStorage.setItem("game_version", GAME_VERSION);
+}
+
+/* ===== DANH SÁCH VOUCHER ===== */
+const voucherList = [
+  {
+    id: 1,
+    name: "Voucher Ăn Uống",
+    image: "assets/voucher/food.png",
+    code: "MOMO-FOOD-50K",
+    desc: "Giảm 50K cho đơn hàng ăn uống từ 150K",
+    color: "#FF6B6B",
+    expiry: "31/12/2026"
+  },
+  {
+    id: 2,
+    name: "Voucher Mua Sắm",
+    image: "assets/voucher/shopping.png",
+    code: "MOMO-SHOP-30%",
+    desc: "Giảm 30% cho đơn hàng mua sắm online",
+    color: "#4ECDC4",
+    expiry: "31/12/2026"
+  },
+  {
+    id: 3,
+    name: "Voucher Xem Phim",
+    image: "assets/voucher/movie.png",
+    code: "MOMO-MOVIE-2X1",
+    desc: "Mua 1 vé tặng 1 vé tại rạp CGV",
+    color: "#FFD166",
+    expiry: "31/12/2026"
+  },
+  {
+    id: 4,
+    name: "Voucher Đi Chơi",
+    image: "assets/voucher/travel.png",
+    code: "MOMO-TRAVEL-20K",
+    desc: "Giảm 20K cho chuyến xe công nghệ",
+    color: "#06D6A0",
+    expiry: "31/12/2026"
+  },
+  {
+    id: 5,
+    name: "Voucher Siêu Thị",
+    image: "assets/voucher/supermarket.png",
+    code: "MOMO-MART-15%",
+    desc: "Giảm 15% khi mua sắm tại siêu thị",
+    color: "#118AB2",
+    expiry: "31/12/2026"
+  },
+  {
+    id: 6,
+    name: "Voucher Cafe",
+    image: "assets/voucher/coffee.png",
+    code: "MOMO-CAFE-FREE",
+    desc: "Tặng 1 ly cafe miễn phí tại Highlands",
+    color: "#EF476F",
+    expiry: "31/12/2026"
+  }
+];
+
+// Preload voucher images
+function preloadVoucherImages() {
+  console.log('Đang tải hình ảnh voucher...');
+  
+  voucherList.forEach(voucher => {
+    const img = new Image();
+    img.src = voucher.image;
+    img.onload = () => {
+      console.log(`✓ Đã tải: ${voucher.image}`);
+    };
+    img.onerror = () => {
+      console.warn(`⚠ Không thể tải: ${voucher.image}`);
+      // Fallback image
+      voucher.image = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDMwMCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMTUwIiByeD0iMTUiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik03NSA1MEgyMjVWMTI1SDc1VjUwWiIgZmlsbD0iI0ZGRkZGRiIgc3Ryb2tlPSIjQTUwMDY0IiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iMTUwIiB5PSI5NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiBmaWxsPSIjQTUwMDY0IiBmb250LXdlaWdodD0iYm9sZCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Vk9VQ0hFUiB8IE1PTU8KPC90ZXh0Pgo8dGV4dCB4PSIxNTAiIHk9IjExNSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSIjQTUwMDY0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4KPHQ+c3BhbiBmb250LXdlaWdodD0iYm9sZCI+JDEwIE9GRjwvc3Bhbj4gfCAkMjAgTUlOSU1VTTwvdGV4dD4KPC9zdmc+";
+    };
+  });
+}
+
+// Hàm chọn voucher ngẫu nhiên
+function getRandomVoucher() {
+  const randomIndex = Math.floor(Math.random() * voucherList.length);
+  return voucherList[randomIndex];
+}
+
+// Hàm hiển thị voucher
+function showVoucher() {
+  const voucher = getRandomVoucher();
+  const voucherPopup = document.getElementById('voucherPopup');
+  const voucherImage = document.getElementById('voucherImage');
+  const voucherCode = document.getElementById('voucherCode');
+  const voucherDesc = document.getElementById('voucherDesc');
+  const voucherExpiry = document.getElementById('voucherExpiry');
+  
+  // Hiển thị hình ảnh voucher
+  voucherImage.src = voucher.image;
+  voucherImage.alt = voucher.name;
+  
+  // Hiển thị mã voucher
+  voucherCode.textContent = voucher.code;
+  
+  // Hiển thị mô tả
+  voucherDesc.textContent = voucher.desc;
+  
+  // Hiển thị hạn sử dụng
+  voucherExpiry.textContent = `Hạn sử dụng: ${voucher.expiry}`;
+  
+  // Thêm hiệu ứng màu cho mã voucher
+  voucherCode.style.background = `linear-gradient(135deg, ${voucher.color}20 0%, ${voucher.color}40 100%)`;
+  voucherCode.style.borderColor = voucher.color;
+  voucherCode.style.color = voucher.color;
+  
+  // Thêm hiệu ứng cho sticker
+  const sticker = document.querySelector('.voucher-sticker');
+  if (sticker) {
+    sticker.style.background = voucher.color;
+  }
+  
+  // Hiển thị popup
+  voucherPopup.style.display = 'block';
+  
+  // Thêm animation cho hình ảnh voucher
+  voucherImage.style.animation = 'float 3s ease-in-out infinite';
+  
+  console.log(`Đã chọn voucher: ${voucher.name}`);
 }
 
 /* ===== CANVAS SETUP ===== */
@@ -942,15 +1158,15 @@ bgMusic.src = "assets/background.mp3";
 bgMusic.loop = true;
 bgMusic.volume = 0.5;
 
-// Hiệu ứng âm thanh - ĐÃ THÊM ÂM THANH ÔNG BỤT
+// Hiệu ứng âm thanh
 const sCoin = new Audio("assets/coin.mp3");
 const sBasket = new Audio("assets/basket.mp3");
 const sHit = new Audio("assets/hit.mp3");
 const sClick = new Audio("assets/click.mp3");
 const sSpeedUp = new Audio("assets/speedup.mp3");
-const sBut = new Audio("assets/but.mp3"); // Âm thanh ông Bụt
-const sMagic = new Audio("assets/magic.mp3"); // Âm thanh phép thuật
-const sWin = new Audio("assets/win.mp3"); // Âm thanh chiến thắng
+const sBut = new Audio("assets/but.mp3");
+const sMagic = new Audio("assets/magic.mp3");
+const sWin = new Audio("assets/win.mp3");
 
 // Thiết lập volume
 sCoin.volume = 0.3;
@@ -958,7 +1174,7 @@ sBasket.volume = 0.4;
 sHit.volume = 0.5;
 sClick.volume = 0.3;
 sSpeedUp.volume = 0.4;
-sBut.volume = 0.6; // Âm thanh ông Bụt to hơn một chút
+sBut.volume = 0.6;
 sMagic.volume = 0.5;
 sWin.volume = 0.6;
 
@@ -1127,7 +1343,7 @@ let coins = [], obstacles = [];
 let coinTimer = 0, obstacleTimer = 0;
 let frameCount = 0;
 let butTimeout = null;
-let lastMilestone = 0; // Theo dõi milestone cuối cùng
+let lastMilestone = 0;
 
 /* SPRITE ANIMATION */
 const RUN_FRAMES = 4;
@@ -1137,6 +1353,14 @@ playerImg.onload = () => {
  SW = playerImg.width / RUN_FRAMES;
  SH = playerImg.height;
 };
+
+/* ===== NHÂN VẬT LỚN HƠN ===== */
+// Kích thước mới cho nhân vật: tăng 20% so với cũ (44x66 → 53x79)
+// Nhưng để đẹp hơn, chúng ta sẽ tăng lên 55x82
+const PLAYER_WIDTH = 55;    // Tăng từ 44 (+25%)
+const PLAYER_HEIGHT = 82;   // Tăng từ 66 (+24%)
+const PLAYER_OFFSET_X = PLAYER_WIDTH / 2;  // 27.5
+const PLAYER_OFFSET_Y = 60;  // Tăng từ 50 để nhân vật đứng cao hơn
 
 /* ===== START GAME ===== */
 function startGame(){
@@ -1233,16 +1457,52 @@ function loop(){
  }
  ctx.setLineDash([]);
  
- /* DRAW PLAYER */
+ /* DRAW PLAYER - KÍCH THƯỚC LỚN HƠN */
  runTick++;
  if(runTick % 6 === 0) runFrame = (runFrame + 1) % RUN_FRAMES;
  
  if(SW){
+  // Vẽ bóng của nhân vật
+  ctx.save();
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+  ctx.beginPath();
+  ctx.ellipse(
+    lanes[player.lane],
+    player.y + 10, // Bóng ở dưới chân nhân vật
+    PLAYER_WIDTH * 0.4, // Bóng rộng hơn
+    PLAYER_WIDTH * 0.15, // Bóng thấp
+    0, 0, Math.PI * 2
+  );
+  ctx.fill();
+  ctx.restore();
+  
+  // Vẽ nhân vật với kích thước mới
   ctx.drawImage(
    playerImg,
    runFrame * SW, 0, SW, SH,
-   lanes[player.lane] - 22, player.y - 50, 44, 66
+   lanes[player.lane] - PLAYER_OFFSET_X, 
+   player.y - PLAYER_OFFSET_Y, 
+   PLAYER_WIDTH, 
+   PLAYER_HEIGHT
   );
+  
+  // Thêm hiệu ứng glow cho nhân vật khi chạy nhanh
+  if (speed > baseSpeed + 2) {
+    ctx.save();
+    ctx.shadowColor = '#FFD700';
+    ctx.shadowBlur = 20;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.drawImage(
+     playerImg,
+     runFrame * SW, 0, SW, SH,
+     lanes[player.lane] - PLAYER_OFFSET_X, 
+     player.y - PLAYER_OFFSET_Y, 
+     PLAYER_WIDTH, 
+     PLAYER_HEIGHT
+    );
+    ctx.restore();
+  }
  }
  
  /* DRAW COINS */
@@ -1264,7 +1524,10 @@ function loop(){
   ctx.drawImage(coinImg, -15, -15, 30, 30);
   ctx.restore();
   
-  if(c.lane === player.lane && Math.abs(c.y - player.y) < 40){
+  // Điều chỉnh khoảng cách va chạm cho phù hợp với kích thước nhân vật mới
+  const collisionDistance = 45; // Tăng từ 40 để phù hợp với nhân vật lớn hơn
+  
+  if(c.lane === player.lane && Math.abs(c.y - player.y) < collisionDistance){
    coins.splice(i, 1);
    coin++;
    document.getElementById('coinEl').innerText = coin;
@@ -1351,7 +1614,10 @@ function loop(){
   ctx.drawImage(t.img, -t.size/2, -t.size/2, t.size, t.size);
   ctx.restore();
   
-  if(o.lane === player.lane && Math.abs(o.y - player.y) < 35){
+  // Điều chỉnh khoảng cách va chạm cho phù hợp với kích thước nhân vật mới
+  const collisionDistance = 40; // Tăng từ 35 để phù hợp với nhân vật lớn hơn
+  
+  if(o.lane === player.lane && Math.abs(o.y - player.y) < collisionDistance){
    endGame(); 
    return;
   }
@@ -1407,7 +1673,8 @@ function endGame(){
   document.getElementById('over').style.display = 'flex';
   
   if(basket >= 3){
-   document.getElementById('voucherPopup').style.display = 'block';
+   // Hiển thị voucher ngẫu nhiên
+   showVoucher();
    // Phát âm thanh chiến thắng
    playSound(sWin);
   }
@@ -1472,126 +1739,6 @@ function saveScore(){
  });
 }
 
-// Kiểm tra và tải file âm thanh
-window.addEventListener('load', function() {
-  // Danh sách file âm thanh cần kiểm tra - ĐÃ THÊM BUT.MP3 VÀ MAGIC.MP3
-  const audioFiles = [
-    'assets/background.mp3',
-    'assets/coin.mp3',
-    'assets/basket.mp3',
-    'assets/hit.mp3',
-    'assets/click.mp3',
-    'assets/speedup.mp3',
-    'assets/but.mp3',     // Âm thanh ông Bụt
-    'assets/magic.mp3',   // Âm thanh phép thuật
-    'assets/win.mp3'
-  ];
-  
-  console.log('Kiểm tra file âm thanh...');
-  
-  // Kiểm tra từng file
-  audioFiles.forEach(file => {
-    fetch(file, { method: 'HEAD' })
-      .then(response => {
-        if (response.ok) {
-          console.log(`✓ ${file} tồn tại`);
-        } else {
-          console.warn(`⚠ ${file} không tồn tại - sẽ tạo âm thanh mẫu`);
-        }
-      })
-      .catch(() => {
-        console.warn(`✗ Không thể truy cập ${file}`);
-      });
-  });
-  
-  // Tạo âm thanh mẫu nếu file không tồn tại
-  createFallbackAudio();
-});
-
-// Tạo âm thanh mẫu nếu file không tồn tại
-function createFallbackAudio() {
-  console.log('Kiểm tra và tạo âm thanh mẫu nếu cần...');
-  
-  // Kiểm tra âm thanh ông Bụt
-  sBut.onerror = function() {
-    console.log('Tạo âm thanh ông Bụt mẫu...');
-    // Tạo âm thanh "ting" đơn giản cho ông Bụt
-    sBut.src = createToneSound(800, 1200, 0.6, 1.0);
-  };
-  
-  // Kiểm tra âm thanh phép thuật
-  sMagic.onerror = function() {
-    console.log('Tạo âm thanh phép thuật mẫu...');
-    // Tạo âm thanh phép thuật với nhiều tần số
-    sMagic.src = createMagicSound();
-  };
-  
-  // Kiểm tra âm thanh win
-  sWin.onerror = function() {
-    console.log('Tạo âm thanh chiến thắng mẫu...');
-    // Tạo âm thanh chiến thắng
-    sWin.src = createWinSound();
-  };
-}
-
-// Tạo âm thanh đơn giản bằng Base64
-function createToneSound(startFreq, endFreq, startVol, endVol) {
-  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  const oscillator = audioContext.createOscillator();
-  const gainNode = audioContext.createGain();
-  
-  oscillator.connect(gainNode);
-  gainNode.connect(audioContext.destination);
-  
-  oscillator.frequency.setValueAtTime(startFreq, audioContext.currentTime);
-  oscillator.frequency.exponentialRampToValueAtTime(endFreq, audioContext.currentTime + 0.5);
-  
-  gainNode.gain.setValueAtTime(startVol, audioContext.currentTime);
-  gainNode.gain.exponentialRampToValueAtTime(endVol, audioContext.currentTime + 0.1);
-  gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-  
-  oscillator.start();
-  
-  // Tạo URL từ AudioBuffer
-  const duration = 0.5;
-  const sampleRate = 44100;
-  const frameCount = sampleRate * duration;
-  
-  const audioBuffer = audioContext.createBuffer(1, frameCount, sampleRate);
-  const channelData = audioBuffer.getChannelData(0);
-  
-  for (let i = 0; i < frameCount; i++) {
-    const t = i / sampleRate;
-    const freq = startFreq * Math.pow(endFreq / startFreq, t / duration);
-    channelData[i] = Math.sin(2 * Math.PI * freq * t) * 
-                    (startVol * Math.pow(endVol / startVol, t / duration)) * 
-                    (1 - t / duration);
-  }
-  
-  oscillator.stop(audioContext.currentTime + duration);
-  
-  // Chuyển thành Data URL (đơn giản hóa)
-  return "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==";
-}
-
-// Tạo âm thanh phép thuật phức tạp hơn
-function createMagicSound() {
-  return "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==";
-}
-
-// Tạo âm thanh chiến thắng
-function createWinSound() {
-  return "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==";
-}
-
-// Fix lỗi touch trên canvas cho mobile
-canvas.addEventListener('touchstart', handleTouch, { passive: false });
-canvas.addEventListener('touchmove', handleTouch, { passive: false });
-
-function handleTouch(e) {
-  if (e.cancelable) e.preventDefault();
-}
-
 // Thêm animation cho sparkle effect
 const style = document.createElement('style');
 style.textContent = `
@@ -1617,4 +1764,3 @@ document.head.appendChild(style);
 </script>
 </body>
 </html>
-
