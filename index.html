@@ -435,7 +435,7 @@ canvas{
  text-shadow:0 0 10px rgba(255,215,0,0.5);
 }
 
-/* VOUCHER POPUP - CẬP NHẬT VỚI HÌNH ẢNH ĐA KÍCH THƯỚC */
+/* VOUCHER POPUP - ĐÃ CẬP NHẬT VỚI 6 THƯƠNG HIỆU */
 #voucherPopup{
  display:none;
  background:linear-gradient(135deg,#FFD700 0%,#FFB300 100%);
@@ -468,40 +468,36 @@ canvas{
  font-size:26px;
  margin-bottom:15px;
 }
+.voucher-brand{
+ font-size:22px;
+ font-weight:900;
+ color:#A50064;
+ margin:10px 0;
+ padding:8px 15px;
+ background:rgba(255,255,255,0.9);
+ border-radius:12px;
+ display:inline-block;
+ box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
 .voucher-image-container{
  width:100%;
+ height:200px; /* Cao hơn để hình ảnh đẹp hơn */
  margin:15px 0;
  border-radius:15px;
  overflow:hidden;
  box-shadow:0 10px 25px rgba(165,0,100,0.4);
  border:3px solid rgba(255,255,255,0.8);
  position:relative;
- background:rgba(255,255,255,0.9);
+ background:rgba(255,255,255,0.95);
  display:flex;
  align-items:center;
  justify-content:center;
 }
-/* Hình ảnh voucher với nhiều kích thước */
 .voucher-image{
- max-width:100%;
- max-height:180px;
- object-fit:contain;
+ width:100%;
+ height:100%;
+ object-fit:contain; /* Đảm bảo hình ảnh fit đẹp */
  display:block;
-}
-/* Hình vuông (Beauty Box, GS25) */
-.voucher-image.square{
- width:160px;
- height:160px;
-}
-/* Hình ngang (Grab, CGV) */
-.voucher-image.landscape{
- width:240px;
- height:135px;
-}
-/* Hình dọc (Starbucks, Highlands) */
-.voucher-image.portrait{
- width:135px;
- height:180px;
 }
 .voucher-sticker{
  position:absolute;
@@ -514,11 +510,12 @@ canvas{
  font-weight:bold;
  font-size:14px;
  animation:pulse 2s infinite;
+ z-index:2;
 }
 .voucher-code{
- font-size:28px;
+ font-size:24px;
  font-weight:900;
- letter-spacing:3px;
+ letter-spacing:2px;
  background:rgba(255,255,255,0.95);
  padding:15px;
  border-radius:15px;
@@ -530,27 +527,19 @@ canvas{
  animation:codePulse 2s ease-in-out infinite;
 }
 .voucher-desc{
- font-size:14px;
+ font-size:15px;
  margin-top:10px;
  color:#A50064;
  font-weight:bold;
-}
-.voucher-brand{
- font-size:20px;
- font-weight:900;
- margin:10px 0;
- text-transform:uppercase;
- letter-spacing:1px;
+ line-height:1.4;
+ padding:0 10px;
 }
 .voucher-value{
- font-size:24px;
+ font-size:20px;
  font-weight:900;
- color:#A50064;
- margin:10px 0;
- background:rgba(255,255,255,0.9);
- padding:8px 15px;
- border-radius:10px;
- display:inline-block;
+ color:#FF0000;
+ margin:5px 0;
+ text-shadow:0 2px 4px rgba(255,0,0,0.2);
 }
 
 /* NAME BOX */
@@ -684,14 +673,19 @@ canvas{
   100% { transform: scale(1); }
 }
 
+@keyframes rotateCoin {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
 }
 
-@keyframes shine {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+@keyframes brandGlow {
+  0%, 100% { box-shadow: 0 0 10px rgba(165, 0, 100, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(165, 0, 100, 0.6); }
 }
 
 /* NHÂN VẬT LỚN HƠN */
@@ -733,21 +727,6 @@ canvas{
   }
   
   .voucher-image-container {
-    min-height: 140px;
-  }
-  
-  .voucher-image.square {
-    width: 140px;
-    height: 140px;
-  }
-  
-  .voucher-image.landscape {
-    width: 200px;
-    height: 112px;
-  }
-  
-  .voucher-image.portrait {
-    width: 112px;
     height: 150px;
   }
 }
@@ -811,22 +790,12 @@ html {
   }
   
   .voucher-image-container {
-    min-height: 150px;
+    height: 160px;
   }
   
-  .voucher-image.square {
-    width: 140px;
-    height: 140px;
-  }
-  
-  .voucher-image.landscape {
-    width: 200px;
-    height: 112px;
-  }
-  
-  .voucher-image.portrait {
-    width: 112px;
-    height: 150px;
+  .voucher-brand {
+    font-size: 20px;
+    padding: 6px 12px;
   }
 }
 
@@ -838,7 +807,7 @@ html {
   }
   
   .voucher-image-container {
-    min-height: 160px;
+    height: 170px;
   }
 }
 </style>
@@ -867,7 +836,7 @@ html {
    <li><b>🪙 Thu thập Xu</b> - Tích luỹ đổi quà MoMo</li>
    <li><b>🧺 Mỗi 50 Xu</b> nhận <b>1 Giỏ Cá</b></li>
    <li><b>⚡ Càng nhiều Xu</b> → Tốc độ càng nhanh</li>
-   <li><b>❌ Tránh chướng ngại vật</b> (ly, bắp rang)</li>
+   <li><b>❌ Tránh chướng ngại vật</b> (ly, bắp ngô)</li>
    <li><b>🎁 Đạt 3 Giỏ Cá</b> để nhận Voucher MoMo</li>
   </ul>
   <button class="btn-momo" onclick="startGame()">🎮 BẮT ĐẦU CHƠI</button>
@@ -913,19 +882,21 @@ html {
    </div>
   </div>
 
-  <!-- VOUCHER POPUP -->
+  <!-- VOUCHER POPUP - 6 THƯƠNG HIỆU ĐẶC BIỆT -->
   <div id="voucherPopup">
    <h3>🎉 CHÚC MỪNG!</h3>
    <p>Bạn đã đạt đủ <b>3 Giỏ Cá</b> 🎯</p>
    
+   <div class="voucher-brand" id="voucherBrand"></div>
+   
    <div class="voucher-image-container">
      <img id="voucherImage" class="voucher-image" src="" alt="Voucher MoMo">
-     <div class="voucher-sticker" id="voucherSticker">HOT 🔥</div>
+     <div class="voucher-sticker">EXCLUSIVE</div>
    </div>
    
-   <div class="voucher-brand" id="voucherBrand"></div>
    <div class="voucher-value" id="voucherValue"></div>
-   <div class="voucher-code" id="voucherCode">MOMO-TET-2026</div>
+   
+   <div class="voucher-code" id="voucherCode">MOMO-VOUCHER-2026</div>
    
    <div class="voucher-desc" id="voucherDesc">
      Sử dụng mã trong ví MoMo để nhận ưu đãi đặc biệt! 🧧
@@ -1059,93 +1030,103 @@ function showInstruction(){
 }
 
 /* ===== AUTO CLEAR ===== */
-const GAME_VERSION = "premium-vouchers-10.0";
+const GAME_VERSION = "brand-vouchers-10.0";
 if(localStorage.getItem("game_version") !== GAME_VERSION){
  localStorage.removeItem("leaderboard");
  localStorage.setItem("game_version", GAME_VERSION);
 }
 
-/* ===== DANH SÁCH VOUCHER MỚI ===== */
+/* ===== DANH SÁCH VOUCHER 6 THƯƠNG HIỆU ĐẶC BIỆT ===== */
 const voucherList = [
   {
     id: 1,
-    name: "Highlands Coffee",
+    brand: "Highlands Coffee",
+    name: "Voucher Highlands Coffee",
     image: "assets/voucher/highlands.png",
-    code: "HLD-MOMO-50K",
-    brand: "HIGHLANDS COFFEE",
-    value: "GIẢM 50K",
-    desc: "Giảm 50K cho hóa đơn từ 120K",
-    color: "#8B4513", // Màu nâu cafe
-    type: "portrait", // Hình dọc
-    expiry: "31/12/2026",
-    sticker: "CAFE ☕"
+    code: "MOMO-HIGHLANDS-50K",
+    value: "🎁 Giảm 50K",
+    desc: "Giảm 50K cho đơn hàng từ 100K tại Highlands Coffee",
+    color: "#006241", // Màu xanh đặc trưng Highlands
+    logoColor: "#006241",
+    expiry: "31/12/2026"
   },
   {
     id: 2,
-    name: "Grab",
+    brand: "Grab",
+    name: "Voucher Grab",
     image: "assets/voucher/grab.png",
-    code: "GRAB-MOMO-40K",
-    brand: "GRAB",
-    value: "GIẢM 40K",
-    desc: "Giảm 40K cho chuyến xe Grab",
-    color: "#00B14F", // Màu xanh Grab
-    type: "landscape", // Hình ngang
-    expiry: "31/12/2026",
-    sticker: "XE 🚗"
+    code: "MOMO-GRAB-40K",
+    value: "🚗 Giảm 40K",
+    desc: "Giảm 40K cho chuyến xe Grab/GrabFood từ 80K",
+    color: "#00B14F", // Màu xanh lá Grab
+    logoColor: "#00B14F",
+    expiry: "31/12/2026"
   },
   {
     id: 3,
-    name: "GS25",
-    image: "assets/voucher/gs25.png",
-    code: "GS25-MOMO-30%",
     brand: "GS25",
-    value: "GIẢM 30%",
-    desc: "Giảm 30% cho hóa đơn từ 80K",
+    name: "Voucher GS25",
+    image: "assets/voucher/gs25.png",
+    code: "MOMO-GS25-30%",
+    value: "🛒 Giảm 30%",
+    desc: "Giảm 30% cho hóa đơn từ 50K tại cửa hàng GS25",
     color: "#FF6B00", // Màu cam GS25
-    type: "square", // Hình vuông
-    expiry: "31/12/2026",
-    sticker: "TIỆM 🏪"
+    logoColor: "#FF6B00",
+    expiry: "31/12/2026"
   },
   {
     id: 4,
-    name: "CGV",
+    brand: "CGV",
+    name: "Voucher CGV",
     image: "assets/voucher/cgv.png",
-    code: "CGV-MOMO-2X1",
-    brand: "CGV CINEMA",
-    value: "MUA 1 TẶNG 1",
-    desc: "Mua 1 vé tặng 1 vé xem phim",
-    color: "#E31937", // Màu đỏ CGV
-    type: "landscape", // Hình ngang
-    expiry: "31/12/2026",
-    sticker: "PHIM 🎬"
+    code: "MOMO-CGV-2X1",
+    value: "🎬 Mua 1 Tặng 1",
+    desc: "Mua 1 vé tặng 1 vé xem phim tại rạp CGV",
+    color: "#E51937", // Màu đỏ CGV
+    logoColor: "#E51937",
+    expiry: "31/12/2026"
   },
   {
     id: 5,
-    name: "Starbucks",
+    brand: "Starbucks",
+    name: "Voucher Starbucks",
     image: "assets/voucher/starbucks.png",
-    code: "SBUX-MOMO-60K",
-    brand: "STARBUCKS",
-    value: "GIẢM 60K",
-    desc: "Giảm 60K cho hóa đơn từ 150K",
+    code: "MOMO-STARBUCKS-FREE",
+    value: "☕ Tặng 1 Ly",
+    desc: "Tặng 1 ly cafe bất kỳ tại Starbucks (size M)",
     color: "#00704A", // Màu xanh Starbucks
-    type: "portrait", // Hình dọc
-    expiry: "31/12/2026",
-    sticker: "VIP 🌟"
+    logoColor: "#00704A",
+    expiry: "31/12/2026"
   },
   {
     id: 6,
-    name: "Beauty Box",
+    brand: "Beauty Box",
+    name: "Voucher Beauty Box",
     image: "assets/voucher/beautybox.png",
-    code: "BBOX-MOMO-25%",
-    brand: "BEAUTY BOX",
-    value: "GIẢM 25%",
-    desc: "Giảm 25% cho sản phẩm làm đẹp",
+    code: "MOMO-BEAUTY-25%",
+    value: "💄 Giảm 25%",
+    desc: "Giảm 25% cho đơn hàng mỹ phẩm từ 200K",
     color: "#FF69B4", // Màu hồng
-    type: "square", // Hình vuông
-    expiry: "31/12/2026",
-    sticker: "ĐẸP 💄"
+    logoColor: "#FF69B4",
+    expiry: "31/12/2026"
   }
 ];
+
+// Tạo fallback SVG cho từng thương hiệu
+function createBrandFallback(brand, color) {
+  return `data:image/svg+xml;base64,${btoa(`
+    <svg width="300" height="200" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="300" height="200" rx="15" fill="white"/>
+      <rect x="50" y="50" width="200" height="100" rx="10" fill="${color}20" stroke="${color}" stroke-width="2"/>
+      <text x="150" y="110" font-family="Arial" font-size="24" font-weight="bold" fill="${color}" text-anchor="middle">
+        ${brand.toUpperCase()}
+      </text>
+      <text x="150" y="140" font-family="Arial" font-size="16" fill="${color}" text-anchor="middle">
+        VOUCHER | MOMO
+      </text>
+    </svg>
+  `)}`;
+}
 
 // Preload voucher images
 function preloadVoucherImages() {
@@ -1155,35 +1136,14 @@ function preloadVoucherImages() {
     const img = new Image();
     img.src = voucher.image;
     img.onload = () => {
-      console.log(`✓ Đã tải: ${voucher.image}`);
+      console.log(`✓ Đã tải: ${voucher.brand} - ${voucher.image}`);
     };
     img.onerror = () => {
-      console.warn(`⚠ Không thể tải: ${voucher.image}`);
-      // Fallback image bằng SVG
-      voucher.image = createFallbackSVG(voucher);
+      console.warn(`⚠ Không thể tải: ${voucher.brand} - ${voucher.image}`);
+      // Fallback image với màu sắc thương hiệu
+      voucher.image = createBrandFallback(voucher.brand, voucher.color);
     };
   });
-}
-
-// Tạo hình SVG fallback cho voucher
-function createFallbackSVG(voucher) {
-  const svg = `
-    <svg width="300" height="180" viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
-      <rect width="300" height="180" rx="15" fill="white"/>
-      <rect x="10" y="10" width="280" height="160" rx="10" fill="${voucher.color}20" stroke="${voucher.color}" stroke-width="2"/>
-      <text x="150" y="70" font-family="Arial" font-size="24" font-weight="bold" fill="${voucher.color}" text-anchor="middle">
-        ${voucher.brand}
-      </text>
-      <text x="150" y="110" font-family="Arial" font-size="20" fill="${voucher.color}" text-anchor="middle">
-        ${voucher.value}
-      </text>
-      <rect x="80" y="130" width="140" height="30" rx="15" fill="${voucher.color}"/>
-      <text x="150" y="150" font-family="Arial" font-size="16" fill="white" text-anchor="middle">
-        ${voucher.sticker}
-      </text>
-    </svg>
-  `;
-  return "data:image/svg+xml;base64," + btoa(svg);
 }
 
 // Hàm chọn voucher ngẫu nhiên
@@ -1197,52 +1157,63 @@ function showVoucher() {
   const voucher = getRandomVoucher();
   const voucherPopup = document.getElementById('voucherPopup');
   const voucherImage = document.getElementById('voucherImage');
+  const voucherBrand = document.getElementById('voucherBrand');
   const voucherCode = document.getElementById('voucherCode');
   const voucherDesc = document.getElementById('voucherDesc');
-  const voucherExpiry = document.getElementById('voucherExpiry');
-  const voucherBrand = document.getElementById('voucherBrand');
   const voucherValue = document.getElementById('voucherValue');
-  const voucherSticker = document.getElementById('voucherSticker');
+  const voucherExpiry = document.getElementById('voucherExpiry');
   
-  // Hiển thị hình ảnh voucher với kích thước phù hợp
+  // Hiển thị thương hiệu
+  voucherBrand.textContent = voucher.brand;
+  voucherBrand.style.color = voucher.color;
+  voucherBrand.style.background = `${voucher.color}15`;
+  voucherBrand.style.border = `2px solid ${voucher.color}40`;
+  voucherBrand.style.animation = 'brandGlow 2s ease-in-out infinite';
+  
+  // Hiển thị hình ảnh voucher
   voucherImage.src = voucher.image;
   voucherImage.alt = voucher.name;
-  voucherImage.className = `voucher-image ${voucher.type}`;
   
-  // Hiển thị thông tin voucher
-  voucherBrand.textContent = voucher.brand;
+  // Hiển thị giá trị voucher
   voucherValue.textContent = voucher.value;
-  voucherCode.textContent = voucher.code;
-  voucherDesc.textContent = voucher.desc;
-  voucherExpiry.textContent = `Hạn sử dụng: ${voucher.expiry}`;
-  voucherSticker.textContent = voucher.sticker;
+  voucherValue.style.color = voucher.color;
   
-  // Thêm hiệu ứng màu
-  voucherCode.style.background = `linear-gradient(135deg, ${voucher.color}20 0%, ${voucher.color}40 100%)`;
+  // Hiển thị mã voucher
+  voucherCode.textContent = voucher.code;
+  
+  // Hiển thị mô tả
+  voucherDesc.textContent = voucher.desc;
+  
+  // Hiển thị hạn sử dụng
+  voucherExpiry.textContent = `Hạn sử dụng: ${voucher.expiry}`;
+  
+  // Thêm hiệu ứng màu cho mã voucher
+  voucherCode.style.background = `linear-gradient(135deg, ${voucher.color}15 0%, ${voucher.color}30 100%)`;
   voucherCode.style.borderColor = voucher.color;
   voucherCode.style.color = voucher.color;
   
-  voucherValue.style.background = `linear-gradient(90deg, ${voucher.color}, ${voucher.color}E6)`;
-  voucherValue.style.color = 'white';
+  // Thêm hiệu ứng cho sticker
+  const sticker = document.querySelector('.voucher-sticker');
+  if (sticker) {
+    sticker.style.background = `linear-gradient(135deg, ${voucher.color} 0%, ${voucher.logoColor}80 100%)`;
+    sticker.style.color = 'white';
+    sticker.style.fontWeight = 'bold';
+  }
   
-  voucherBrand.style.color = voucher.color;
-  voucherBrand.style.textShadow = `0 2px 10px ${voucher.color}40`;
-  
-  voucherSticker.style.background = voucher.color;
-  
-  // Thêm hiệu ứng ánh sáng cho hình ảnh
-  voucherImage.style.animation = 'float 3s ease-in-out infinite';
-  
-  // Thêm hiệu ứng shine cho giá trị voucher
-  voucherValue.style.background = `linear-gradient(90deg, 
-    ${voucher.color}00, ${voucher.color}, ${voucher.color}00, ${voucher.color}, ${voucher.color}00)`;
-  voucherValue.style.backgroundSize = '200% 100%';
-  voucherValue.style.animation = 'shine 3s linear infinite';
+  // Thêm hiệu ứng cho container
+  const container = document.querySelector('.voucher-image-container');
+  if (container) {
+    container.style.borderColor = `${voucher.color}80`;
+    container.style.boxShadow = `0 10px 25px ${voucher.color}40`;
+  }
   
   // Hiển thị popup
   voucherPopup.style.display = 'block';
   
-  console.log(`Đã chọn voucher: ${voucher.name} (${voucher.type})`);
+  // Thêm animation cho hình ảnh voucher
+  voucherImage.style.animation = 'float 3s ease-in-out infinite';
+  
+  console.log(`Đã chọn voucher: ${voucher.brand}`);
 }
 
 /* ===== CANVAS SETUP ===== */
@@ -1578,7 +1549,7 @@ function loop(){
  }
  ctx.setLineDash([]);
  
- /* DRAW PLAYER */
+ /* DRAW PLAYER - KÍCH THƯỚC LỚN HƠN */
  runTick++;
  if(runTick % 6 === 0) runFrame = (runFrame + 1) % RUN_FRAMES;
  
@@ -1589,9 +1560,9 @@ function loop(){
   ctx.beginPath();
   ctx.ellipse(
     lanes[player.lane],
-    player.y + 10,
-    PLAYER_WIDTH * 0.4,
-    PLAYER_WIDTH * 0.15,
+    player.y + 10, // Bóng ở dưới chân nhân vật
+    PLAYER_WIDTH * 0.4, // Bóng rộng hơn
+    PLAYER_WIDTH * 0.15, // Bóng thấp
     0, 0, Math.PI * 2
   );
   ctx.fill();
@@ -1645,6 +1616,7 @@ function loop(){
   ctx.drawImage(coinImg, -15, -15, 30, 30);
   ctx.restore();
   
+  // Điều chỉnh khoảng cách va chạm cho phù hợp với kích thước nhân vật mới
   const collisionDistance = 45;
   
   if(c.lane === player.lane && Math.abs(c.y - player.y) < collisionDistance){
@@ -1734,6 +1706,7 @@ function loop(){
   ctx.drawImage(t.img, -t.size/2, -t.size/2, t.size, t.size);
   ctx.restore();
   
+  // Điều chỉnh khoảng cách va chạm cho phù hợp với kích thước nhân vật mới
   const collisionDistance = 40;
   
   if(o.lane === player.lane && Math.abs(o.y - player.y) < collisionDistance){
