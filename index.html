@@ -1,4 +1,4 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
@@ -435,7 +435,7 @@ canvas{
  text-shadow:0 0 10px rgba(255,215,0,0.5);
 }
 
-/* VOUCHER POPUP - CẬP NHẬT VỚI HÌNH ẢNH ĐA KÍCH THƯỚC */
+/* VOUCHER POPUP - CẬP NHẬT KÍCH THƯỚC */
 #voucherPopup{
  display:none;
  background:linear-gradient(135deg,#FFD700 0%,#FFB300 100%);
@@ -468,9 +468,10 @@ canvas{
  font-size:26px;
  margin-bottom:15px;
 }
+/* CONTAINER CHO HÌNH VOUCHER */
 .voucher-image-container{
  width:100%;
- height:180px;
+ height:200px; /* Tăng chiều cao để chứa hình tốt hơn */
  margin:15px 0;
  border-radius:15px;
  overflow:hidden;
@@ -482,27 +483,26 @@ canvas{
  align-items:center;
  justify-content:center;
 }
-/* Hình ảnh voucher với nhiều kích thước */
+/* Hình ảnh voucher - ĐÃ SỬA ĐỂ FIT CONTAINER */
 .voucher-image{
- max-width:300%;
- max-height:480px;
- object-fit:contain;
+ max-width:100%;
+ max-height:100%;
+ width:auto;
+ height:auto;
+ object-fit:contain; /* Giữ tỷ lệ và fit trong container */
  display:block;
 }
 /* Hình vuông (Beauty Box, GS25) */
 .voucher-image.square{
- width:440px;
- height:440px;
+ /* Không cần kích thước cố định, sẽ tự fit */
 }
 /* Hình ngang (Grab, CGV) */
 .voucher-image.landscape{
- width:440px;
- height:440px;
+ /* Không cần kích thước cố định, sẽ tự fit */
 }
 /* Hình dọc (Starbucks, Highlands) */
 .voucher-image.portrait{
- width:440px;
- height:440px;
+ /* Không cần kích thước cố định, sẽ tự fit */
 }
 .voucher-code{
  font-size:28px;
@@ -722,22 +722,20 @@ canvas{
   }
   
   .voucher-image-container {
-    min-height: 50px;
+    height: 120px; /* Giảm chiều cao trong landscape */
   }
   
-  .voucher-image.square {
-    width: 140px;
-    height: 140px;
+  .voucher-code {
+    font-size: 20px;
+    padding: 10px;
   }
   
-  .voucher-image.landscape {
-    width: 200px;
-    height: 112px;
+  .voucher-brand {
+    font-size: 16px;
   }
   
-  .voucher-image.portrait {
-    width: 112px;
-    height: 150px;
+  .voucher-value {
+    font-size: 18px;
   }
 }
 
@@ -800,22 +798,20 @@ html {
   }
   
   .voucher-image-container {
-    min-height: 50px;
+    height: 150px; /* Giảm chiều cao cho màn hình nhỏ */
   }
   
-  .voucher-image.square {
-    width: 140px;
-    height: 140px;
+  .voucher-code {
+    font-size: 22px;
+    padding: 12px;
   }
   
-  .voucher-image.landscape {
-    width: 200px;
-    height: 112px;
+  .voucher-brand {
+    font-size: 18px;
   }
   
-  .voucher-image.portrait {
-    width: 112px;
-    height: 150px;
+  .voucher-value {
+    font-size: 20px;
   }
 }
 
@@ -827,7 +823,34 @@ html {
   }
   
   .voucher-image-container {
-    min-height: 50px;
+    height: 150px; /* Giảm chiều cao cho màn hình cao */
+  }
+}
+
+/* Cho màn hình rất nhỏ */
+@media (max-width: 320px) {
+  .voucher-image-container {
+    height: 140px;
+  }
+  
+  .voucher-code {
+    font-size: 20px;
+    padding: 10px;
+  }
+  
+  .voucher-brand {
+    font-size: 16px;
+  }
+  
+  .voucher-value {
+    font-size: 18px;
+  }
+}
+
+/* Cho màn hình lớn hơn */
+@media (min-width: 361px) and (min-height: 641px) {
+  .voucher-image-container {
+    height: 220px; /* Tăng chiều cao cho màn hình lớn */
   }
 }
 </style>
@@ -902,14 +925,13 @@ html {
    </div>
   </div>
 
-  <!-- VOUCHER POPUP -->
+  <!-- VOUCHER POPUP - ĐÃ SỬA KÍCH THƯỚC -->
   <div id="voucherPopup">
    <h3>🎉 CHÚC MỪNG!</h3>
    <p>Bạn đã đạt đủ <b>3 Giỏ Cá</b> 🎯</p>
    
    <div class="voucher-image-container">
      <img id="voucherImage" class="voucher-image" src="" alt="Voucher MoMo">
-     <div class="voucher-sticker" id="voucherSticker">HOT 🔥</div>
    </div>
    
    <div class="voucher-brand" id="voucherBrand"></div>
@@ -1157,17 +1179,17 @@ function preloadVoucherImages() {
 // Tạo hình SVG fallback cho voucher
 function createFallbackSVG(voucher) {
   const svg = `
-    <svg width="300" height="180" viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
-      <rect width="300" height="180" rx="15" fill="white"/>
-      <rect x="10" y="10" width="280" height="160" rx="10" fill="${voucher.color}20" stroke="${voucher.color}" stroke-width="2"/>
+    <svg width="300" height="200" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="300" height="200" rx="15" fill="white"/>
+      <rect x="10" y="10" width="280" height="180" rx="10" fill="${voucher.color}20" stroke="${voucher.color}" stroke-width="2"/>
       <text x="150" y="70" font-family="Arial" font-size="24" font-weight="bold" fill="${voucher.color}" text-anchor="middle">
         ${voucher.brand}
       </text>
       <text x="150" y="110" font-family="Arial" font-size="20" fill="${voucher.color}" text-anchor="middle">
         ${voucher.value}
       </text>
-      <rect x="80" y="130" width="140" height="30" rx="15" fill="${voucher.color}"/>
-      <text x="150" y="150" font-family="Arial" font-size="16" fill="white" text-anchor="middle">
+      <rect x="80" y="140" width="140" height="40" rx="15" fill="${voucher.color}"/>
+      <text x="150" y="165" font-family="Arial" font-size="16" fill="white" text-anchor="middle">
         ${voucher.sticker}
       </text>
     </svg>
@@ -1181,7 +1203,7 @@ function getRandomVoucher() {
   return voucherList[randomIndex];
 }
 
-// Hàm hiển thị voucher
+// Hàm hiển thị voucher - ĐÃ SỬA ĐỂ FIT CONTAINER
 function showVoucher() {
   const voucher = getRandomVoucher();
   const voucherPopup = document.getElementById('voucherPopup');
@@ -1191,9 +1213,16 @@ function showVoucher() {
   const voucherExpiry = document.getElementById('voucherExpiry');
   const voucherBrand = document.getElementById('voucherBrand');
   const voucherValue = document.getElementById('voucherValue');
-  const voucherSticker = document.getElementById('voucherSticker');
   
   // Hiển thị hình ảnh voucher với kích thước phù hợp
+  voucherImage.onload = function() {
+    // Tự động fit container sau khi hình tải xong
+    this.style.maxWidth = '100%';
+    this.style.maxHeight = '100%';
+    this.style.width = 'auto';
+    this.style.height = 'auto';
+  };
+  
   voucherImage.src = voucher.image;
   voucherImage.alt = voucher.name;
   voucherImage.className = `voucher-image ${voucher.type}`;
@@ -1204,7 +1233,6 @@ function showVoucher() {
   voucherCode.textContent = voucher.code;
   voucherDesc.textContent = voucher.desc;
   voucherExpiry.textContent = `Hạn sử dụng: ${voucher.expiry}`;
-  voucherSticker.textContent = voucher.sticker;
   
   // Thêm hiệu ứng màu
   voucherCode.style.background = `linear-gradient(135deg, ${voucher.color}20 0%, ${voucher.color}40 100%)`;
@@ -1216,8 +1244,6 @@ function showVoucher() {
   
   voucherBrand.style.color = voucher.color;
   voucherBrand.style.textShadow = `0 2px 10px ${voucher.color}40`;
-  
-  voucherSticker.style.background = voucher.color;
   
   // Thêm hiệu ứng ánh sáng cho hình ảnh
   voucherImage.style.animation = 'float 3s ease-in-out infinite';
@@ -1872,11 +1898,3 @@ document.head.appendChild(style);
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
