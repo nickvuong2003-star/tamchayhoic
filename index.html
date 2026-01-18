@@ -435,7 +435,7 @@ canvas{
  text-shadow:0 0 10px rgba(255,215,0,0.5);
 }
 
-/* VOUCHER POPUP - CẬP NHẬT KÍCH THƯỚC */
+/* VOUCHER POPUP - HÌNH ẢNH FILL TOÀN BỘ CONTAINER */
 #voucherPopup{
  display:none;
  background:linear-gradient(135deg,#FFD700 0%,#FFB300 100%);
@@ -468,10 +468,10 @@ canvas{
  font-size:26px;
  margin-bottom:15px;
 }
-/* CONTAINER CHO HÌNH VOUCHER */
+/* CONTAINER CHO HÌNH VOUCHER - VỚI KÍCH THƯỚC CỐ ĐỊNH */
 .voucher-image-container{
  width:100%;
- height:200px; /* Tăng chiều cao để chứa hình tốt hơn */
+ height:220px; /* Tăng chiều cao để hiển thị rõ hơn */
  margin:15px 0;
  border-radius:15px;
  overflow:hidden;
@@ -483,27 +483,23 @@ canvas{
  align-items:center;
  justify-content:center;
 }
-/* Hình ảnh voucher - ĐÃ SỬA ĐỂ FIT CONTAINER */
+/* Hình ảnh voucher - FILL TOÀN BỘ CONTAINER */
 .voucher-image{
- max-width:100%;
- max-height:100%;
- width:auto;
- height:auto;
- object-fit:contain; /* Giữ tỷ lệ và fit trong container */
+ width:100%;
+ height:100%;
+ object-fit:cover; /* Thay đổi từ 'contain' thành 'cover' để fill container */
  display:block;
+ position:absolute;
+ top:0;
+ left:0;
 }
-/* Hình vuông (Beauty Box, GS25) */
-.voucher-image.square{
- /* Không cần kích thước cố định, sẽ tự fit */
+/* Xóa các class cũ về kích thước vì giờ đã fill container */
+.voucher-image.square,
+.voucher-image.landscape,
+.voucher-image.portrait {
+  /* Tất cả sẽ fill container */
 }
-/* Hình ngang (Grab, CGV) */
-.voucher-image.landscape{
- /* Không cần kích thước cố định, sẽ tự fit */
-}
-/* Hình dọc (Starbucks, Highlands) */
-.voucher-image.portrait{
- /* Không cần kích thước cố định, sẽ tự fit */
-}
+
 .voucher-code{
  font-size:28px;
  font-weight:900;
@@ -722,7 +718,7 @@ canvas{
   }
   
   .voucher-image-container {
-    height: 120px; /* Giảm chiều cao trong landscape */
+    height: 140px; /* Giảm chiều cao trong landscape */
   }
   
   .voucher-code {
@@ -798,7 +794,7 @@ html {
   }
   
   .voucher-image-container {
-    height: 150px; /* Giảm chiều cao cho màn hình nhỏ */
+    height: 180px; /* Điều chỉnh cho màn hình nhỏ */
   }
   
   .voucher-code {
@@ -823,14 +819,14 @@ html {
   }
   
   .voucher-image-container {
-    height: 150px; /* Giảm chiều cao cho màn hình cao */
+    height: 180px; /* Điều chỉnh cho màn hình cao */
   }
 }
 
 /* Cho màn hình rất nhỏ */
 @media (max-width: 320px) {
   .voucher-image-container {
-    height: 140px;
+    height: 160px;
   }
   
   .voucher-code {
@@ -850,7 +846,7 @@ html {
 /* Cho màn hình lớn hơn */
 @media (min-width: 361px) and (min-height: 641px) {
   .voucher-image-container {
-    height: 220px; /* Tăng chiều cao cho màn hình lớn */
+    height: 240px; /* Tăng chiều cao cho màn hình lớn */
   }
 }
 </style>
@@ -925,7 +921,7 @@ html {
    </div>
   </div>
 
-  <!-- VOUCHER POPUP - ĐÃ SỬA KÍCH THƯỚC -->
+  <!-- VOUCHER POPUP - HÌNH ẢNH FILL TOÀN BỘ CONTAINER -->
   <div id="voucherPopup">
    <h3>🎉 CHÚC MỪNG!</h3>
    <p>Bạn đã đạt đủ <b>3 Giỏ Cá</b> 🎯</p>
@@ -1179,17 +1175,17 @@ function preloadVoucherImages() {
 // Tạo hình SVG fallback cho voucher
 function createFallbackSVG(voucher) {
   const svg = `
-    <svg width="300" height="200" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
-      <rect width="300" height="200" rx="15" fill="white"/>
-      <rect x="10" y="10" width="280" height="180" rx="10" fill="${voucher.color}20" stroke="${voucher.color}" stroke-width="2"/>
-      <text x="150" y="70" font-family="Arial" font-size="24" font-weight="bold" fill="${voucher.color}" text-anchor="middle">
+    <svg width="300" height="220" viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+      <rect width="300" height="220" rx="15" fill="white"/>
+      <rect x="10" y="10" width="280" height="200" rx="10" fill="${voucher.color}20" stroke="${voucher.color}" stroke-width="2"/>
+      <text x="150" y="80" font-family="Arial" font-size="24" font-weight="bold" fill="${voucher.color}" text-anchor="middle">
         ${voucher.brand}
       </text>
-      <text x="150" y="110" font-family="Arial" font-size="20" fill="${voucher.color}" text-anchor="middle">
+      <text x="150" y="120" font-family="Arial" font-size="20" fill="${voucher.color}" text-anchor="middle">
         ${voucher.value}
       </text>
-      <rect x="80" y="140" width="140" height="40" rx="15" fill="${voucher.color}"/>
-      <text x="150" y="165" font-family="Arial" font-size="16" fill="white" text-anchor="middle">
+      <rect x="80" y="150" width="140" height="40" rx="15" fill="${voucher.color}"/>
+      <text x="150" y="175" font-family="Arial" font-size="16" fill="white" text-anchor="middle">
         ${voucher.sticker}
       </text>
     </svg>
@@ -1203,7 +1199,7 @@ function getRandomVoucher() {
   return voucherList[randomIndex];
 }
 
-// Hàm hiển thị voucher - ĐÃ SỬA ĐỂ FIT CONTAINER
+// Hàm hiển thị voucher - HÌNH ẢNH FILL TOÀN BỘ CONTAINER
 function showVoucher() {
   const voucher = getRandomVoucher();
   const voucherPopup = document.getElementById('voucherPopup');
@@ -1214,18 +1210,17 @@ function showVoucher() {
   const voucherBrand = document.getElementById('voucherBrand');
   const voucherValue = document.getElementById('voucherValue');
   
-  // Hiển thị hình ảnh voucher với kích thước phù hợp
+  // Hiển thị hình ảnh voucher - fill toàn bộ container
   voucherImage.onload = function() {
-    // Tự động fit container sau khi hình tải xong
-    this.style.maxWidth = '100%';
-    this.style.maxHeight = '100%';
-    this.style.width = 'auto';
-    this.style.height = 'auto';
+    // Đảm bảo hình ảnh fill container
+    this.style.width = '100%';
+    this.style.height = '100%';
+    this.style.objectFit = 'cover';
   };
   
   voucherImage.src = voucher.image;
   voucherImage.alt = voucher.name;
-  voucherImage.className = `voucher-image ${voucher.type}`;
+  voucherImage.className = 'voucher-image'; // Chỉ cần class cơ bản
   
   // Hiển thị thông tin voucher
   voucherBrand.textContent = voucher.brand;
@@ -1257,7 +1252,7 @@ function showVoucher() {
   // Hiển thị popup
   voucherPopup.style.display = 'block';
   
-  console.log(`Đã chọn voucher: ${voucher.name} (${voucher.type})`);
+  console.log(`Đã chọn voucher: ${voucher.name} (fill container)`);
 }
 
 /* ===== CANVAS SETUP ===== */
