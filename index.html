@@ -435,7 +435,7 @@ canvas{
  text-shadow:0 0 10px rgba(255,215,0,0.5);
 }
 
-/* VOUCHER POPUP */
+/* VOUCHER POPUP - HÌNH ẢNH FILL TOÀN BỘ CONTAINER */
 #voucherPopup{
  display:none;
  background:linear-gradient(135deg,#FFD700 0%,#FFB300 100%);
@@ -468,9 +468,10 @@ canvas{
  font-size:26px;
  margin-bottom:15px;
 }
+/* CONTAINER CHO HÌNH VOUCHER - VỚI KÍCH THƯỚC CỐ ĐỊNH */
 .voucher-image-container{
  width:100%;
- height:220px;
+ height:220px; /* Tăng chiều cao để hiển thị rõ hơn */
  margin:15px 0;
  border-radius:15px;
  overflow:hidden;
@@ -482,15 +483,23 @@ canvas{
  align-items:center;
  justify-content:center;
 }
+/* Hình ảnh voucher - FILL TOÀN BỘ CONTAINER */
 .voucher-image{
  width:100%;
  height:100%;
- object-fit:cover;
+ object-fit:cover; /* Thay đổi từ 'contain' thành 'cover' để fill container */
  display:block;
  position:absolute;
  top:0;
  left:0;
 }
+/* Xóa các class cũ về kích thước vì giờ đã fill container */
+.voucher-image.square,
+.voucher-image.landscape,
+.voucher-image.portrait {
+  /* Tất cả sẽ fill container */
+}
+
 .voucher-code{
  font-size:28px;
  font-weight:900;
@@ -670,6 +679,21 @@ canvas{
   100% { background-position: 200% center; }
 }
 
+/* NHÂN VẬT LỚN HƠN */
+.player-shadow {
+  position: absolute;
+  bottom: 505px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  filter: blur(5px);
+  z-index: 5;
+  pointer-events: none;
+}
+
 /* ===== RESPONSIVE FIXES ===== */
 /* Mobile Landscape */
 @media (max-height: 500px) and (orientation: landscape) {
@@ -694,12 +718,20 @@ canvas{
   }
   
   .voucher-image-container {
-    height: 140px;
+    height: 140px; /* Giảm chiều cao trong landscape */
   }
   
   .voucher-code {
     font-size: 20px;
     padding: 10px;
+  }
+  
+  .voucher-brand {
+    font-size: 16px;
+  }
+  
+  .voucher-value {
+    font-size: 18px;
   }
 }
 
@@ -742,6 +774,18 @@ html {
   overflow: hidden;
 }
 
+/* INTRO FIX SPECIFIC */
+#start {
+  background: #000;
+}
+#start img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  display: block;
+  margin: auto;
+}
+
 /* For very small screens */
 @media (max-width: 360px) {
   #gameWrapper {
@@ -750,101 +794,65 @@ html {
   }
   
   .voucher-image-container {
-    height: 180px;
+    height: 180px; /* Điều chỉnh cho màn hình nhỏ */
   }
   
   .voucher-code {
     font-size: 22px;
     padding: 12px;
   }
+  
+  .voucher-brand {
+    font-size: 18px;
+  }
+  
+  .voucher-value {
+    font-size: 20px;
+  }
 }
 
-/* FPS Counter (for debugging) */
-#fpsCounter {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  color: #FFD700;
-  font-size: 12px;
-  background: rgba(0,0,0,0.5);
-  padding: 5px 10px;
-  border-radius: 10px;
-  z-index: 100;
-  display: none;
+/* For very tall screens */
+@media (max-height: 640px) {
+  #gameWrapper {
+    max-height: 100vh;
+    max-width: calc(100vh * (360/640));
+  }
+  
+  .voucher-image-container {
+    height: 180px; /* Điều chỉnh cho màn hình cao */
+  }
 }
 
-/* Game Loader */
-#gameLoader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  transition: opacity 0.3s;
+/* Cho màn hình rất nhỏ */
+@media (max-width: 320px) {
+  .voucher-image-container {
+    height: 160px;
+  }
+  
+  .voucher-code {
+    font-size: 20px;
+    padding: 10px;
+  }
+  
+  .voucher-brand {
+    font-size: 16px;
+  }
+  
+  .voucher-value {
+    font-size: 18px;
+  }
 }
 
-.loader-content {
-  text-align: center;
-  color: #FFD700;
-}
-
-.loader-spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid #A50064;
-  border-top: 5px solid #FFD700;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 20px;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* PERFORMANCE OPTIMIZATIONS */
-/* Hardware acceleration */
-canvas {
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  will-change: transform;
-}
-
-#gameWrapper {
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  will-change: transform;
-}
-
-/* Reduce animation complexity on low-power devices */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+/* Cho màn hình lớn hơn */
+@media (min-width: 361px) and (min-height: 641px) {
+  .voucher-image-container {
+    height: 240px; /* Tăng chiều cao cho màn hình lớn */
   }
 }
 </style>
 </head>
 
 <body>
-
-<!-- Game Loader -->
-<div id="gameLoader">
-  <div class="loader-content">
-    <div class="loader-spinner"></div>
-    <p>Đang tải game...</p>
-  </div>
-</div>
-
-<!-- FPS Counter (hidden by default) -->
-<div id="fpsCounter">FPS: 60</div>
 
 <div id="gameWrapper">
 
@@ -863,7 +871,7 @@ canvas {
  <div id="instructionBox">
   <h2>CÁCH CHƠI</h2>
   <ul>
-   <li><b>👈👉 swipe trái/phải</b> để đổi làn đường</li>
+   <li><b>👈👉 Tap trái/phải</b> để đổi làn đường</li>
    <li><b>🪙 Thu thập Xu</b> - Tích luỹ đổi quà MoMo</li>
    <li><b>🧺 Mỗi 5 Xu</b> nhận <b>1 Giỏ Cá</b></li>
    <li><b>⚡ Càng nhiều Xu</b> → Tốc độ càng nhanh</li>
@@ -913,7 +921,7 @@ canvas {
    </div>
   </div>
 
-  <!-- VOUCHER POPUP -->
+  <!-- VOUCHER POPUP - HÌNH ẢNH FILL TOÀN BỘ CONTAINER -->
   <div id="voucherPopup">
    <h3>🎉 CHÚC MỪNG!</h3>
    <p>Bạn đã đạt đủ <b>3 Giỏ Cá</b> 🎯</p>
@@ -953,88 +961,55 @@ canvas {
 </div>
 
 <script>
-/* ===== PERFORMANCE OPTIMIZATIONS ===== */
-let lastTime = 0;
-let fps = 0;
-let frameCount = 0;
-let lastFpsUpdate = 0;
-const fpsUpdateInterval = 500; // Update FPS counter every 500ms
-
-// Performance monitoring
-function updateFPS(currentTime) {
-  frameCount++;
-  
-  if (currentTime - lastFpsUpdate >= fpsUpdateInterval) {
-    fps = Math.round((frameCount * 1000) / (currentTime - lastFpsUpdate));
-    frameCount = 0;
-    lastFpsUpdate = currentTime;
-    
-    // Optional: Show FPS counter for debugging
-    // document.getElementById('fpsCounter').textContent = `FPS: ${fps}`;
-    
-    // Adaptive quality based on FPS
-    adjustQualityBasedOnFPS(fps);
-  }
-}
-
-function adjustQualityBasedOnFPS(currentFPS) {
-  // Lower quality if FPS drops below 30
-  if (currentFPS < 30 && !qualityReduced) {
-    reduceQuality();
-  } else if (currentFPS > 50 && qualityReduced) {
-    restoreQuality();
-  }
-}
-
-let qualityReduced = false;
-function reduceQuality() {
-  qualityReduced = true;
-  // Reduce visual effects
-  canvas.style.filter = 'none';
-  // Reduce animation complexity
-  if (bgMusic) bgMusic.playbackRate = 0.9;
-}
-
-function restoreQuality() {
-  qualityReduced = false;
-  // Restore visual effects
-  canvas.style.filter = 'drop-shadow(0 10px 30px rgba(0,0,0,0.5))';
-  if (bgMusic) bgMusic.playbackRate = 1.0;
-}
-
 /* ===== FULLSCREEN FIXES ===== */
+// Fix 100vh trên mobile
 function setVH() {
   const vh = window.innerHeight * 0.01;
   document.documentElement.style.setProperty('--vh', `${vh}px`);
 }
 
+// Scale game cho phù hợp
 function initializeGameSize() {
   const gameWrapper = document.getElementById('gameWrapper');
   const windowWidth = window.innerWidth;
   const windowHeight = window.innerHeight;
   
+  // Tính toán tỷ lệ scale
   const targetRatio = 360 / 640;
   const currentRatio = windowWidth / windowHeight;
   
   let scale;
   if (currentRatio > targetRatio) {
+    // Màn hình rộng hơn -> scale theo chiều cao
     scale = windowHeight / 640;
   } else {
+    // Màn hình cao hơn -> scale theo chiều rộng
     scale = windowWidth / 360;
   }
   
-  if (scale > 1.2) scale = 1.2;
-  if (scale < 0.8) scale = 0.8;
+  // Giới hạn scale
+  if (scale > 1.2) {
+    scale = 1.2; // Giới hạn phóng to tối đa 1.2x
+  }
+  
+  if (scale < 0.8) {
+    scale = 0.8; // Giới hạn thu nhỏ tối thiểu 0.8x
+  }
   
   gameWrapper.style.transform = `scale(${scale})`;
+  gameWrapper.style.transformOrigin = 'center center';
 }
 
+// Fix riêng cho intro
 function fixIntroSize() {
   const startImg = document.getElementById('startImage');
+  
   if (startImg) {
+    // Reset để ảnh hiển thị đúng
     startImg.style.width = '100%';
     startImg.style.height = '100%';
     startImg.style.objectFit = 'cover';
+    startImg.style.display = 'block';
   }
 }
 
@@ -1044,16 +1019,15 @@ window.addEventListener('load', function() {
   initializeGameSize();
   fixIntroSize();
   
-  // Preload assets
-  preloadAssets().then(() => {
-    document.getElementById('gameLoader').style.opacity = '0';
-    setTimeout(() => {
-      document.getElementById('gameLoader').style.display = 'none';
-    }, 300);
-  });
+  // Preload voucher images
+  preloadVoucherImages();
   
-  // Initialize performance monitoring
-  lastFpsUpdate = performance.now();
+  // Fix cho iOS
+  setTimeout(() => {
+    setVH();
+    initializeGameSize();
+    fixIntroSize();
+  }, 100);
 });
 
 window.addEventListener('resize', function() {
@@ -1070,64 +1044,35 @@ window.addEventListener('orientationchange', function() {
   }, 150);
 });
 
-// Prevent zoom and context menu
+// Prevent zoom on double tap
 document.addEventListener('touchstart', function(e) {
-  if (e.touches.length > 1) e.preventDefault();
+  if (e.touches.length > 1) {
+    e.preventDefault();
+  }
 }, { passive: false });
 
+// Prevent context menu on long press
 document.addEventListener('contextmenu', function(e) {
   e.preventDefault();
   return false;
 });
 
-/* ===== ASSET PRELOADING ===== */
-async function preloadAssets() {
-  const assets = [
-    'assets/start.png',
-    'assets/but.png',
-    'assets/basket.png',
-    'assets/road.png',
-    'assets/cotam-run.png',
-    'assets/coin.png',
-    'assets/obs-rock.png',
-    'assets/obs-log.png',
-    'assets/obs-pot.png',
-    'assets/voucher/highlands.png',
-    'assets/voucher/grab.png',
-    'assets/voucher/gs25.png',
-    'assets/voucher/cgv.png',
-    'assets/voucher/starbucks.png',
-    'assets/voucher/beautybox.png'
-  ];
-  
-  const promises = assets.map(src => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.src = src;
-      img.onload = resolve;
-      img.onerror = resolve; // Continue even if some images fail
-    });
-  });
-  
-  await Promise.all(promises);
-  console.log('All assets loaded');
-}
-
 /* ===== INTRO → INSTRUCTION ===== */
 function showInstruction(){
  document.getElementById('start').style.display = 'none';
  document.getElementById('instruction').style.display = 'flex';
+ // Bắt đầu nhạc nền khi vào màn hình hướng dẫn
  playBackgroundMusic();
 }
 
 /* ===== AUTO CLEAR ===== */
-const GAME_VERSION = "smooth-v1.0";
+const GAME_VERSION = "premium-vouchers-10.0";
 if(localStorage.getItem("game_version") !== GAME_VERSION){
  localStorage.removeItem("leaderboard");
  localStorage.setItem("game_version", GAME_VERSION);
 }
 
-/* ===== DANH SÁCH VOUCHER ===== */
+/* ===== DANH SÁCH VOUCHER MỚI ===== */
 const voucherList = [
   {
     id: 1,
@@ -1137,8 +1082,10 @@ const voucherList = [
     brand: "HIGHLANDS COFFEE",
     value: "GIẢM 30K",
     desc: "Giảm 30K cho hóa đơn từ 100K",
-    color: "#8B4513",
-    expiry: "31/03/2026"
+    color: "#8B4513", // Màu nâu cafe
+    type: "portrait", // Hình dọc
+    expiry: "31/03/2026",
+    sticker: "CAFE ☕"
   },
   {
     id: 2,
@@ -1148,8 +1095,10 @@ const voucherList = [
     brand: "GRAB",
     value: "GIẢM 40K",
     desc: "Giảm 50K cho chuyến xe Grab",
-    color: "#00B14F",
-    expiry: "31/03/2026"
+    color: "#00B14F", // Màu xanh Grab
+    type: "landscape", // Hình ngang
+    expiry: "31/03/2026",
+    sticker: "XE 🚗"
   },
   {
     id: 3,
@@ -1159,144 +1108,227 @@ const voucherList = [
     brand: "GS25",
     value: "GIẢM 25k",
     desc: "Giảm 25k cho hóa đơn từ 80K",
-    color: "#FF6B00",
-    expiry: "31/03/2026"
+    color: "#FF6B00", // Màu cam GS25
+    type: "square", // Hình vuông
+    expiry: "31/03/2026",
+    sticker: "TIỆM 🏪"
+  },
+  {
+    id: 4,
+    name: "CGV",
+    image: "assets/voucher/cgv.png",
+    code: "CGV-MOMO-2X1",
+    brand: "CGV CINEMA",
+    value: "MUA 1 TẶNG 1",
+    desc: "Mua 1 vé tặng 1 vé xem phim",
+    color: "#E31937", // Màu đỏ CGV
+    type: "landscape", // Hình ngang
+    expiry: "31/03/2026",
+    sticker: "PHIM 🎬"
+  },
+  {
+    id: 5,
+    name: "Starbucks",
+    image: "assets/voucher/starbucks.png",
+    code: "SBUX-MOMO-50K",
+    brand: "STARBUCKS",
+    value: "GIẢM 50K",
+    desc: "Giảm 50K cho hóa đơn từ 150K",
+    color: "#00704A", // Màu xanh Starbucks
+    type: "portrait", // Hình dọc
+    expiry: "31/03/2026",
+    sticker: "VIP 🌟"
+  },
+  {
+    id: 6,
+    name: "Beauty Box",
+    image: "assets/voucher/beautybox.png",
+    code: "BBOX-MOMO-25%",
+    brand: "BEAUTY BOX",
+    value: "GIẢM 25%",
+    desc: "Giảm 25% cho sản phẩm làm đẹp",
+    color: "#FF69B4", // Màu hồng
+    type: "square", // Hình vuông
+    expiry: "31/12/2026",
+    sticker: "ĐẸP 💄"
   }
 ];
 
-function getRandomVoucher() {
-  return voucherList[Math.floor(Math.random() * voucherList.length)];
+// Preload voucher images
+function preloadVoucherImages() {
+  console.log('Đang tải hình ảnh voucher...');
+  
+  voucherList.forEach(voucher => {
+    const img = new Image();
+    img.src = voucher.image;
+    img.onload = () => {
+      console.log(`✓ Đã tải: ${voucher.image}`);
+    };
+    img.onerror = () => {
+      console.warn(`⚠ Không thể tải: ${voucher.image}`);
+      // Fallback image bằng SVG
+      voucher.image = createFallbackSVG(voucher);
+    };
+  });
 }
 
+// Tạo hình SVG fallback cho voucher
+function createFallbackSVG(voucher) {
+  const svg = `
+    <svg width="300" height="220" viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+      <rect width="300" height="220" rx="15" fill="white"/>
+      <rect x="10" y="10" width="280" height="200" rx="10" fill="${voucher.color}20" stroke="${voucher.color}" stroke-width="2"/>
+      <text x="150" y="80" font-family="Arial" font-size="24" font-weight="bold" fill="${voucher.color}" text-anchor="middle">
+        ${voucher.brand}
+      </text>
+      <text x="150" y="120" font-family="Arial" font-size="20" fill="${voucher.color}" text-anchor="middle">
+        ${voucher.value}
+      </text>
+      <rect x="80" y="150" width="140" height="40" rx="15" fill="${voucher.color}"/>
+      <text x="150" y="175" font-family="Arial" font-size="16" fill="white" text-anchor="middle">
+        ${voucher.sticker}
+      </text>
+    </svg>
+  `;
+  return "data:image/svg+xml;base64," + btoa(svg);
+}
+
+// Hàm chọn voucher ngẫu nhiên
+function getRandomVoucher() {
+  const randomIndex = Math.floor(Math.random() * voucherList.length);
+  return voucherList[randomIndex];
+}
+
+// Hàm hiển thị voucher - HÌNH ẢNH FILL TOÀN BỘ CONTAINER
 function showVoucher() {
   const voucher = getRandomVoucher();
   const voucherPopup = document.getElementById('voucherPopup');
   const voucherImage = document.getElementById('voucherImage');
+  const voucherCode = document.getElementById('voucherCode');
+  const voucherDesc = document.getElementById('voucherDesc');
+  const voucherExpiry = document.getElementById('voucherExpiry');
+  const voucherBrand = document.getElementById('voucherBrand');
+  const voucherValue = document.getElementById('voucherValue');
   
+  // Hiển thị hình ảnh voucher - fill toàn bộ container
   voucherImage.onload = function() {
+    // Đảm bảo hình ảnh fill container
     this.style.width = '100%';
     this.style.height = '100%';
     this.style.objectFit = 'cover';
   };
   
   voucherImage.src = voucher.image;
-  document.getElementById('voucherBrand').textContent = voucher.brand;
-  document.getElementById('voucherValue').textContent = voucher.value;
-  document.getElementById('voucherCode').textContent = voucher.code;
-  document.getElementById('voucherDesc').textContent = voucher.desc;
-  document.getElementById('voucherExpiry').textContent = `Hạn sử dụng: ${voucher.expiry}`;
+  voucherImage.alt = voucher.name;
+  voucherImage.className = 'voucher-image'; // Chỉ cần class cơ bản
   
+  // Hiển thị thông tin voucher
+  voucherBrand.textContent = voucher.brand;
+  voucherValue.textContent = voucher.value;
+  voucherCode.textContent = voucher.code;
+  voucherDesc.textContent = voucher.desc;
+  voucherExpiry.textContent = `Hạn sử dụng: ${voucher.expiry}`;
+  
+  // Thêm hiệu ứng màu
+  voucherCode.style.background = `linear-gradient(135deg, ${voucher.color}20 0%, ${voucher.color}40 100%)`;
+  voucherCode.style.borderColor = voucher.color;
+  voucherCode.style.color = voucher.color;
+  
+  voucherValue.style.background = `linear-gradient(90deg, ${voucher.color}, ${voucher.color}E6)`;
+  voucherValue.style.color = 'white';
+  
+  voucherBrand.style.color = voucher.color;
+  voucherBrand.style.textShadow = `0 2px 10px ${voucher.color}40`;
+  
+  // Thêm hiệu ứng ánh sáng cho hình ảnh
+  voucherImage.style.animation = 'float 3s ease-in-out infinite';
+  
+  // Thêm hiệu ứng shine cho giá trị voucher
+  voucherValue.style.background = `linear-gradient(90deg, 
+    ${voucher.color}00, ${voucher.color}, ${voucher.color}00, ${voucher.color}, ${voucher.color}00)`;
+  voucherValue.style.backgroundSize = '200% 100%';
+  voucherValue.style.animation = 'shine 3s linear infinite';
+  
+  // Hiển thị popup
   voucherPopup.style.display = 'block';
+  
+  console.log(`Đã chọn voucher: ${voucher.name} (fill container)`);
 }
 
 /* ===== CANVAS SETUP ===== */
 const canvas = document.getElementById('game');
-const ctx = canvas.getContext('2d', { alpha: false }); // Disable alpha for better performance
+const ctx = canvas.getContext('2d');
 
-// Use integer dimensions for crisp rendering
 canvas.width = 360;
 canvas.height = 640;
 
-/* ===== IMAGE CACHING ===== */
-const images = {
-  road: new Image(),
-  player: new Image(),
-  coin: new Image(),
-  obstacles: [
-    new Image(),
-    new Image(),
-    new Image()
-  ]
-};
+/* ===== IMAGES ===== */
+const roadImg = new Image(); 
+roadImg.src = "assets/road.png";
 
-images.road.src = "assets/road.png";
-images.player.src = "assets/cotam-run.png";
-images.coin.src = "assets/coin.png";
-images.obstacles[0].src = "assets/obs-rock.png";
-images.obstacles[1].src = "assets/obs-log.png";
-images.obstacles[2].src = "assets/obs-pot.png";
+const playerImg = new Image(); 
+playerImg.src = "assets/cotam-run.png";
 
-/* ===== AUDIO OPTIMIZATION ===== */
-// Create audio context for better performance
-let audioContext;
-let bgMusicSource;
-const audioCache = {};
+const coinImg = new Image(); 
+coinImg.src = "assets/coin.png";
 
-function initAudio() {
-  try {
-    if (!audioContext) {
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    }
-  } catch (e) {
-    console.log("Web Audio API not supported:", e);
-  }
-}
+const obstacleTypes = [
+ { img: new Image(), size: 40, color: '#8B4513' },
+ { img: new Image(), size: 44, color: '#654321' },
+ { img: new Image(), size: 38, color: '#808080' }
+];
+obstacleTypes[0].img.src = "assets/obs-rock.png";
+obstacleTypes[1].img.src = "assets/obs-log.png";
+obstacleTypes[2].img.src = "assets/obs-pot.png";
 
-function loadAudio(url, name) {
-  return new Promise((resolve, reject) => {
-    if (audioCache[name]) {
-      resolve(audioCache[name]);
-      return;
-    }
-    
-    fetch(url)
-      .then(response => response.arrayBuffer())
-      .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
-      .then(audioBuffer => {
-        audioCache[name] = audioBuffer;
-        resolve(audioBuffer);
-      })
-      .catch(reject);
-  });
-}
+const imagesToLoad = [roadImg, playerImg, coinImg, 
+                     obstacleTypes[0].img, obstacleTypes[1].img, obstacleTypes[2].img];
 
-function playCachedSound(name) {
-  if (!soundEnabled || !audioContext || !audioCache[name]) return;
-  
-  try {
-    const source = audioContext.createBufferSource();
-    source.buffer = audioCache[name];
-    source.connect(audioContext.destination);
-    source.start();
-  } catch (e) {
-    console.log("Error playing sound:", e);
-  }
-}
-
-// Legacy audio for fallback
+/* ===== ÂM THANH ===== */
+// Nhạc nền
 const bgMusic = new Audio();
 bgMusic.src = "assets/background.mp3";
 bgMusic.loop = true;
 bgMusic.volume = 0.5;
 
-// Sound effects (fallback)
-const soundEffects = {
-  coin: new Audio("assets/coin.mp3"),
-  basket: new Audio("assets/basket.mp3"),
-  hit: new Audio("assets/hit.mp3"),
-  click: new Audio("assets/click.mp3"),
-  speedup: new Audio("assets/speedup.mp3"),
-  but: new Audio("assets/but.mp3"),
-  magic: new Audio("assets/magic.mp3"),
-  win: new Audio("assets/win.mp3")
-};
+// Hiệu ứng âm thanh
+const sCoin = new Audio("assets/coin.mp3");
+const sBasket = new Audio("assets/basket.mp3");
+const sHit = new Audio("assets/hit.mp3");
+const sClick = new Audio("assets/click.mp3");
+const sSpeedUp = new Audio("assets/speedup.mp3");
+const sBut = new Audio("assets/but.mp3");
+const sMagic = new Audio("assets/magic.mp3");
+const sWin = new Audio("assets/win.mp3");
 
-// Set volumes
-Object.values(soundEffects).forEach(sound => {
-  sound.volume = 0.3;
-  sound.preload = 'auto';
-});
+// Thiết lập volume
+sCoin.volume = 0.3;
+sBasket.volume = 0.4;
+sHit.volume = 0.5;
+sClick.volume = 0.3;
+sSpeedUp.volume = 0.4;
+sBut.volume = 0.6;
+sMagic.volume = 0.5;
+sWin.volume = 0.6;
 
+// Biến kiểm soát âm thanh
 let soundEnabled = true;
 
+// Hàm phát nhạc nền
 function playBackgroundMusic() {
   if (soundEnabled && bgMusic) {
     bgMusic.play().catch(e => {
-      console.log("Nhạc nền cần tương tác:", e);
+      console.log("Nhạc nền cần tương tác người dùng:", e);
+      // Thử lại khi người dùng click
+      document.addEventListener('click', function playOnce() {
+      bgMusic.play().catch(e => console.log("Vẫn không thể phát nhạc nền"));
+        document.removeEventListener('click', playOnce);
+      }, { once: true });
     });
   }
 }
 
+// Hàm dừng nhạc nền
 function stopBackgroundMusic() {
   if (bgMusic) {
     bgMusic.pause();
@@ -1304,500 +1336,643 @@ function stopBackgroundMusic() {
   }
 }
 
+// Hàm bật/tắt âm thanh
 function toggleSound() {
   soundEnabled = !soundEnabled;
+  
+  // Cập nhật icon
   const soundIcon = document.getElementById('soundIcon');
   soundIcon.textContent = soundEnabled ? '🔊' : '🔇';
   
+  // Phát âm thanh click khi bật/tắt
+  if (soundEnabled) {
+    playSound(sClick);
+  }
+  
+  // Áp dụng trạng thái âm thanh
   if (soundEnabled) {
     bgMusic.volume = 0.5;
-    Object.values(soundEffects).forEach(sound => {
-      sound.volume = 0.3;
-    });
+    sCoin.volume = 0.3;
+    sBasket.volume = 0.4;
+    sHit.volume = 0.5;
+    sClick.volume = 0.3;
+    sSpeedUp.volume = 0.4;
+    sBut.volume = 0.6;
+    sMagic.volume = 0.5;
+    sWin.volume = 0.6;
+    
+    // Tiếp tục nhạc nền nếu đang trong game
+    if (run) {
+      playBackgroundMusic();
+    }
   } else {
     bgMusic.volume = 0;
-    Object.values(soundEffects).forEach(sound => {
-      sound.volume = 0;
-    });
+    sCoin.volume = 0;
+    sBasket.volume = 0;
+    sHit.volume = 0;
+    sClick.volume = 0;
+    sSpeedUp.volume = 0;
+    sBut.volume = 0;
+    sMagic.volume = 0;
+    sWin.volume = 0;
   }
 }
 
-function playSound(soundName) {
-  if (!soundEnabled || !soundEffects[soundName]) return;
+// Hàm phát âm thanh an toàn
+function playSound(sound) {
+  if (!soundEnabled || !sound) return;
   
   try {
-    soundEffects[soundName].currentTime = 0;
-    soundEffects[soundName].play().catch(e => {
-      console.log("Sound error:", e);
+    // Nếu âm thanh đang phát, reset để phát lại
+    sound.currentTime = 0;
+    sound.play().catch(e => {
+      // Nếu lỗi, thử tải lại file
+      console.log("Lỗi âm thanh, thử tải lại:", e);
+      sound.load();
     });
   } catch (e) {
-    console.log("Sound play failed:", e);
+    console.log("Không thể phát âm thanh:", e);
   }
 }
+
+// Hàm phát âm thanh ông Bụt với hiệu ứng đặc biệt
+function playButSound() {
+  if (!soundEnabled) return;
+  
+  // Phát âm thanh ông Bụt
+  playSound(sBut);
+  
+  // Sau 0.5 giây, phát âm thanh phép thuật
+  setTimeout(() => {
+    playSound(sMagic);
+  }, 500);
+  
+  // Tạo hiệu ứng lấp lánh khi ông Bụt xuất hiện
+  createSparkleEffect();
+}
+
+// Hàm tạo hiệu ứng lấp lánh
+function createSparkleEffect() {
+  const butElement = document.getElementById('but');
+  const butRect = butElement.getBoundingClientRect();
+  const gameWrapper = document.getElementById('gameWrapper');
+  const wrapperRect = gameWrapper.getBoundingClientRect();
+  
+  // Vị trí ông Bụt
+  const butX = butRect.left - wrapperRect.left + butRect.width / 2;
+  const butY = butRect.top - wrapperRect.top;
+  
+  // Tạo 10 hạt lấp lánh
+  for (let i = 0; i < 10; i++) {
+    const sparkle = document.createElement('div');
+    sparkle.style.position = 'absolute';
+    sparkle.style.width = '10px';
+    sparkle.style.height = '10px';
+    sparkle.style.background = 'radial-gradient(circle, #FFD700, #FF9100)';
+    sparkle.style.borderRadius = '50%';
+    sparkle.style.left = (butX - 5) + 'px';
+    sparkle.style.top = (butY + 50) + 'px'; // Dưới chân ông Bụt
+    sparkle.style.zIndex = '14';
+    sparkle.style.pointerEvents = 'none';
+    sparkle.style.animation = `sparkle 1s ease-out forwards`;
+    sparkle.style.animationDelay = (i * 0.1) + 's';
+    
+    // Random direction
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 30 + Math.random() * 50;
+    const endX = Math.cos(angle) * distance;
+    const endY = Math.sin(angle) * distance - 50;
+    
+    sparkle.style.setProperty('--end-x', endX + 'px');
+    sparkle.style.setProperty('--end-y', endY + 'px');
+    
+    gameWrapper.appendChild(sparkle);
+    
+    // Xóa sau khi animation kết thúc
+    setTimeout(() => {
+      if (sparkle.parentNode) {
+        sparkle.parentNode.removeChild(sparkle);
+      }
+    }, 1000 + i * 100);
+  }
+}
+
+// Unlock audio trên mobile
+document.addEventListener('touchstart', function() {
+  const silentAudio = new Audio();
+  silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==';
+  silentAudio.play().then(() => {
+    console.log("Audio đã được mở khóa");
+  }).catch(e => console.log("Audio unlock error"));
+}, { once: true });
 
 /* ===== GAME STATE ===== */
 let run = false, coin = 0, basket = 0;
-let baseSpeed = 3.5, speed = baseSpeed, speedStep = 0.5, maxSpeed = 8; // Reduced max speed for smoother gameplay
+let baseSpeed = 3.5, speed = baseSpeed, speedStep = 0.7, maxSpeed = 9;
 let roadY = 0;
 const lanes = [60, 180, 300];
 let player = { lane: 1, y: 520 };
 let coins = [], obstacles = [];
 let coinTimer = 0, obstacleTimer = 0;
-let gameFrameCount = 0;
+let frameCount = 0;
 let butTimeout = null;
 let lastMilestone = 0;
-
-// Object pooling for better performance
-const coinPool = [];
-const obstaclePool = [];
-
-function getCoinFromPool() {
-  if (coinPool.length > 0) {
-    return coinPool.pop();
-  }
-  return {
-    lane: 0,
-    y: -40,
-    angle: 0,
-    scale: 1,
-    pulse: 0
-  };
-}
-
-function returnCoinToPool(coin) {
-  coinPool.push(coin);
-}
-
-function getObstacleFromPool() {
-  if (obstaclePool.length > 0) {
-    return obstaclePool.pop();
-  }
-  return {
-    lane: 0,
-    y: -60,
-    type: 0,
-    phase: 0,
-    shakeIntensity: 1,
-    shakeSpeed: 0.1,
-    rotation: 0,
-    scale: 1,
-    spawnTime: 0
-  };
-}
-
-function returnObstacleToPool(obstacle) {
-  obstaclePool.push(obstacle);
-}
 
 /* SPRITE ANIMATION */
 const RUN_FRAMES = 4;
 let runFrame = 0, runTick = 0;
 let SW = 0, SH = 0;
-
-images.player.onload = () => {
-  SW = images.player.width / RUN_FRAMES;
-  SH = images.player.height;
+playerImg.onload = () => {
+ SW = playerImg.width / RUN_FRAMES;
+ SH = playerImg.height;
 };
 
-// Pre-render road for better performance
-let roadCanvas = document.createElement('canvas');
-roadCanvas.width = 360;
-roadCanvas.height = 640;
-let roadCtx = roadCanvas.getContext('2d');
+/* ===== NHÂN VẬT LỚN HƠN ===== */
+const PLAYER_WIDTH = 55;
+const PLAYER_HEIGHT = 82;
+const PLAYER_OFFSET_X = PLAYER_WIDTH / 2;
+const PLAYER_OFFSET_Y = 60;
 
-function renderRoad() {
-  roadCtx.drawImage(images.road, 0, 0, 360, 640);
-  
-  // Draw lane markers (pre-rendered)
-  roadCtx.strokeStyle = 'rgba(255, 215, 0, 0.3)';
-  roadCtx.lineWidth = 2;
-  roadCtx.setLineDash([20, 20]);
-  
-  for(let i = 0; i < lanes.length; i++) {
-    roadCtx.beginPath();
-    roadCtx.moveTo(lanes[i] - 60, 0);
-    roadCtx.lineTo(lanes[i] - 60, 640);
-    roadCtx.stroke();
-    roadCtx.beginPath();
-    roadCtx.moveTo(lanes[i] + 60, 0);
-    roadCtx.lineTo(lanes[i] + 60, 640);
-    roadCtx.stroke();
-  }
-  roadCtx.setLineDash([]);
-}
+/* ===== TỐI ƯU HIỆU SUẤT ===== */
+// Thêm biến để kiểm soát FPS
+let lastTime = 0;
+const targetFPS = 60;
+const frameInterval = 1000 / targetFPS;
 
-// Pre-render coins for performance
-let coinCanvas = document.createElement('canvas');
-coinCanvas.width = 30;
-coinCanvas.height = 30;
-let coinCtx = coinCanvas.getContext('2d');
+// Object pooling cho coins và obstacles để tái sử dụng
+const coinPool = [];
+const obstaclePool = [];
 
-function renderCoin() {
-  coinCtx.clearRect(0, 0, 30, 30);
-  coinCtx.shadowColor = '#FFD700';
-  coinCtx.shadowBlur = 10;
-  coinCtx.drawImage(images.coin, 0, 0, 30, 30);
-}
-
-/* ===== START GAME ===== */
-function startGame(){
-  playSound('click');
-  document.getElementById('instruction').style.display = 'none';
-  run = true;
-  lastMilestone = 0;
-  
-  // Pre-render static elements
-  renderRoad();
-  renderCoin();
-  
-  if (bgMusic) {
-    bgMusic.playbackRate = 1.0;
+// Tạo sẵn object pool
+function initializeObjectPools() {
+  // Tạo sẵn 20 coin objects
+  for (let i = 0; i < 20; i++) {
+    coinPool.push({
+      lane: 0,
+      y: 0,
+      angle: 0,
+      scale: 1,
+      pulse: 0,
+      active: false
+    });
   }
   
-  // Start game loop with requestAnimationFrame
-  lastTime = performance.now();
-  gameLoop();
+  // Tạo sẵn 15 obstacle objects
+  for (let i = 0; i < 15; i++) {
+    obstaclePool.push({
+      lane: 0,
+      y: 0,
+      type: 0,
+      phase: 0,
+      shakeIntensity: 0,
+      shakeSpeed: 0,
+      rotation: 0,
+      scale: 1,
+      spawnTime: 0,
+      active: false
+    });
+  }
 }
 
-/* CONTROL */
-let touchStartX = 0;
-let touchStartTime = 0;
-
-canvas.addEventListener("touchstart", function(e) {
-  e.preventDefault();
-  const touch = e.touches[0];
-  const rect = canvas.getBoundingClientRect();
-  touchStartX = touch.clientX - rect.left;
-  touchStartTime = Date.now();
-});
-
-canvas.addEventListener("touchend", function(e) {
-  e.preventDefault();
-  const rect = canvas.getBoundingClientRect();
-  const touch = e.changedTouches[0];
-  const touchEndX = touch.clientX - rect.left;
-  const touchEndTime = Date.now();
-  
-  const deltaX = touchEndX - touchStartX;
-  const deltaTime = touchEndTime - touchStartTime;
-  
-  // Quick tap detection
-  if (deltaTime < 200 && Math.abs(deltaX) > 10) {
-    const oldLane = player.lane;
-    if (deltaX < 0) {
-      player.lane = Math.max(0, player.lane - 1);
-    } else {
-      player.lane = Math.min(2, player.lane + 1);
-    }
-    
-    if (oldLane !== player.lane) {
-      playSound('click');
+// Lấy coin từ pool
+function getCoinFromPool() {
+  for (let i = 0; i < coinPool.length; i++) {
+    if (!coinPool[i].active) {
+      coinPool[i].active = true;
+      return coinPool[i];
     }
   }
-});
-
-/* SPAWN OBJECTS */
-function spawnCoin() {
-  if (coins.length >= 15) return; // Limit coins on screen
   
-  const coin = getCoinFromPool();
-  coin.lane = Math.floor(Math.random() * 3);
-  coin.y = -40;
-  coin.angle = Math.random() * Math.PI * 2;
-  coin.scale = 0.8 + Math.random() * 0.4;
-  coin.pulse = Math.random() * Math.PI * 2;
-  
-  coins.push(coin);
+  // Nếu hết, tạo thêm
+  const newCoin = {
+    lane: 0,
+    y: 0,
+    angle: 0,
+    scale: 1,
+    pulse: 0,
+    active: true
+  };
+  coinPool.push(newCoin);
+  return newCoin;
 }
 
-function spawnObstacleWave() {
-  if (obstacles.length >= 8) return; // Limit obstacles on screen
+// Lấy obstacle từ pool
+function getObstacleFromPool() {
+  for (let i = 0; i < obstaclePool.length; i++) {
+    if (!obstaclePool[i].active) {
+      obstaclePool[i].active = true;
+      return obstaclePool[i];
+    }
+  }
   
+  // Nếu hết, tạo thêm
+  const newObstacle = {
+    lane: 0,
+    y: 0,
+    type: 0,
+    phase: 0,
+    shakeIntensity: 0,
+    shakeSpeed: 0,
+    rotation: 0,
+    scale: 1,
+    spawnTime: 0,
+    active: true
+  };
+  obstaclePool.push(newObstacle);
+  return newObstacle;
+}
+
+// Hàm spawn coin tối ưu
+const spawnCoin = () => {
+  const lane = Math.floor(Math.random() * 3);
+  const coinObj = getCoinFromPool();
+  
+  coinObj.lane = lane;
+  coinObj.y = -40;
+  coinObj.angle = Math.random() * Math.PI * 2;
+  coinObj.scale = 0.8 + Math.random() * 0.4;
+  coinObj.pulse = Math.random() * Math.PI * 2;
+  coinObj.active = true;
+  
+  coins.push(coinObj);
+};
+
+// Hàm spawn obstacle tối ưu
+const spawnObstacleWave = () => {
   const freeLane = Math.floor(Math.random() * 3);
   for(let l = 0; l < 3; l++) {
-    if(l !== freeLane && Math.random() < 0.6) {
+    if(l !== freeLane && Math.random() < 0.7) {
+      const type = Math.floor(Math.random() * obstacleTypes.length);
       const obstacle = getObstacleFromPool();
+      
       obstacle.lane = l;
       obstacle.y = -60;
-      obstacle.type = Math.floor(Math.random() * 3);
+      obstacle.type = type;
       obstacle.phase = Math.random() * Math.PI * 2;
       obstacle.shakeIntensity = 1 + Math.random() * 2;
       obstacle.shakeSpeed = 0.08 + Math.random() * 0.15;
       obstacle.rotation = Math.random() * 0.3 - 0.15;
-      obstacle.scale = 1.2 + Math.random() * 0.2;
-      obstacle.spawnTime = gameFrameCount;
+      obstacle.scale = 1.4 + Math.random() * 0.2;
+      obstacle.spawnTime = frameCount;
+      obstacle.active = true;
       
       obstacles.push(obstacle);
-      break; // Spawn only one obstacle per wave
     }
   }
-}
+};
 
-/* MAIN GAME LOOP - OPTIMIZED */
-function gameLoop(currentTime = performance.now()) {
-  if(!run) return;
-  
-  // Calculate delta time for consistent speed
-  const deltaTime = Math.min(currentTime - lastTime, 100); // Cap delta time
-  lastTime = currentTime;
-  
-  // Update FPS counter
-  updateFPS(currentTime);
-  
-  gameFrameCount++;
-  
-  // Clear canvas efficiently
-  ctx.clearRect(0, 0, 360, 640);
-  
-  /* DRAW ROAD (pre-rendered) */
-  roadY += speed * (deltaTime / 16.67); // Normalize speed to 60fps
-  if(roadY >= 640) roadY = 0;
-  
-  ctx.drawImage(roadCanvas, 0, roadY - 640);
-  ctx.drawImage(roadCanvas, 0, roadY);
-  
-  /* DRAW PLAYER */
-  runTick++;
-  if(runTick % 8 === 0) runFrame = (runFrame + 1) % RUN_FRAMES; // Slower animation for performance
-  
-  if(SW){
-    // Draw player shadow
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-    ctx.beginPath();
-    ctx.ellipse(
-      lanes[player.lane],
-      player.y + 10,
-      20,
-      8,
-      0, 0, Math.PI * 2
-    );
-    ctx.fill();
-    
-    // Draw player with hardware acceleration
-    ctx.drawImage(
-      images.player,
-      runFrame * SW, 0, SW, SH,
-      lanes[player.lane] - 27.5, 
-      player.y - 60, 
-      55, 
-      82
-    );
-  }
-  
-  /* DRAW COINS (optimized) */
-  for(let i = coins.length - 1; i >= 0; i--){
-    const c = coins[i];
-    c.y += speed * (deltaTime / 16.67);
-    c.angle += 0.1 * (deltaTime / 16.67);
-    c.pulse += 0.1 * (deltaTime / 16.67);
-    
-    const pulseScale = 0.1 * Math.sin(c.pulse);
-    const scale = c.scale + pulseScale;
-    
-    ctx.save();
-    ctx.translate(lanes[c.lane], c.y);
-    ctx.rotate(c.angle);
-    
-    // Use pre-rendered coin or draw directly
-    ctx.drawImage(coinCanvas, -15 * scale, -15 * scale, 30 * scale, 30 * scale);
-    ctx.restore();
-    
-    const collisionDistance = 40;
-    
-    if(c.lane === player.lane && Math.abs(c.y - player.y) < collisionDistance){
-      // Return coin to pool
-      returnCoinToPool(coins[i]);
+// Hàm kiểm tra và xóa vật thể không cần thiết
+function cleanupObjects() {
+  // Xóa coins đã ra khỏi màn hình và đánh dấu không active
+  for (let i = coins.length - 1; i >= 0; i--) {
+    if (coins[i].y > 700) { // Ra khỏi màn hình
+      coins[i].active = false;
       coins.splice(i, 1);
-      
-      coin++;
-      document.getElementById('coinEl').innerText = coin;
-      
-      playSound('coin');
-      
-      const milestone = Math.floor(coin / 5);
-      if(milestone > basket){
-        basket = milestone;
-        document.getElementById('basketEl').innerText = basket;
-        
-        playButAnimation();
-        
-        playSound('but');
-        setTimeout(() => {
-          playSound('magic');
-        }, 500);
-      }
-      
-      speed = Math.min(baseSpeed + milestone * speedStep, maxSpeed);
-      
-      if (milestone > lastMilestone) {
-        lastMilestone = milestone;
-        playSound('speedup');
-        
-        if (bgMusic) {
-          const musicSpeed = 1.0 + (speed - baseSpeed) / (maxSpeed - baseSpeed) * 0.2;
-          bgMusic.playbackRate = Math.min(musicSpeed, 1.2);
-        }
-      }
-      
-      document.getElementById('progress').style.width = ((coin % 5) / 5 * 100) + "%";
-      
-      // Create sparkle effect
-      createSparkleEffect(lanes[player.lane], player.y - 30);
     }
   }
   
-  /* DRAW OBSTACLES */
-  for(let i = obstacles.length - 1; i >= 0; i--){
-    const o = obstacles[i];
-    o.y += speed * (deltaTime / 16.67);
-    o.phase += o.shakeSpeed * (deltaTime / 16.67);
-    
-    const shakeX = Math.sin(o.phase) * o.shakeIntensity;
-    const shakeY = Math.cos(o.phase * 1.5) * (o.shakeIntensity * 0.8);
-    
-    const age = gameFrameCount - o.spawnTime;
-    const blink = age < 60 ? (Math.sin(age * 0.3) * 0.5 + 0.5) : 1;
-    
-    ctx.save();
-    ctx.translate(lanes[o.lane] + shakeX, o.y + shakeY);
-    ctx.rotate(o.rotation);
-    ctx.scale(o.scale, o.scale);
-    ctx.globalAlpha = blink;
-    
-    const t = images.obstacles[o.type];
-    ctx.drawImage(t, -20, -20, 40, 40);
-    ctx.restore();
-    
-    const collisionDistance = 35;
-    
-    if(o.lane === player.lane && Math.abs(o.y - player.y) < collisionDistance){
-      endGame(); 
-      return;
-    }
-    
-    // Remove obstacles that are far off screen
-    if (o.y > 700) {
-      returnObstacleToPool(obstacles[i]);
+  // Xóa obstacles đã ra khỏi màn hình
+  for (let i = obstacles.length - 1; i >= 0; i--) {
+    if (obstacles[i].y > 700) { // Ra khỏi màn hình
+      obstacles[i].active = false;
       obstacles.splice(i, 1);
     }
   }
+}
+
+/* ===== START GAME ===== */
+function startGame(){
+ playSound(sClick);
+ document.getElementById('instruction').style.display = 'none';
+ run = true;
+ lastMilestone = 0;
+ 
+ // Khởi tạo object pools
+ initializeObjectPools();
+ 
+ // Tăng tốc độ nhạc nền khi bắt đầu game
+ if (bgMusic) {
+   bgMusic.playbackRate = 1.0;
+ }
+ 
+ lastTime = performance.now();
+ loop();
+}
+
+/* CONTROL - Tối ưu touch */
+let touchStartX = 0;
+let touchStartTime = 0;
+const TAP_THRESHOLD = 200; // ms
+const SWIPE_THRESHOLD = 50; // pixels
+
+canvas.addEventListener("touchstart", function(e) {
+ e.preventDefault();
+ const touch = e.touches[0];
+ const rect = canvas.getBoundingClientRect();
+ touchStartX = touch.clientX - rect.left;
+ touchStartTime = Date.now();
+});
+
+canvas.addEventListener("touchend", function(e) {
+ e.preventDefault();
+ const touchEndTime = Date.now();
+ const touchDuration = touchEndTime - touchStartTime;
+ 
+ if (touchDuration < TAP_THRESHOLD) {
+   const rect = canvas.getBoundingClientRect();
+   const touchEndX = e.changedTouches[0].clientX - rect.left;
+   const swipeDistance = touchEndX - touchStartX;
+   
+   const oldLane = player.lane;
+   
+   if (Math.abs(swipeDistance) > SWIPE_THRESHOLD) {
+     // Swipe rõ ràng
+     if (swipeDistance > 0) {
+       // Swipe sang phải
+       player.lane = Math.min(2, player.lane + 1);
+     } else {
+       // Swipe sang trái
+       player.lane = Math.max(0, player.lane - 1);
+     }
+   } else {
+     // Tap đơn giản
+     const halfWidth = rect.width / 2;
+     if (touchEndX < halfWidth) {
+       player.lane = Math.max(0, player.lane - 1);
+     } else {
+       player.lane = Math.min(2, player.lane + 1);
+     }
+   }
+   
+   // Phát âm thanh khi chuyển lane
+   if (oldLane !== player.lane) {
+     playSound(sClick);
+   }
+ }
+});
+
+/* MAIN GAME LOOP - TỐI ƯU */
+function loop(timestamp = 0){
+ if(!run) return;
+ 
+ // Điều chỉnh FPS để game chạy mượt hơn
+ const elapsed = timestamp - lastTime;
+ 
+ if (elapsed < frameInterval) {
+   requestAnimationFrame(loop);
+   return;
+ }
+ 
+ lastTime = timestamp - (elapsed % frameInterval);
+ 
+ frameCount++;
+ 
+ ctx.clearRect(0, 0, 360, 640);
+ 
+ /* DRAW ROAD - Tối ưu bằng cách chỉ vẽ 1 lần */
+ roadY += speed;
+ if(roadY >= 640) roadY = 0;
+ 
+ // Tạo gradient nền để giảm việc vẽ ảnh
+ const gradient = ctx.createLinearGradient(0, 0, 0, 640);
+ gradient.addColorStop(0, '#1a0033');
+ gradient.addColorStop(0.5, '#330066');
+ gradient.addColorStop(1, '#4d0099');
+ ctx.fillStyle = gradient;
+ ctx.fillRect(0, 0, 360, 640);
+ 
+ // Vẽ road với hiệu ứng mờ
+ ctx.globalAlpha = 0.8;
+ ctx.drawImage(roadImg, 0, roadY - 640, 360, 640);
+ ctx.drawImage(roadImg, 0, roadY, 360, 640);
+ ctx.globalAlpha = 1.0;
+ 
+ /* DRAW LANE MARKERS - Đơn giản hóa */
+ ctx.strokeStyle = 'rgba(255, 215, 0, 0.2)';
+ ctx.lineWidth = 1;
+ for(let i = 0; i < lanes.length; i++) {
+  ctx.beginPath();
+  ctx.moveTo(lanes[i] - 60, 0);
+  ctx.lineTo(lanes[i] - 60, 640);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(lanes[i] + 60, 0);
+  ctx.lineTo(lanes[i] + 60, 640);
+  ctx.stroke();
+ }
+ 
+ /* DRAW PLAYER - Tối ưu animation */
+ runTick++;
+ if(runTick % 8 === 0) runFrame = (runFrame + 1) % RUN_FRAMES; // Giảm tốc độ animation
+ 
+ if(SW){
+  // Vẽ bóng đơn giản
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+  ctx.beginPath();
+  ctx.ellipse(
+    lanes[player.lane],
+    player.y + 10,
+    PLAYER_WIDTH * 0.4,
+    PLAYER_WIDTH * 0.15,
+    0, 0, Math.PI * 2
+  );
+  ctx.fill();
   
-  // Remove coins that are far off screen
-  for(let i = coins.length - 1; i >= 0; i--){
-    if (coins[i].y > 700) {
-      returnCoinToPool(coins[i]);
-      coins.splice(i, 1);
+  // Vẽ nhân vật với kích thước mới
+  ctx.drawImage(
+   playerImg,
+   runFrame * SW, 0, SW, SH,
+   lanes[player.lane] - PLAYER_OFFSET_X, 
+   player.y - PLAYER_OFFSET_Y, 
+   PLAYER_WIDTH, 
+   PLAYER_HEIGHT
+  );
+ }
+ 
+ /* DRAW COINS - Tối ưu */
+ for(let i = coins.length - 1; i >= 0; i--){
+  const c = coins[i];
+  c.y += speed;
+  c.angle += 0.08; // Giảm tốc độ xoay
+  c.pulse += 0.08; // Giảm tốc độ pulse
+  
+  const pulseScale = 0.1 * Math.sin(c.pulse);
+  
+  ctx.save();
+  ctx.translate(lanes[c.lane], c.y);
+  ctx.rotate(c.angle);
+  ctx.scale(c.scale + pulseScale, c.scale + pulseScale);
+  
+  // Giảm hiệu ứng shadow để tăng hiệu suất
+  ctx.shadowColor = '#FFD700';
+  ctx.shadowBlur = 10;
+  ctx.drawImage(coinImg, -15, -15, 30, 30);
+  ctx.restore();
+  
+  const collisionDistance = 45;
+  
+  if(c.lane === player.lane && Math.abs(c.y - player.y) < collisionDistance){
+   coins.splice(i, 1);
+   c.active = false; // Đánh dấu coin không active
+   coin++;
+   document.getElementById('coinEl').innerText = coin;
+   
+   playSound(sCoin);
+   
+   // THAY ĐỔI TỪ 50 XU XUỐNG 5 XU CHO MỖI GIỎ CÁ
+   const milestone = Math.floor(coin / 5); // Đã thay đổi từ 50 xuống 5
+   if(milestone > basket){
+    basket = milestone;
+    document.getElementById('basketEl').innerText = basket;
+    
+    // PHÁT ÂM THANH ÔNG BỤT KHI NHẬN GIỎ CÁ MỚI
+    playButSound();
+    
+    // Hiển thị ông Bụt
+    const butElement = document.getElementById('but');
+    butElement.classList.add('show');
+    
+    if (butTimeout) {
+      clearTimeout(butTimeout);
     }
-  }
-  
-  coinTimer++; 
-  obstacleTimer++;
-  
-  if(coinTimer > 30){
-    spawnCoin(); 
-    coinTimer = 0;
-  }
-  if(obstacleTimer > 100){
-    spawnObstacleWave(); 
-    obstacleTimer = 0;
-  }
-  
-  // Use requestAnimationFrame with fixed time step
-  requestAnimationFrame(gameLoop);
-}
-
-function createSparkleEffect(x, y) {
-  if (qualityReduced) return; // Skip effects when quality is reduced
-  
-  for(let i = 0; i < 3; i++) {
-    const sparkle = document.createElement('div');
-    sparkle.style.position = 'absolute';
-    sparkle.style.width = '8px';
-    sparkle.style.height = '8px';
-    sparkle.style.background = 'radial-gradient(circle, #FFD700, #FF9100)';
-    sparkle.style.borderRadius = '50%';
-    sparkle.style.left = (x - 4) + 'px';
-    sparkle.style.top = (y - 4) + 'px';
-    sparkle.style.zIndex = '14';
-    sparkle.style.pointerEvents = 'none';
-    sparkle.style.animation = `sparkle 0.8s ease-out forwards`;
     
-    gameWrapper.appendChild(sparkle);
+    butTimeout = setTimeout(() => {
+      butElement.classList.add('hide');
+      setTimeout(() => {
+        butElement.classList.remove('show', 'hide');
+        butElement.style.top = '-200px';
+        butElement.style.opacity = '0';
+      }, 500);
+    }, 2000);
+    
+    // Hiển thị giỏ cá
+    const basketElement = document.getElementById('basketDrop');
+    basketElement.classList.add('show');
     
     setTimeout(() => {
-      if (sparkle.parentNode) {
-        sparkle.parentNode.removeChild(sparkle);
-      }
-    }, 800);
+      basketElement.classList.remove('show');
+      basketElement.style.opacity = '0';
+      basketElement.style.transform = 'translateX(-50%) scale(0)';
+    }, 1000);
+   }
+   
+   // Tăng tốc độ
+   const oldSpeed = speed;
+   speed = Math.min(baseSpeed + milestone * speedStep, maxSpeed);
+   
+   // Phát âm thanh tăng tốc nếu có sự thay đổi tốc độ và milestone mới
+   if (milestone > lastMilestone) {
+     lastMilestone = milestone;
+     playSound(sSpeedUp);
+     
+     // Tăng tốc độ nhạc nền theo tốc độ game
+     if (bgMusic) {
+       const musicSpeed = 1.0 + (speed - baseSpeed) / (maxSpeed - baseSpeed) * 0.3;
+       bgMusic.playbackRate = Math.min(musicSpeed, 1.3);
+     }
+   }
+   
+   // THAY ĐỔI THANH PROGRESS TỪ 50 XU XUỐNG 5 XU
+   document.getElementById('progress').style.width = ((coin % 5) / 5 * 100) + "%"; // Đã thay đổi từ 50 xuống 5
   }
-}
-
-function playButAnimation() {
-  const butElement = document.getElementById('but');
-  butElement.classList.add('show');
+ }
+ 
+ /* DRAW OBSTACLES - Tối ưu */
+ for(let i = obstacles.length - 1; i >= 0; i--){
+  const o = obstacles[i];
+  const t = obstacleTypes[o.type];
+  o.y += speed;
+  o.phase += o.shakeSpeed * 0.8; // Giảm tốc độ rung
   
-  if (butTimeout) {
-    clearTimeout(butTimeout);
+  const shakeX = Math.sin(o.phase) * o.shakeIntensity;
+  
+  const age = frameCount - o.spawnTime;
+  const blink = age < 60 ? (Math.sin(age * 0.3) * 0.5 + 0.5) : 1;
+  
+  ctx.save();
+  ctx.translate(lanes[o.lane] + shakeX, o.y);
+  ctx.rotate(o.rotation);
+  ctx.scale(o.scale, o.scale);
+  ctx.globalAlpha = blink;
+  
+  // Giảm hiệu ứng shadow
+  ctx.shadowColor = t.color;
+  ctx.shadowBlur = 8;
+  ctx.drawImage(t.img, -t.size/2, -t.size/2, t.size, t.size);
+  ctx.restore();
+  
+  const collisionDistance = 40;
+  
+  if(o.lane === player.lane && Math.abs(o.y - player.y) < collisionDistance){
+   endGame(); 
+   return;
   }
-  
-  butTimeout = setTimeout(() => {
-    butElement.classList.add('hide');
-    setTimeout(() => {
-      butElement.classList.remove('show', 'hide');
-      butElement.style.top = '-200px';
-      butElement.style.opacity = '0';
-    }, 500);
-  }, 1500);
-  
-  const basketElement = document.getElementById('basketDrop');
-  basketElement.classList.add('show');
-  
-  setTimeout(() => {
-    basketElement.classList.remove('show');
-    basketElement.style.opacity = '0';
-    basketElement.style.transform = 'translateX(-50%) scale(0)';
-  }, 800);
+ }
+ 
+ // Dọn dẹp vật thể không cần thiết
+ cleanupObjects();
+ 
+ coinTimer++; 
+ obstacleTimer++;
+ 
+ // Điều chỉnh spawn rate dựa trên tốc độ
+ const coinSpawnRate = Math.max(15, 30 - Math.floor(speed));
+ const obstacleSpawnRate = Math.max(50, 100 - Math.floor(speed * 5));
+ 
+ if(coinTimer > coinSpawnRate && coins.length < 10){
+  spawnCoin(); 
+  coinTimer = 0;
+ }
+ 
+ if(obstacleTimer > obstacleSpawnRate && obstacles.length < 8){
+  spawnObstacleWave(); 
+  obstacleTimer = 0;
+ }
+ 
+ requestAnimationFrame(loop);
 }
 
 function endGame(){
-  run = false;
-  playSound('hit');
-  stopBackgroundMusic();
+ run = false;
+ playSound(sHit);
+ stopBackgroundMusic();
+ 
+ document.getElementById('finalCoins').textContent = coin;
+ document.getElementById('finalBaskets').textContent = basket;
+ document.getElementById('finalSpeed').textContent = speed.toFixed(1);
+ 
+ const butElement = document.getElementById('but');
+ if (butElement.classList.contains('show')) {
+   butElement.classList.remove('show');
+   butElement.classList.add('hide');
+   setTimeout(() => {
+     butElement.classList.remove('hide');
+     butElement.style.top = '-200px';
+     butElement.style.opacity = '0';
+   }, 500);
+ }
+ 
+ if (butTimeout) {
+   clearTimeout(butTimeout);
+   butTimeout = null;
+ }
+ 
+ const gameWrapper = document.getElementById('gameWrapper');
+ gameWrapper.style.animation = 'shake 0.5s ease';
+ setTimeout(() => {
+  gameWrapper.style.animation = '';
+ }, 500);
+ 
+ setTimeout(() => {
+  document.getElementById('over').style.display = 'flex';
   
-  document.getElementById('finalCoins').textContent = coin;
-  document.getElementById('finalBaskets').textContent = basket;
-  document.getElementById('finalSpeed').textContent = speed.toFixed(1);
-  
-  const butElement = document.getElementById('but');
-  if (butElement.classList.contains('show')) {
-    butElement.classList.remove('show');
-    butElement.classList.add('hide');
-    setTimeout(() => {
-      butElement.classList.remove('hide');
-      butElement.style.top = '-200px';
-      butElement.style.opacity = '0';
-    }, 500);
+  if(basket >= 3){
+   // Hiển thị voucher ngẫu nhiên
+   showVoucher();
+   // Phát âm thanh chiến thắng
+   playSound(sWin);
   }
-  
-  if (butTimeout) {
-    clearTimeout(butTimeout);
-    butTimeout = null;
-  }
-  
-  const gameWrapper = document.getElementById('gameWrapper');
-  gameWrapper.style.animation = 'shake 0.5s ease';
-  setTimeout(() => {
-    gameWrapper.style.animation = '';
-  }, 500);
-  
-  setTimeout(() => {
-    document.getElementById('over').style.display = 'flex';
-    
-    if(basket >= 3){
-      showVoucher();
-      playSound('win');
-    }
-  }, 800);
+ }, 1000);
 }
 
 /* SAVE SCORE */
@@ -1858,12 +2033,28 @@ function saveScore(){
  });
 }
 
-// Initialize audio on first user interaction
-document.addEventListener('click', function initAudioOnce() {
-  initAudio();
-  document.removeEventListener('click', initAudioOnce);
-}, { once: true });
+// Thêm animation cho sparkle effect
+const style = document.createElement('style');
+style.textContent = `
+@keyframes sparkle {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(0);
+    opacity: 0;
+  }
+  20% {
+    transform: translate(var(--end-x, 0), var(--end-y, -50px)) rotate(90deg) scale(1);
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(calc(var(--end-x, 0) * 1.5), calc(var(--end-y, -50px) - 50px)) rotate(180deg) scale(0);
+    opacity: 0;
+  }
+}
+`;
+document.head.appendChild(style);
 </script>
 </body>
 </html>
-
