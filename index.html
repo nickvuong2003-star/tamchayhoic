@@ -45,6 +45,126 @@ body{
  user-select:none;
 }
 
+/* LOADING SCREEN */
+#loading{
+ position:fixed;
+ top:0;
+ left:0;
+ width:100%;
+ height:100%;
+ background:linear-gradient(135deg, #A50064 0%, #D6006E 50%, #FF0077 100%);
+ z-index:100;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ transition:opacity 0.5s ease, visibility 0.5s ease;
+}
+
+#loading.hidden{
+ opacity:0;
+ visibility:hidden;
+ pointer-events:none;
+}
+
+.loading-container{
+ text-align:center;
+ width:90%;
+ max-width:300px;
+}
+
+.loading-logo{
+ width:120px;
+ height:120px;
+ margin:0 auto 30px;
+ background:rgba(255,255,255,0.9);
+ border-radius:30px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
+ box-shadow:0 15px 30px rgba(0,0,0,0.3),0 0 0 3px rgba(255,215,0,0.5);
+ animation:pulse 2s ease-in-out infinite;
+}
+
+.loading-logo img{
+ width:100%;
+ height:100%;
+ object-fit:contain;
+}
+
+.loading-title{
+ color:#fff;
+ font-size:28px;
+ font-weight:800;
+ margin-bottom:20px;
+ text-shadow:0 2px 10px rgba(0,0,0,0.3);
+ position:relative;
+}
+
+.loading-title::after{
+ content:'🎮';
+ position:absolute;
+ right:-40px;
+ top:50%;
+ transform:translateY(-50%);
+ font-size:24px;
+}
+
+.loading-subtitle{
+ color:#FFD700;
+ font-size:16px;
+ margin-bottom:40px;
+ opacity:0.9;
+}
+
+/* Loading Progress */
+.loading-progress-container{
+ width:100%;
+ height:8px;
+ background:rgba(255,255,255,0.2);
+ border-radius:4px;
+ overflow:hidden;
+ margin-bottom:15px;
+ box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+.loading-progress-bar{
+ height:100%;
+ width:0%;
+ background:linear-gradient(90deg,#FFD700,#FF9100,#FFD700);
+ background-size:200% 100%;
+ animation:loadingShine 2s linear infinite;
+ transition:width 0.3s ease;
+ border-radius:4px;
+}
+
+.loading-percentage{
+ color:#FFD700;
+ font-size:20px;
+ font-weight:bold;
+ margin-bottom:10px;
+ text-shadow:0 2px 5px rgba(0,0,0,0.3);
+}
+
+.loading-text{
+ color:#fff;
+ font-size:14px;
+ opacity:0.8;
+}
+
+/* Loading dots animation */
+.loading-dots{
+ display:inline-block;
+ width:20px;
+ text-align:left;
+}
+
+.loading-dots::after{
+ content:'...';
+ animation:dots 1.5s steps(4, end) infinite;
+}
+
 /* GAME WRAPPER */
 #gameWrapper{
  position:relative;
@@ -60,6 +180,14 @@ body{
  display:flex;
  align-items:center;
  justify-content:center;
+ opacity:0;
+ transform:scale(0.9);
+ transition:opacity 0.5s ease, transform 0.5s ease;
+}
+
+#gameWrapper.visible{
+ opacity:1;
+ transform:scale(1);
 }
 
 /* INTRO SCREEN - FIXED */
@@ -679,6 +807,19 @@ canvas{
   100% { background-position: 200% center; }
 }
 
+/* Loading animations */
+@keyframes loadingShine {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes dots {
+  0%, 20% { content: ''; }
+  40% { content: '.'; }
+  60% { content: '..'; }
+  80%, 100% { content: '...'; }
+}
+
 /* NHÂN VẬT LỚN HƠN */
 .player-shadow {
   position: absolute;
@@ -732,6 +873,16 @@ canvas{
   
   .voucher-value {
     font-size: 18px;
+  }
+  
+  .loading-logo {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+  }
+  
+  .loading-title {
+    font-size: 22px;
   }
 }
 
@@ -809,6 +960,15 @@ html {
   .voucher-value {
     font-size: 20px;
   }
+  
+  .loading-logo {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .loading-title {
+    font-size: 24px;
+  }
 }
 
 /* For very tall screens */
@@ -841,6 +1001,15 @@ html {
   .voucher-value {
     font-size: 18px;
   }
+  
+  .loading-logo {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .loading-title {
+    font-size: 22px;
+  }
 }
 
 /* Cho màn hình lớn hơn */
@@ -853,6 +1022,29 @@ html {
 </head>
 
 <body>
+
+<!-- LOADING SCREEN -->
+<div id="loading">
+  <div class="loading-container">
+    <div class="loading-logo">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="45" fill="#A50064"/>
+        <path d="M35 30 L65 30 L75 50 L65 70 L35 70 L25 50 Z" fill="#FFD700"/>
+        <circle cx="50" cy="50" r="15" fill="#A50064"/>
+        <text x="50" y="55" text-anchor="middle" fill="#FFD700" font-family="Arial" font-weight="bold" font-size="14">M</text>
+      </svg>
+    </div>
+    
+    <h1 class="loading-title">NHẶT ĐỒNG NHỎ</h1>
+    <p class="loading-subtitle">Ví MoMo - Phiên bản đặc biệt 2026</p>
+    
+    <div class="loading-percentage">0%</div>
+    <div class="loading-progress-container">
+      <div class="loading-progress-bar"></div>
+    </div>
+    <p class="loading-text">Đang tải tài nguyên<span class="loading-dots"></span></p>
+  </div>
+</div>
 
 <div id="gameWrapper">
 
@@ -961,6 +1153,100 @@ html {
 </div>
 
 <script>
+/* ===== LOADING SYSTEM ===== */
+const loadingScreen = document.getElementById('loading');
+const gameWrapper = document.getElementById('gameWrapper');
+const loadingPercentage = document.querySelector('.loading-percentage');
+const loadingProgressBar = document.querySelector('.loading-progress-bar');
+const loadingText = document.querySelector('.loading-text');
+
+let totalAssets = 0;
+let loadedAssets = 0;
+const assetsToLoad = [];
+
+// Hàm cập nhật tiến độ loading
+function updateLoadingProgress() {
+  const percentage = Math.min(Math.round((loadedAssets / totalAssets) * 100), 100);
+  loadingPercentage.textContent = `${percentage}%`;
+  loadingProgressBar.style.width = `${percentage}%`;
+  
+  // Thay đổi text theo tiến độ
+  if (percentage < 30) {
+    loadingText.innerHTML = 'Đang tải hình ảnh<span class="loading-dots"></span>';
+  } else if (percentage < 70) {
+    loadingText.innerHTML = 'Đang tải âm thanh<span class="loading-dots"></span>';
+  } else if (percentage < 100) {
+    loadingText.innerHTML = 'Đang khởi tạo game<span class="loading-dots"></span>';
+  } else {
+    loadingText.innerHTML = 'Sẵn sàng!';
+  }
+}
+
+// Hàm đếm asset
+function countAsset(asset) {
+  totalAssets++;
+  assetsToLoad.push(asset);
+  
+  asset.onload = () => {
+    loadedAssets++;
+    updateLoadingProgress();
+    checkAllAssetsLoaded();
+  };
+  
+  asset.onerror = () => {
+    console.warn(`Không thể tải asset: ${asset.src}`);
+    loadedAssets++; // Vẫn tính là đã tải để không bị kẹt
+    updateLoadingProgress();
+    checkAllAssetsLoaded();
+  };
+}
+
+// Hàm kiểm tra tất cả asset đã tải xong
+function checkAllAssetsLoaded() {
+  if (loadedAssets >= totalAssets) {
+    // Tất cả asset đã tải xong
+    setTimeout(() => {
+      // Hoàn thành loading với hiệu ứng
+      loadingScreen.classList.add('hidden');
+      
+      setTimeout(() => {
+        gameWrapper.classList.add('visible');
+        
+        // Bắt đầu preload voucher images
+        preloadVoucherImages();
+        
+        console.log('Tất cả tài nguyên đã tải xong!');
+      }, 300);
+    }, 500); // Thêm delay nhỏ để hiển thị 100%
+  }
+}
+
+// Hàm tạo placeholder cho hình ảnh bị lỗi
+function createPlaceholderImage(width, height, color, text) {
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  
+  // Vẽ nền
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, width, height);
+  
+  // Vẽ border
+  ctx.strokeStyle = '#FFFFFF';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(2, 2, width - 4, height - 4);
+  
+  // Vẽ text
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = 'bold 14px Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, width / 2, height / 2);
+  
+  return canvas.toDataURL();
+}
+
 /* ===== FULLSCREEN FIXES ===== */
 // Fix 100vh trên mobile
 function setVH() {
@@ -970,7 +1256,6 @@ function setVH() {
 
 // Scale game cho phù hợp
 function initializeGameSize() {
-  const gameWrapper = document.getElementById('gameWrapper');
   const windowWidth = window.innerWidth;
   const windowHeight = window.innerHeight;
   
@@ -1018,9 +1303,6 @@ window.addEventListener('load', function() {
   setVH();
   initializeGameSize();
   fixIntroSize();
-  
-  // Preload voucher images
-  preloadVoucherImages();
   
   // Fix cho iOS
   setTimeout(() => {
@@ -1161,6 +1443,8 @@ function preloadVoucherImages() {
   voucherList.forEach(voucher => {
     const img = new Image();
     img.src = voucher.image;
+    countAsset(img); // Đếm vào hệ thống loading
+    
     img.onload = () => {
       console.log(`✓ Đã tải: ${voucher.image}`);
     };
@@ -1265,12 +1549,15 @@ canvas.height = 640;
 /* ===== IMAGES ===== */
 const roadImg = new Image(); 
 roadImg.src = "assets/road.png";
+countAsset(roadImg); // Đếm vào hệ thống loading
 
 const playerImg = new Image(); 
 playerImg.src = "assets/cotam-run.png";
+countAsset(playerImg);
 
 const coinImg = new Image(); 
 coinImg.src = "assets/coin.png";
+countAsset(coinImg);
 
 const obstacleTypes = [
  { img: new Image(), size: 40, color: '#8B4513' },
@@ -1281,8 +1568,20 @@ obstacleTypes[0].img.src = "assets/obs-rock.png";
 obstacleTypes[1].img.src = "assets/obs-log.png";
 obstacleTypes[2].img.src = "assets/obs-pot.png";
 
-const imagesToLoad = [roadImg, playerImg, coinImg, 
-                     obstacleTypes[0].img, obstacleTypes[1].img, obstacleTypes[2].img];
+// Đếm tất cả obstacle images
+obstacleTypes.forEach(obs => countAsset(obs.img));
+
+// Đếm start image
+const startImage = document.getElementById('startImage');
+countAsset(startImage);
+
+// Đếm but image
+const butImage = document.getElementById('but');
+countAsset(butImage);
+
+// Đếm basket image
+const basketImage = document.getElementById('basketDrop');
+countAsset(basketImage);
 
 /* ===== ÂM THANH ===== */
 // Nhạc nền
@@ -1310,6 +1609,15 @@ sSpeedUp.volume = 0.4;
 sBut.volume = 0.6;
 sMagic.volume = 0.5;
 sWin.volume = 0.6;
+
+// Đếm âm thanh vào loading (không bắt buộc nhưng tốt hơn)
+const audioElements = [bgMusic, sCoin, sBasket, sHit, sClick, sSpeedUp, sBut, sMagic, sWin];
+audioElements.forEach(audio => {
+  // Tăng totalAssets nhưng không đợi audio load hoàn toàn
+  totalAssets++;
+  loadedAssets++; // Tăng ngay để không làm chậm loading
+  updateLoadingProgress();
+});
 
 // Biến kiểm soát âm thanh
 let soundEnabled = true;
