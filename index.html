@@ -8,109 +8,849 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#A50064">
-<!-- Preload critical resources -->
-<link rel="preload" href="assets/road.png" as="image">
-<link rel="preload" href="assets/cotam-run.png" as="image">
-<link rel="preload" href="assets/coin.png" as="image">
 
 <style>
-/* MINIFIED CSS - REMOVED ALL COMMENTS AND WHITESPACE */
-:root{--vh:1vh}*{box-sizing:border-box;margin:0;padding:0}body{margin:0;padding:0;background:#000;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;min-height:calc(var(--vh, 1vh) * 100);background:linear-gradient(135deg,#1a0033 0%,#330066 50%,#4d0099 100%);position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;height:calc(var(--vh, 1vh) * 100);-webkit-tap-highlight-color:transparent;touch-action:none;-webkit-user-select:none;user-select:none}
-#gameWrapper{position:relative;width:100%;height:100%;max-width:360px;max-height:640px;margin:auto;transform-origin:center center;filter:drop-shadow(0 10px 30px rgba(0,0,0,0.5));touch-action:manipulation;overflow:hidden;display:flex;align-items:center;justify-content:center}
-#start{position:absolute;top:0;left:0;width:100%;height:100%;z-index:50;cursor:pointer;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
-#start img{width:100%;height:100%;object-fit:cover;pointer-events:none;display:block;margin:auto;max-width:100%;max-height:100%}
-#instruction{position:absolute;top:0;left:0;width:100%;height:100%;color:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;z-index:40;text-align:center;background:linear-gradient(-45deg,#A50064,#D6006E,#FF0077,#FF3399,#A50064,#D6006E,#FF0077,#FF3399);background-size:400% 400%;animation:gradientFlow 8s ease infinite}
-@keyframes gradientFlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-#instructionBox{background:rgba(255,255,255,0.15);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:2px solid rgba(255,255,255,0.25);padding:30px;border-radius:25px;max-width:320px;width:90%;box-shadow:0 20px 40px rgba(0,0,0,0.3),inset 0 0 0 1px rgba(255,255,255,0.1)}
-#instructionBox h2{margin-top:0;color:#fff;font-size:28px;text-shadow:0 2px 10px rgba(0,0,0,0.3);margin-bottom:25px;padding-bottom:15px;border-bottom:2px solid rgba(255,255,255,0.3);position:relative}
-#instructionBox h2::after{content:'';position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);width:100px;height:3px;background:linear-gradient(90deg,transparent,#FFD700,transparent)}
-#instructionBox ul{text-align:left;padding-left:25px;line-height:1.7;color:#fff;font-size:16px;margin-bottom:25px;list-style:none}
-#instructionBox li{margin-bottom:16px;padding-left:35px;position:relative}
-#instructionBox li::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:24px;height:24px;background:rgba(255,215,0,0.2);border-radius:50%;border:2px solid #FFD700}
-#instructionBox li::after{content:'✓';position:absolute;left:0;top:50%;transform:translateY(-50%);width:24px;height:24px;color:#FFD700;font-weight:bold;text-align:center;line-height:24px}
-#instructionBox b{color:#FFD700;font-weight:800;text-shadow:0 0 10px rgba(255,215,0,0.5)}
-#hud{position:absolute;top:20px;left:20px;color:#fff;font-weight:bold;z-index:10;background:rgba(165,0,100,0.85);padding:15px 20px;border-radius:20px;border:2px solid rgba(255,215,0,0.3);box-shadow:0 10px 20px rgba(0,0,0,0.3);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.hud-item{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.hud-item:last-child{margin-bottom:0}
-.hud-icon{font-size:24px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))}
-.hud-value{font-size:24px;color:#FFD700;text-shadow:0 0 10px rgba(255,215,0,0.5)}
-#soundBtn{position:absolute;top:20px;right:20px;width:44px;height:44px;background:rgba(165,0,100,0.85);border-radius:50%;border:2px solid rgba(255,215,0,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:11;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 5px 15px rgba(0,0,0,0.3);transition:all 0.3s ease}
-#soundBtn:hover{transform:scale(1.1)}
-#soundIcon{font-size:22px;color:#FFD700;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))}
-#progressBox{position:absolute;top:145px;left:20px;width:200px;height:16px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;border:2px solid rgba(255,255,255,0.2);box-shadow:0 5px 15px rgba(0,0,0,0.2)}
-#progress{height:100%;width:0%;background:linear-gradient(90deg,#FFD700 0%,#FFB300 25%,#FF9100 50%,#FFB300 75%,#FFD700 100%);background-size:200% 100%;animation:progressShine 2s linear infinite;box-shadow:0 0 20px rgba(255,215,0,0.7),inset 0 0 40px rgba(255,215,0,0.3);transition:width 0.3s ease}
-canvas{display:block;width:100%;height:100%;border-radius:20px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,0.4),inset 0 0 0 2px rgba(255,215,0,0.2);-webkit-touch-callout:none}
-.btn-momo{margin-top:20px;padding:16px 36px;border:none;border-radius:25px;font-size:18px;font-weight:800;background:linear-gradient(135deg,#FFD700 0%,#FFB300 50%,#FF9100 100%);color:#A50064;cursor:pointer;transition:all 0.3s ease;box-shadow:0 10px 25px rgba(165,0,100,0.4);font-family:inherit;letter-spacing:0.5px;position:relative;overflow:hidden;z-index:1;-webkit-appearance:none}
-.btn-momo::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);transition:0.6s;z-index:-1}
-.btn-momo:hover{transform:translateY(-5px) scale(1.05);box-shadow:0 15px 35px rgba(165,0,100,0.6)}
-.btn-momo:hover::before{left:100%}
-.btn-momo:active{transform:translateY(2px) scale(1)}
-#but{position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:140px;opacity:0;transition:all 0.8s cubic-bezier(0.68,-0.55,0.265,1.55);z-index:15;filter:drop-shadow(0 10px 20px rgba(0,0,0,0.4));pointer-events:none}
-#but.show{top:100px;opacity:1;transform:translateX(-50%) scale(1.1);animation:butFloat 3s ease-in-out infinite}
-#but.hide{animation:butHide 0.5s ease forwards}
-#basketDrop{position:absolute;top:200px;left:50%;transform:translateX(-50%) scale(0);width:80px;opacity:0;z-index:16;pointer-events:none;filter:drop-shadow(0 10px 20px rgba(255,215,0,0.5));transition:opacity 0.6s cubic-bezier(0.2,0.8,0.3,1),transform 0.6s cubic-bezier(0.2,0.8,0.3,1)}
-#basketDrop.show{opacity:1;transform:translateX(-50%) scale(1);animation:basketBounce 0.6s ease}
-#over{position:absolute;top:0;left:0;width:100%;height:100%;display:none;align-items:center;justify-content:flex-start;flex-direction:column;color:#fff;z-index:50;padding:30px;text-align:center;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);overflow-y:auto;padding-bottom:100px;-webkit-overflow-scrolling:touch;background:linear-gradient(-45deg,rgba(165,0,100,0.95),rgba(214,0,110,0.95),rgba(255,0,119,0.95),rgba(255,51,153,0.95),rgba(165,0,100,0.95),rgba(214,0,110,0.95),rgba(255,0,119,0.95),rgba(255,51,153,0.95));background-size:400% 400%;animation:gradientFlow 8s ease infinite}
-#over-content{display:flex;flex-direction:column;align-items:center;width:100%;max-width:340px;margin:0 auto}
-#summary{background:rgba(255,255,255,0.15);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:25px;border-radius:25px;width:100%;margin-bottom:20px;text-align:center;border:2px solid rgba(255,255,255,0.25);box-shadow:0 20px 40px rgba(0,0,0,0.3)}
-.summary-item{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid rgba(255,255,255,0.2)}
-.summary-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
-.summary-value{font-size:24px;font-weight:bold;color:#FFD700;text-shadow:0 0 10px rgba(255,215,0,0.5)}
-#voucherPopup{display:none;background:linear-gradient(135deg,#FFD700 0%,#FFB300 100%);color:#A50064;padding:25px;border-radius:25px;width:100%;margin-bottom:20px;text-align:center;border:3px solid rgba(255,255,255,0.7);box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 50px rgba(255,215,0,0.5);position:relative;overflow:hidden}
-#voucherPopup::before{content:'';position:absolute;top:-10px;left:-10px;right:-10px;bottom:-10px;background:conic-gradient(from 0deg,#FFD700,#FF9100,#FFD700,#FF9100,#FFD700);z-index:-1;filter:blur(20px);opacity:0.5}
-#voucherPopup h3{margin-top:0;color:#A50064;font-size:26px;margin-bottom:15px}
-.voucher-image-container{width:100%;height:220px;margin:15px 0;border-radius:15px;overflow:hidden;box-shadow:0 10px 25px rgba(165,0,100,0.4);border:3px solid rgba(255,255,255,0.8);position:relative;background:rgba(255,255,255,0.9);display:flex;align-items:center;justify-content:center}
-.voucher-image{width:100%;height:100%;object-fit:cover;display:block;position:absolute;top:0;left:0}
-.voucher-code{font-size:28px;font-weight:900;letter-spacing:3px;background:rgba(255,255,255,0.95);padding:15px;border-radius:15px;margin:15px 0;color:#A50064;border:3px dashed #A50064;font-family:'Courier New',monospace;text-shadow:0 2px 4px rgba(0,0,0,0.1);animation:codePulse 2s ease-in-out infinite}
-.voucher-desc{font-size:14px;margin-top:10px;color:#A50064;font-weight:bold}
-.voucher-brand{font-size:20px;font-weight:900;margin:10px 0;text-transform:uppercase;letter-spacing:1px}
-.voucher-value{font-size:24px;font-weight:900;color:#A50064;margin:10px 0;background:rgba(255,255,255,0.9);padding:8px 15px;border-radius:10px;display:inline-block}
-#nameBox{background:rgba(255,255,255,0.15);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:25px;border-radius:25px;width:100%;margin-bottom:20px;text-align:center;border:2px solid rgba(255,255,255,0.25);box-shadow:0 20px 40px rgba(0,0,0,0.3)}
-#nameBox label{display:block;margin-bottom:10px;color:#FFD700;font-weight:bold;font-size:18px}
-#playerName{width:100%;padding:15px;border-radius:15px;border:2px solid rgba(255,215,0,0.5);background:rgba(255,255,255,0.9);margin:10px 0 20px;font-size:16px;color:#A50064;font-weight:bold;text-align:center;-webkit-appearance:none}
-#leaderboard{display:none;background:rgba(255,255,255,0.95);color:#A50064;border-radius:25px;width:100%;padding:25px;margin:20px 0;border:3px solid #FFD700;box-shadow:0 20px 40px rgba(0,0,0,0.3)}
-#leaderboard h3{margin-top:0;color:#A50064;text-align:center;margin-bottom:20px;padding-bottom:15px;border-bottom:2px solid rgba(165,0,100,0.3);font-size:24px}
-.rank{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;margin:8px 0;border-radius:12px;background:rgba(255,215,0,0.1);border-left:5px solid transparent}
-.rank.you{font-weight:bold;color:#FF9100;background:rgba(255,215,0,0.3);border-left:5px solid #FFD700}
-.rank-medal{font-size:20px;margin-right:10px}
-#playAgainBtn{margin-top:20px;margin-bottom:10px;position:relative;z-index:10;width:100%;max-width:340px}
-@keyframes progressShine{0%{background-position:-200% 0}100%{background-position:200% 0}}
-@keyframes butFloat{0%,100%{transform:translateX(-50%) translateY(0) scale(1.1)}50%{transform:translateX(-50%) translateY(-10px) scale(1.15)}}
-@keyframes butHide{0%{transform:translateX(-50%) translateY(0) scale(1.1);opacity:1}100%{transform:translateX(-50%) translateY(-100px) scale(0.5);opacity:0}}
-@keyframes basketBounce{0%{transform:translateX(-50%) scale(0)}60%{transform:translateX(-50%) scale(1.2)}100%{transform:translateX(-50%) scale(1)}}
-@keyframes codePulse{0%,100%{transform:scale(1);box-shadow:0 0 20px rgba(255,215,0,0.5)}50%{transform:scale(1.05);box-shadow:0 0 40px rgba(255,215,0,0.8)}}
-@keyframes shake{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-5px)}20%,40%,60%,80%{transform:translateX(5px)}}
-@keyframes sparkle{0%{transform:translateY(0) rotate(0deg);opacity:0}50%{opacity:1}100%{transform:translateY(-100px) rotate(360deg);opacity:0}}
-@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-@keyframes shine{0%{background-position:-200% center}100%{background-position:200% center}}
-.player-shadow{position:absolute;bottom:505px;left:50%;transform:translateX(-50%);width:60px;height:20px;background:rgba(0,0,0,0.3);border-radius:50%;filter:blur(5px);z-index:5;pointer-events:none}
-@media (max-height:500px) and (orientation:landscape){#gameWrapper{max-height:500px;transform:scale(0.8)}#hud{transform:scale(0.8);transform-origin:top left}#soundBtn{transform:scale(0.8);transform-origin:top right}#progressBox{transform:scale(0.8);transform-origin:top left}.voucher-image-container{height:140px}.voucher-code{font-size:20px;padding:10px}.voucher-brand{font-size:16px}.voucher-value{font-size:18px}}
-@supports (-webkit-touch-callout:none){body{height:-webkit-fill-available}#gameWrapper{height:-webkit-fill-available}}
-@supports (padding:max(0px)){#gameWrapper{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}#over{padding-top:calc(env(safe-area-inset-top) + 30px);padding-bottom:calc(env(safe-area-inset-bottom) + 100px)}#soundBtn{top:calc(env(safe-area-inset-top) + 20px);right:calc(env(safe-area-inset-right) + 20px)}}
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%;height:100%;overflow:hidden}
-#start{background:#000}#start img{max-width:100%;max-height:100%;object-fit:cover;display:block;margin:auto}
-@media (max-width:360px){#gameWrapper{max-width:100vw;max-height:calc(100vw * (640/360))}.voucher-image-container{height:180px}.voucher-code{font-size:22px;padding:12px}.voucher-brand{font-size:18px}.voucher-value{font-size:20px}}
-@media (max-height:640px){#gameWrapper{max-height:100vh;max-width:calc(100vh * (360/640))}.voucher-image-container{height:180px}}
-@media (max-width:320px){.voucher-image-container{height:160px}.voucher-code{font-size:20px;padding:10px}.voucher-brand{font-size:16px}.voucher-value{font-size:18px}}
-@media (min-width:361px) and (min-height:641px){.voucher-image-container{height:240px}}
-</style>
+/* CSS Variables */
+:root {
+  --vh: 1vh;
+}
 
-<!-- Inline critical CSS for faster rendering -->
-<style id="critical-css">
-/* Critical above-the-fold styles */
-#gameWrapper{background:#000}
-#start{background:#000;display:flex}
+/* Reset */
+*{box-sizing:border-box;margin:0;padding:0}
+
+/* Body - Fullscreen */
+body{
+ margin:0;
+ padding:0;
+ background:#000;
+ overflow:hidden;
+ font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ min-height:100vh;
+ min-height:calc(var(--vh, 1vh) * 100);
+ background: linear-gradient(135deg, #1a0033 0%, #330066 50%, #4d0099 100%);
+ position:fixed;
+ top:0;
+ left:0;
+ right:0;
+ bottom:0;
+ width:100vw;
+ height:100vh;
+ height:calc(var(--vh, 1vh) * 100);
+ -webkit-tap-highlight-color:transparent;
+ touch-action:none;
+ -webkit-user-select:none;
+ user-select:none;
+}
+
+/* GAME WRAPPER */
+#gameWrapper{
+ position:relative;
+ width:100%;
+ height:100%;
+ max-width:360px;
+ max-height:640px;
+ margin:auto;
+ transform-origin:center center;
+ filter:drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+ touch-action:manipulation;
+ overflow:hidden;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+}
+
+/* INTRO SCREEN - FIXED */
+#start{
+ position:absolute;
+ top:0;
+ left:0;
+ width:100%;
+ height:100%;
+ z-index:50;
+ cursor:pointer;
+ background:#000;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ overflow:hidden;
+}
+#start img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+ pointer-events:none;
+ display:block;
+ margin:auto;
+ max-width:100%;
+ max-height:100%;
+}
+
+/* INSTRUCTION SCREEN */
+#instruction{
+ position:absolute;
+ top:0;
+ left:0;
+ width:100%;
+ height:100%;
+ color:#fff;
+ display:none;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
+ z-index:40;
+ text-align:center;
+ background:linear-gradient(-45deg,#A50064,#D6006E,#FF0077,#FF3399,#A50064,#D6006E,#FF0077,#FF3399);
+ background-size:400% 400%;
+ animation:gradientFlow 8s ease infinite;
+}
+@keyframes gradientFlow{
+ 0%{background-position:0% 50%}
+ 50%{background-position:100% 50%}
+ 100%{background-position:0% 50%}
+}
+
+#instructionBox{
+ background:rgba(255,255,255,0.15);
+ backdrop-filter:blur(20px);
+ -webkit-backdrop-filter:blur(20px);
+ border:2px solid rgba(255,255,255,0.25);
+ padding:30px;
+ border-radius:25px;
+ max-width:320px;
+ width:90%;
+ box-shadow:0 20px 40px rgba(0,0,0,0.3),0 0 0 1px rgba(255,255,255,0.1) inset;
+}
+#instructionBox h2{
+ margin-top:0;
+ color:#fff;
+ font-size:28px;
+ text-shadow:0 2px 10px rgba(0,0,0,0.3);
+ margin-bottom:25px;
+ padding-bottom:15px;
+ border-bottom:2px solid rgba(255,255,255,0.3);
+ position:relative;
+}
+#instructionBox h2::after{
+ content:'';
+ position:absolute;
+ bottom:-2px;
+ left:50%;
+ transform:translateX(-50%);
+ width:100px;
+ height:3px;
+ background:linear-gradient(90deg,transparent,#FFD700,transparent);
+}
+#instructionBox ul{
+ text-align:left;
+ padding-left:25px;
+ line-height:1.7;
+ color:#fff;
+ font-size:16px;
+ margin-bottom:25px;
+ list-style:none;
+}
+#instructionBox li{
+ margin-bottom:16px;
+ padding-left:35px;
+ position:relative;
+}
+#instructionBox li::before{
+ content:'';
+ position:absolute;
+ left:0;
+ top:50%;
+ transform:translateY(-50%);
+ width:24px;
+ height:24px;
+ background:rgba(255,215,0,0.2);
+ border-radius:50%;
+ border:2px solid #FFD700;
+}
+#instructionBox li::after{
+ content:'✓';
+ position:absolute;
+ left:0;
+ top:50%;
+ transform:translateY(-50%);
+ width:24px;
+ height:24px;
+ color:#FFD700;
+ font-weight:bold;
+ text-align:center;
+ line-height:24px;
+}
+#instructionBox b{
+ color:#FFD700;
+ font-weight:800;
+ text-shadow:0 0 10px rgba(255,215,0,0.5);
+}
+
+/* HUD */
+#hud{
+ position:absolute;
+ top:20px;
+ left:20px;
+ color:#fff;
+ font-weight:bold;
+ z-index:10;
+ background:rgba(165,0,100,0.85);
+ padding:15px 20px;
+ border-radius:20px;
+ border:2px solid rgba(255,215,0,0.3);
+ box-shadow:0 10px 20px rgba(0,0,0,0.3);
+ backdrop-filter:blur(10px);
+ -webkit-backdrop-filter:blur(10px);
+}
+.hud-item{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ margin-bottom:10px;
+}
+.hud-item:last-child{
+ margin-bottom:0;
+}
+.hud-icon{
+ font-size:24px;
+ filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+.hud-value{
+ font-size:24px;
+ color:#FFD700;
+ text-shadow:0 0 10px rgba(255,215,0,0.5);
+}
+
+/* NÚT ÂM THANH */
+#soundBtn{
+ position:absolute;
+ top:20px;
+ right:20px;
+ width:44px;
+ height:44px;
+ background:rgba(165,0,100,0.85);
+ border-radius:50%;
+ border:2px solid rgba(255,215,0,0.3);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ cursor:pointer;
+ z-index:11;
+ backdrop-filter:blur(10px);
+ -webkit-backdrop-filter:blur(10px);
+ box-shadow:0 5px 15px rgba(0,0,0,0.3);
+ transition:all 0.3s ease;
+}
+#soundBtn:hover{
+ transform:scale(1.1);
+}
+#soundIcon{
+ font-size:22px;
+ color:#FFD700;
+ filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+/* PROGRESS */
+#progressBox{
+ position:absolute;
+ top:145px;
+ left:20px;
+ width:200px;
+ height:16px;
+ background:rgba(255,255,255,0.1);
+ border-radius:10px;
+ overflow:hidden;
+ border:2px solid rgba(255,255,255,0.2);
+ box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+#progress{
+ height:100%;
+ width:0%;
+ background:linear-gradient(90deg,#FFD700 0%,#FFB300 25%,#FF9100 50%,#FFB300 75%,#FFD700 100%);
+ background-size:200% 100%;
+ animation:progressShine 2s linear infinite;
+ box-shadow:0 0 20px rgba(255,215,0,0.7),0 0 40px rgba(255,215,0,0.3) inset;
+ transition:width 0.3s ease;
+}
+
+/* CANVAS */
+canvas{
+ display:block;
+ width:100%;
+ height:100%;
+ border-radius:20px;
+ overflow:hidden;
+ box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 0 2px rgba(255,215,0,0.2);
+ -webkit-touch-callout:none;
+}
+
+/* BUTTONS */
+.btn-momo{
+ margin-top:20px;
+ padding:16px 36px;
+ border:none;
+ border-radius:25px;
+ font-size:18px;
+ font-weight:800;
+ background:linear-gradient(135deg,#FFD700 0%,#FFB300 50%,#FF9100 100%);
+ color:#A50064;
+ cursor:pointer;
+ transition:all 0.3s ease;
+ box-shadow:0 10px 25px rgba(165,0,100,0.4);
+ font-family:inherit;
+ letter-spacing:0.5px;
+ position:relative;
+ overflow:hidden;
+ z-index:1;
+ -webkit-appearance:none;
+}
+.btn-momo::before{
+ content:'';
+ position:absolute;
+ top:0;
+ left:-100%;
+ width:100%;
+ height:100%;
+ background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);
+ transition:0.6s;
+ z-index:-1;
+}
+.btn-momo:hover{
+ transform:translateY(-5px) scale(1.05);
+ box-shadow:0 15px 35px rgba(165,0,100,0.6);
+}
+.btn-momo:hover::before{
+ left:100%;
+}
+.btn-momo:active{
+ transform:translateY(2px) scale(1);
+}
+
+/* ÔNG BỤT */
+#but{
+ position:absolute;
+ top:-200px;
+ left:50%;
+ transform:translateX(-50%);
+ width:140px;
+ opacity:0;
+ transition:all 0.8s cubic-bezier(0.68,-0.55,0.265,1.55);
+ z-index:15;
+ filter:drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+ pointer-events:none;
+}
+#but.show{
+ top:100px;
+ opacity:1;
+ transform:translateX(-50%) scale(1.1);
+ animation:butFloat 3s ease-in-out infinite;
+}
+#but.hide{
+ animation:butHide 0.5s ease forwards;
+}
+
+/* RỔ CÁ */
+#basketDrop{
+ position:absolute;
+ top:200px;
+ left:50%;
+ transform:translateX(-50%) scale(0);
+ width:80px;
+ opacity:0;
+ z-index:16;
+ pointer-events:none;
+ filter:drop-shadow(0 10px 20px rgba(255,215,0,0.5));
+ transition:opacity 0.6s cubic-bezier(0.2,0.8,0.3,1),transform 0.6s cubic-bezier(0.2,0.8,0.3,1);
+}
+#basketDrop.show{
+ opacity:1;
+ transform:translateX(-50%) scale(1);
+ animation:basketBounce 0.6s ease;
+}
+
+/* GAME OVER */
+#over{
+ position:absolute;
+ top:0;
+ left:0;
+ width:100%;
+ height:100%;
+ display:none;
+ align-items:center;
+ justify-content:flex-start;
+ flex-direction:column;
+ color:#fff;
+ z-index:50;
+ padding:30px;
+ text-align:center;
+ backdrop-filter:blur(10px);
+ -webkit-backdrop-filter:blur(10px);
+ overflow-y:auto;
+ padding-bottom:100px;
+ -webkit-overflow-scrolling:touch;
+ background:linear-gradient(-45deg,rgba(165,0,100,0.95),rgba(214,0,110,0.95),rgba(255,0,119,0.95),rgba(255,51,153,0.95),rgba(165,0,100,0.95),rgba(214,0,110,0.95),rgba(255,0,119,0.95),rgba(255,51,153,0.95));
+ background-size:400% 400%;
+ animation:gradientFlow 8s ease infinite;
+}
+#over-content{
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ width:100%;
+ max-width:340px;
+ margin:0 auto;
+}
+#summary{
+ background:rgba(255,255,255,0.15);
+ backdrop-filter:blur(20px);
+ -webkit-backdrop-filter:blur(20px);
+ padding:25px;
+ border-radius:25px;
+ width:100%;
+ margin-bottom:20px;
+ text-align:center;
+ border:2px solid rgba(255,255,255,0.25);
+ box-shadow:0 20px 40px rgba(0,0,0,0.3);
+}
+.summary-item{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:15px;
+ padding-bottom:15px;
+ border-bottom:1px solid rgba(255,255,255,0.2);
+}
+.summary-item:last-child{
+ margin-bottom:0;
+ padding-bottom:0;
+ border-bottom:none;
+}
+.summary-value{
+ font-size:24px;
+ font-weight:bold;
+ color:#FFD700;
+ text-shadow:0 0 10px rgba(255,215,0,0.5);
+}
+
+/* VOUCHER POPUP */
+#voucherPopup{
+ display:none;
+ background:linear-gradient(135deg,#FFD700 0%,#FFB300 100%);
+ color:#A50064;
+ padding:25px;
+ border-radius:25px;
+ width:100%;
+ margin-bottom:20px;
+ text-align:center;
+ border:3px solid rgba(255,255,255,0.7);
+ box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 50px rgba(255,215,0,0.5);
+ position:relative;
+ overflow:hidden;
+}
+#voucherPopup::before{
+ content:'';
+ position:absolute;
+ top:-10px;
+ left:-10px;
+ right:-10px;
+ bottom:-10px;
+ background:conic-gradient(from 0deg,#FFD700,#FF9100,#FFD700,#FF9100,#FFD700);
+ z-index:-1;
+ filter:blur(20px);
+ opacity:0.5;
+}
+#voucherPopup h3{
+ margin-top:0;
+ color:#A50064;
+ font-size:26px;
+ margin-bottom:15px;
+}
+.voucher-image-container{
+ width:100%;
+ height:220px;
+ margin:15px 0;
+ border-radius:15px;
+ overflow:hidden;
+ box-shadow:0 10px 25px rgba(165,0,100,0.4);
+ border:3px solid rgba(255,255,255,0.8);
+ position:relative;
+ background:rgba(255,255,255,0.9);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+}
+.voucher-image{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+ display:block;
+ position:absolute;
+ top:0;
+ left:0;
+}
+.voucher-code{
+ font-size:28px;
+ font-weight:900;
+ letter-spacing:3px;
+ background:rgba(255,255,255,0.95);
+ padding:15px;
+ border-radius:15px;
+ margin:15px 0;
+ color:#A50064;
+ border:3px dashed #A50064;
+ font-family:'Courier New',monospace;
+ text-shadow:0 2px 4px rgba(0,0,0,0.1);
+ animation:codePulse 2s ease-in-out infinite;
+}
+.voucher-desc{
+ font-size:14px;
+ margin-top:10px;
+ color:#A50064;
+ font-weight:bold;
+}
+.voucher-brand{
+ font-size:20px;
+ font-weight:900;
+ margin:10px 0;
+ text-transform:uppercase;
+ letter-spacing:1px;
+}
+.voucher-value{
+ font-size:24px;
+ font-weight:900;
+ color:#A50064;
+ margin:10px 0;
+ background:rgba(255,255,255,0.9);
+ padding:8px 15px;
+ border-radius:10px;
+ display:inline-block;
+}
+
+/* NAME BOX */
+#nameBox{
+ background:rgba(255,255,255,0.15);
+ backdrop-filter:blur(20px);
+ -webkit-backdrop-filter:blur(20px);
+ padding:25px;
+ border-radius:25px;
+ width:100%;
+ margin-bottom:20px;
+ text-align:center;
+ border:2px solid rgba(255,255,255,0.25);
+ box-shadow:0 20px 40px rgba(0,0,0,0.3);
+}
+#nameBox label{
+ display:block;
+ margin-bottom:10px;
+ color:#FFD700;
+ font-weight:bold;
+ font-size:18px;
+}
+#playerName{
+ width:100%;
+ padding:15px;
+ border-radius:15px;
+ border:2px solid rgba(255,215,0,0.5);
+ background:rgba(255,255,255,0.9);
+ margin:10px 0 20px;
+ font-size:16px;
+ color:#A50064;
+ font-weight:bold;
+ text-align:center;
+ -webkit-appearance:none;
+}
+
+/* LEADERBOARD */
+#leaderboard{
+ display:none;
+ background:rgba(255,255,255,0.95);
+ color:#A50064;
+ border-radius:25px;
+ width:100%;
+ padding:25px;
+ margin:20px 0;
+ border:3px solid #FFD700;
+ box-shadow:0 20px 40px rgba(0,0,0,0.3);
+}
+#leaderboard h3{
+ margin-top:0;
+ color:#A50064;
+ text-align:center;
+ margin-bottom:20px;
+ padding-bottom:15px;
+ border-bottom:2px solid rgba(165,0,100,0.3);
+ font-size:24px;
+}
+.rank{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:12px 15px;
+ margin:8px 0;
+ border-radius:12px;
+ background:rgba(255,215,0,0.1);
+ border-left:5px solid transparent;
+}
+.rank.you{
+ font-weight:bold;
+ color:#FF9100;
+ background:rgba(255,215,0,0.3);
+ border-left:5px solid #FFD700;
+}
+.rank-medal{
+ font-size:20px;
+ margin-right:10px;
+}
+
+/* NÚT CHƠI LẠI */
+#playAgainBtn{
+ margin-top:20px;
+ margin-bottom:10px;
+ position:relative;
+ z-index:10;
+ width:100%;
+ max-width:340px;
+}
+
+/* ANIMATIONS */
+@keyframes progressShine{
+ 0%{background-position:-200% 0}
+ 100%{background-position:200% 0}
+}
+
+@keyframes butFloat{
+ 0%,100%{transform:translateX(-50%) translateY(0) scale(1.1)}
+ 50%{transform:translateX(-50%) translateY(-10px) scale(1.15)}
+}
+
+@keyframes butHide{
+ 0%{transform:translateX(-50%) translateY(0) scale(1.1);opacity:1}
+ 100%{transform:translateX(-50%) translateY(-100px) scale(0.5);opacity:0}
+}
+
+@keyframes basketBounce{
+ 0%{transform:translateX(-50%) scale(0)}
+ 60%{transform:translateX(-50%) scale(1.2)}
+ 100%{transform:translateX(-50%) scale(1)}
+}
+
+@keyframes codePulse{
+ 0%,100%{transform:scale(1);box-shadow:0 0 20px rgba(255,215,0,0.5)}
+ 50%{transform:scale(1.05);box-shadow:0 0 40px rgba(255,215,0,0.8)}
+}
+
+@keyframes shake{
+ 0%,100%{transform:translateX(0)}
+ 10%,30%,50%,70%,90%{transform:translateX(-5px)}
+ 20%,40%,60%,80%{transform:translateX(5px)}
+}
+
+@keyframes sparkle {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shine {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ===== RESPONSIVE FIXES ===== */
+/* Mobile Landscape */
+@media (max-height: 500px) and (orientation: landscape) {
+  #gameWrapper {
+    max-height: 500px;
+    transform: scale(0.8);
+  }
+  
+  #hud {
+    transform: scale(0.8);
+    transform-origin: top left;
+  }
+  
+  #soundBtn {
+    transform: scale(0.8);
+    transform-origin: top right;
+  }
+  
+  #progressBox {
+    transform: scale(0.8);
+    transform-origin: top left;
+  }
+  
+  .voucher-image-container {
+    height: 140px;
+  }
+  
+  .voucher-code {
+    font-size: 20px;
+    padding: 10px;
+  }
+}
+
+/* iOS Safari 100vh fix */
+@supports (-webkit-touch-callout: none) {
+  body {
+    height: -webkit-fill-available;
+  }
+  
+  #gameWrapper {
+    height: -webkit-fill-available;
+  }
+}
+
+/* Safe area support */
+@supports (padding: max(0px)) {
+  #gameWrapper {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  #over {
+    padding-top: calc(env(safe-area-inset-top) + 30px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 100px);
+  }
+  
+  #soundBtn {
+    top: calc(env(safe-area-inset-top) + 20px);
+    right: calc(env(safe-area-inset-right) + 20px);
+  }
+}
+
+/* Prevent text size adjustment */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* For very small screens */
+@media (max-width: 360px) {
+  #gameWrapper {
+    max-width: 100vw;
+    max-height: calc(100vw * (640/360));
+  }
+  
+  .voucher-image-container {
+    height: 180px;
+  }
+  
+  .voucher-code {
+    font-size: 22px;
+    padding: 12px;
+  }
+}
+
+/* FPS Counter (for debugging) */
+#fpsCounter {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  color: #FFD700;
+  font-size: 12px;
+  background: rgba(0,0,0,0.5);
+  padding: 5px 10px;
+  border-radius: 10px;
+  z-index: 100;
+  display: none;
+}
+
+/* Game Loader */
+#gameLoader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: opacity 0.3s;
+}
+
+.loader-content {
+  text-align: center;
+  color: #FFD700;
+}
+
+.loader-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #A50064;
+  border-top: 5px solid #FFD700;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* PERFORMANCE OPTIMIZATIONS */
+/* Hardware acceleration */
+canvas {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+}
+
+#gameWrapper {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Reduce animation complexity on low-power devices */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 </style>
 </head>
 
 <body>
 
+<!-- Game Loader -->
+<div id="gameLoader">
+  <div class="loader-content">
+    <div class="loader-spinner"></div>
+    <p>Đang tải game...</p>
+  </div>
+</div>
+
+<!-- FPS Counter (hidden by default) -->
+<div id="fpsCounter">FPS: 60</div>
+
 <div id="gameWrapper">
 
-<!-- START SCREEN - Simplified -->
+<!-- START SCREEN -->
 <div id="start" onclick="showInstruction()">
- <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzYwIiBoZWlnaHQ9IjY0MCIgdmlld0JveD0iMCAwIDM2MCA2NDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjM2MCIgaGVpZ2h0PSI2NDAiIGZpbGw9IiNBMDAwNjQiLz48dGV4dCB4PSIxODAiIHk9IjMyMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjMyIiBmaWxsPSIjRkZGRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+TUVNRSBHTU1FPC90ZXh0Pjwvc3ZnPg==" alt="MoMo Game" id="startImage" onload="this.src='assets/start.png'">
+ <img src="assets/start.png" alt="MoMo Game" id="startImage">
 </div>
 
 <!-- NÚT ÂM THANH -->
@@ -134,9 +874,9 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;height:100%;overflow:hi
  </div>
 </div>
 
-<!-- CHARACTERS - Lazy loaded -->
-<img id="but" data-src="assets/but.png" alt="Ông Bụt">
-<img id="basketDrop" data-src="assets/basket.png" alt="Giỏ Cá">
+<!-- CHARACTERS -->
+<img id="but" src="assets/but.png" alt="Ông Bụt">
+<img id="basketDrop" src="assets/basket.png" alt="Giỏ Cá">
 
 <!-- HUD -->
 <div id="hud">
@@ -179,7 +919,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;height:100%;overflow:hi
    <p>Bạn đã đạt đủ <b>3 Giỏ Cá</b> 🎯</p>
    
    <div class="voucher-image-container">
-     <img id="voucherImage" class="voucher-image" data-src="" alt="Voucher MoMo">
+     <img id="voucherImage" class="voucher-image" src="" alt="Voucher MoMo">
    </div>
    
    <div class="voucher-brand" id="voucherBrand"></div>
@@ -213,293 +953,916 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;height:100%;overflow:hi
 </div>
 
 <script>
-/* ===== OPTIMIZED FOR FAST LOADING ===== */
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
+let lastTime = 0;
+let fps = 0;
+let frameCount = 0;
+let lastFpsUpdate = 0;
+const fpsUpdateInterval = 500; // Update FPS counter every 500ms
 
-// 1. MINIMAL INITIALIZATION
+// Performance monitoring
+function updateFPS(currentTime) {
+  frameCount++;
+  
+  if (currentTime - lastFpsUpdate >= fpsUpdateInterval) {
+    fps = Math.round((frameCount * 1000) / (currentTime - lastFpsUpdate));
+    frameCount = 0;
+    lastFpsUpdate = currentTime;
+    
+    // Optional: Show FPS counter for debugging
+    // document.getElementById('fpsCounter').textContent = `FPS: ${fps}`;
+    
+    // Adaptive quality based on FPS
+    adjustQualityBasedOnFPS(fps);
+  }
+}
+
+function adjustQualityBasedOnFPS(currentFPS) {
+  // Lower quality if FPS drops below 30
+  if (currentFPS < 30 && !qualityReduced) {
+    reduceQuality();
+  } else if (currentFPS > 50 && qualityReduced) {
+    restoreQuality();
+  }
+}
+
+let qualityReduced = false;
+function reduceQuality() {
+  qualityReduced = true;
+  // Reduce visual effects
+  canvas.style.filter = 'none';
+  // Reduce animation complexity
+  if (bgMusic) bgMusic.playbackRate = 0.9;
+}
+
+function restoreQuality() {
+  qualityReduced = false;
+  // Restore visual effects
+  canvas.style.filter = 'drop-shadow(0 10px 30px rgba(0,0,0,0.5))';
+  if (bgMusic) bgMusic.playbackRate = 1.0;
+}
+
+/* ===== FULLSCREEN FIXES ===== */
 function setVH() {
-  document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
 }
 
-// 2. LAZY LOAD IMAGES
-const lazyImages = {};
-function lazyLoadImage(id, src) {
-  if (lazyImages[id]) return lazyImages[id];
+function initializeGameSize() {
+  const gameWrapper = document.getElementById('gameWrapper');
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
   
-  const img = new Image();
-  img.src = src;
-  lazyImages[id] = img;
-  return img;
+  const targetRatio = 360 / 640;
+  const currentRatio = windowWidth / windowHeight;
+  
+  let scale;
+  if (currentRatio > targetRatio) {
+    scale = windowHeight / 640;
+  } else {
+    scale = windowWidth / 360;
+  }
+  
+  if (scale > 1.2) scale = 1.2;
+  if (scale < 0.8) scale = 0.8;
+  
+  gameWrapper.style.transform = `scale(${scale})`;
 }
 
-// 3. DEFER NON-CRITICAL RESOURCES
-const deferredAssets = [
-  'assets/but.png',
-  'assets/basket.png',
-  'assets/obs-rock.png',
-  'assets/obs-log.png',
-  'assets/obs-pot.png',
-  'assets/background.mp3',
-  'assets/coin.mp3',
-  'assets/basket.mp3',
-  'assets/hit.mp3',
-  'assets/click.mp3',
-  'assets/speedup.mp3',
-  'assets/but.mp3',
-  'assets/magic.mp3',
-  'assets/win.mp3'
-];
-
-// 4. SIMPLIFIED VOUCHER LIST - REDUCED SIZE
-const voucherList = [
-  {id:1,name:"Highlands",code:"HLD-MOMO-50K",brand:"HIGHLANDS",value:"GIẢM 30K",desc:"Giảm 30K cho hóa đơn từ 100K",color:"#8B4513",expiry:"31/03/2026"},
-  {id:2,name:"Grab",code:"GRAB-MOMO-50K",brand:"GRAB",value:"GIẢM 40K",desc:"Giảm 50K cho chuyến xe Grab",color:"#00B14F",expiry:"31/03/2026"},
-  {id:3,name:"GS25",code:"GS25-MOMO-25k",brand:"GS25",value:"GIẢM 25k",desc:"Giảm 25k cho hóa đơn từ 80K",color:"#FF6B00",expiry:"31/03/2026"}
-];
-
-// 5. CREATE FALLBACK IMAGES INLINE
-function createFallbackSVG(color, text) {
-  return `data:image/svg+xml;base64,${btoa(`
-    <svg width="300" height="220" viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <rect width="300" height="220" rx="15" fill="white"/>
-      <rect x="10" y="10" width="280" height="200" rx="10" fill="${color}20" stroke="${color}" stroke-width="2"/>
-      <text x="150" y="80" font-family="Arial" font-size="24" font-weight="bold" fill="${color}" text-anchor="middle">${text}</text>
-    </svg>
-  `)}`;
+function fixIntroSize() {
+  const startImg = document.getElementById('startImage');
+  if (startImg) {
+    startImg.style.width = '100%';
+    startImg.style.height = '100%';
+    startImg.style.objectFit = 'cover';
+  }
 }
 
-// 6. OPTIMIZED GAME INITIALIZATION
-let initialized = false;
-function initGame() {
-  if (initialized) return;
-  initialized = true;
-  
-  // Load critical game images
-  gameImages.road = new Image();
-  gameImages.road.src = 'assets/road.png';
-  
-  gameImages.player = new Image();
-  gameImages.player.src = 'assets/cotam-run.png';
-  gameImages.player.onload = () => {
-    SW = gameImages.player.width / RUN_FRAMES;
-    SH = gameImages.player.height;
-  };
-  
-  gameImages.coin = new Image();
-  gameImages.coin.src = 'assets/coin.png';
-  
-  // Load obstacles lazily when needed
-  gameImages.obs1 = new Image();
-  gameImages.obs1.src = 'assets/obs-rock.png';
-  gameImages.obs2 = new Image();
-  gameImages.obs2.src = 'assets/obs-log.png';
-  gameImages.obs3 = new Image();
-  gameImages.obs3.src = 'assets/obs-pot.png';
-}
-
-// 7. PRELOAD AFTER INITIAL RENDER
+/* ===== INITIALIZE ===== */
 window.addEventListener('load', function() {
   setVH();
   initializeGameSize();
+  fixIntroSize();
   
-  // Load game images after a short delay
-  setTimeout(initGame, 100);
+  // Preload assets
+  preloadAssets().then(() => {
+    document.getElementById('gameLoader').style.opacity = '0';
+    setTimeout(() => {
+      document.getElementById('gameLoader').style.display = 'none';
+    }, 300);
+  });
   
-  // Load deferred assets in background
-  setTimeout(() => {
-    deferredAssets.forEach(src => {
-      const img = new Image();
-      img.src = src;
-    });
-  }, 500);
+  // Initialize performance monitoring
+  lastFpsUpdate = performance.now();
 });
 
-window.addEventListener('resize', setVH);
-window.addEventListener('orientationchange', () => setTimeout(setVH, 150));
+window.addEventListener('resize', function() {
+  setVH();
+  initializeGameSize();
+  fixIntroSize();
+});
 
-// 8. MINIMAL GAME STATE
+window.addEventListener('orientationchange', function() {
+  setTimeout(() => {
+    setVH();
+    initializeGameSize();
+    fixIntroSize();
+  }, 150);
+});
+
+// Prevent zoom and context menu
+document.addEventListener('touchstart', function(e) {
+  if (e.touches.length > 1) e.preventDefault();
+}, { passive: false });
+
+document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+  return false;
+});
+
+/* ===== ASSET PRELOADING ===== */
+async function preloadAssets() {
+  const assets = [
+    'assets/start.png',
+    'assets/but.png',
+    'assets/basket.png',
+    'assets/road.png',
+    'assets/cotam-run.png',
+    'assets/coin.png',
+    'assets/obs-rock.png',
+    'assets/obs-log.png',
+    'assets/obs-pot.png',
+    'assets/voucher/highlands.png',
+    'assets/voucher/grab.png',
+    'assets/voucher/gs25.png',
+    'assets/voucher/cgv.png',
+    'assets/voucher/starbucks.png',
+    'assets/voucher/beautybox.png'
+  ];
+  
+  const promises = assets.map(src => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = resolve;
+      img.onerror = resolve; // Continue even if some images fail
+    });
+  });
+  
+  await Promise.all(promises);
+  console.log('All assets loaded');
+}
+
+/* ===== INTRO → INSTRUCTION ===== */
+function showInstruction(){
+ document.getElementById('start').style.display = 'none';
+ document.getElementById('instruction').style.display = 'flex';
+ playBackgroundMusic();
+}
+
+/* ===== AUTO CLEAR ===== */
+const GAME_VERSION = "smooth-v1.0";
+if(localStorage.getItem("game_version") !== GAME_VERSION){
+ localStorage.removeItem("leaderboard");
+ localStorage.setItem("game_version", GAME_VERSION);
+}
+
+/* ===== DANH SÁCH VOUCHER ===== */
+const voucherList = [
+  {
+    id: 1,
+    name: "Highlands Coffee",
+    image: "assets/voucher/highlands.png",
+    code: "HLD-MOMO-50K",
+    brand: "HIGHLANDS COFFEE",
+    value: "GIẢM 30K",
+    desc: "Giảm 30K cho hóa đơn từ 100K",
+    color: "#8B4513",
+    expiry: "31/03/2026"
+  },
+  {
+    id: 2,
+    name: "Grab",
+    image: "assets/voucher/grab.png",
+    code: "GRAB-MOMO-50K",
+    brand: "GRAB",
+    value: "GIẢM 40K",
+    desc: "Giảm 50K cho chuyến xe Grab",
+    color: "#00B14F",
+    expiry: "31/03/2026"
+  },
+  {
+    id: 3,
+    name: "GS25",
+    image: "assets/voucher/gs25.png",
+    code: "GS25-MOMO-25k",
+    brand: "GS25",
+    value: "GIẢM 25k",
+    desc: "Giảm 25k cho hóa đơn từ 80K",
+    color: "#FF6B00",
+    expiry: "31/03/2026"
+  }
+];
+
+function getRandomVoucher() {
+  return voucherList[Math.floor(Math.random() * voucherList.length)];
+}
+
+function showVoucher() {
+  const voucher = getRandomVoucher();
+  const voucherPopup = document.getElementById('voucherPopup');
+  const voucherImage = document.getElementById('voucherImage');
+  
+  voucherImage.onload = function() {
+    this.style.width = '100%';
+    this.style.height = '100%';
+    this.style.objectFit = 'cover';
+  };
+  
+  voucherImage.src = voucher.image;
+  document.getElementById('voucherBrand').textContent = voucher.brand;
+  document.getElementById('voucherValue').textContent = voucher.value;
+  document.getElementById('voucherCode').textContent = voucher.code;
+  document.getElementById('voucherDesc').textContent = voucher.desc;
+  document.getElementById('voucherExpiry').textContent = `Hạn sử dụng: ${voucher.expiry}`;
+  
+  voucherPopup.style.display = 'block';
+}
+
+/* ===== CANVAS SETUP ===== */
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d', { alpha: false }); // Disable alpha for better performance
+
+// Use integer dimensions for crisp rendering
+canvas.width = 360;
+canvas.height = 640;
+
+/* ===== IMAGE CACHING ===== */
+const images = {
+  road: new Image(),
+  player: new Image(),
+  coin: new Image(),
+  obstacles: [
+    new Image(),
+    new Image(),
+    new Image()
+  ]
+};
+
+images.road.src = "assets/road.png";
+images.player.src = "assets/cotam-run.png";
+images.coin.src = "assets/coin.png";
+images.obstacles[0].src = "assets/obs-rock.png";
+images.obstacles[1].src = "assets/obs-log.png";
+images.obstacles[2].src = "assets/obs-pot.png";
+
+/* ===== AUDIO OPTIMIZATION ===== */
+// Create audio context for better performance
+let audioContext;
+let bgMusicSource;
+const audioCache = {};
+
+function initAudio() {
+  try {
+    if (!audioContext) {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+  } catch (e) {
+    console.log("Web Audio API not supported:", e);
+  }
+}
+
+function loadAudio(url, name) {
+  return new Promise((resolve, reject) => {
+    if (audioCache[name]) {
+      resolve(audioCache[name]);
+      return;
+    }
+    
+    fetch(url)
+      .then(response => response.arrayBuffer())
+      .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+      .then(audioBuffer => {
+        audioCache[name] = audioBuffer;
+        resolve(audioBuffer);
+      })
+      .catch(reject);
+  });
+}
+
+function playCachedSound(name) {
+  if (!soundEnabled || !audioContext || !audioCache[name]) return;
+  
+  try {
+    const source = audioContext.createBufferSource();
+    source.buffer = audioCache[name];
+    source.connect(audioContext.destination);
+    source.start();
+  } catch (e) {
+    console.log("Error playing sound:", e);
+  }
+}
+
+// Legacy audio for fallback
+const bgMusic = new Audio();
+bgMusic.src = "assets/background.mp3";
+bgMusic.loop = true;
+bgMusic.volume = 0.5;
+
+// Sound effects (fallback)
+const soundEffects = {
+  coin: new Audio("assets/coin.mp3"),
+  basket: new Audio("assets/basket.mp3"),
+  hit: new Audio("assets/hit.mp3"),
+  click: new Audio("assets/click.mp3"),
+  speedup: new Audio("assets/speedup.mp3"),
+  but: new Audio("assets/but.mp3"),
+  magic: new Audio("assets/magic.mp3"),
+  win: new Audio("assets/win.mp3")
+};
+
+// Set volumes
+Object.values(soundEffects).forEach(sound => {
+  sound.volume = 0.3;
+  sound.preload = 'auto';
+});
+
+let soundEnabled = true;
+
+function playBackgroundMusic() {
+  if (soundEnabled && bgMusic) {
+    bgMusic.play().catch(e => {
+      console.log("Nhạc nền cần tương tác:", e);
+    });
+  }
+}
+
+function stopBackgroundMusic() {
+  if (bgMusic) {
+    bgMusic.pause();
+    bgMusic.currentTime = 0;
+  }
+}
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  const soundIcon = document.getElementById('soundIcon');
+  soundIcon.textContent = soundEnabled ? '🔊' : '🔇';
+  
+  if (soundEnabled) {
+    bgMusic.volume = 0.5;
+    Object.values(soundEffects).forEach(sound => {
+      sound.volume = 0.3;
+    });
+  } else {
+    bgMusic.volume = 0;
+    Object.values(soundEffects).forEach(sound => {
+      sound.volume = 0;
+    });
+  }
+}
+
+function playSound(soundName) {
+  if (!soundEnabled || !soundEffects[soundName]) return;
+  
+  try {
+    soundEffects[soundName].currentTime = 0;
+    soundEffects[soundName].play().catch(e => {
+      console.log("Sound error:", e);
+    });
+  } catch (e) {
+    console.log("Sound play failed:", e);
+  }
+}
+
+/* ===== GAME STATE ===== */
 let run = false, coin = 0, basket = 0;
-let baseSpeed = 3.5, speed = baseSpeed, speedStep = 0.7, maxSpeed = 9;
+let baseSpeed = 3.5, speed = baseSpeed, speedStep = 0.5, maxSpeed = 8; // Reduced max speed for smoother gameplay
 let roadY = 0;
 const lanes = [60, 180, 300];
 let player = { lane: 1, y: 520 };
 let coins = [], obstacles = [];
 let coinTimer = 0, obstacleTimer = 0;
-let frameCount = 0;
+let gameFrameCount = 0;
 let butTimeout = null;
 let lastMilestone = 0;
+
+// Object pooling for better performance
+const coinPool = [];
+const obstaclePool = [];
+
+function getCoinFromPool() {
+  if (coinPool.length > 0) {
+    return coinPool.pop();
+  }
+  return {
+    lane: 0,
+    y: -40,
+    angle: 0,
+    scale: 1,
+    pulse: 0
+  };
+}
+
+function returnCoinToPool(coin) {
+  coinPool.push(coin);
+}
+
+function getObstacleFromPool() {
+  if (obstaclePool.length > 0) {
+    return obstaclePool.pop();
+  }
+  return {
+    lane: 0,
+    y: -60,
+    type: 0,
+    phase: 0,
+    shakeIntensity: 1,
+    shakeSpeed: 0.1,
+    rotation: 0,
+    scale: 1,
+    spawnTime: 0
+  };
+}
+
+function returnObstacleToPool(obstacle) {
+  obstaclePool.push(obstacle);
+}
+
+/* SPRITE ANIMATION */
 const RUN_FRAMES = 4;
 let runFrame = 0, runTick = 0;
 let SW = 0, SH = 0;
-const PLAYER_WIDTH = 55;
-const PLAYER_HEIGHT = 82;
-const PLAYER_OFFSET_X = PLAYER_WIDTH / 2;
-const PLAYER_OFFSET_Y = 60;
 
-// 9. GAME IMAGES OBJECT
-const gameImages = {};
+images.player.onload = () => {
+  SW = images.player.width / RUN_FRAMES;
+  SH = images.player.height;
+};
 
-// 10. OPTIMIZED AUDIO - LOAD ON DEMAND
-const audioCache = {};
-function getAudio(src) {
-  if (!audioCache[src]) {
-    audioCache[src] = new Audio(src);
-    audioCache[src].volume = 0.5;
+// Pre-render road for better performance
+let roadCanvas = document.createElement('canvas');
+roadCanvas.width = 360;
+roadCanvas.height = 640;
+let roadCtx = roadCanvas.getContext('2d');
+
+function renderRoad() {
+  roadCtx.drawImage(images.road, 0, 0, 360, 640);
+  
+  // Draw lane markers (pre-rendered)
+  roadCtx.strokeStyle = 'rgba(255, 215, 0, 0.3)';
+  roadCtx.lineWidth = 2;
+  roadCtx.setLineDash([20, 20]);
+  
+  for(let i = 0; i < lanes.length; i++) {
+    roadCtx.beginPath();
+    roadCtx.moveTo(lanes[i] - 60, 0);
+    roadCtx.lineTo(lanes[i] - 60, 640);
+    roadCtx.stroke();
+    roadCtx.beginPath();
+    roadCtx.moveTo(lanes[i] + 60, 0);
+    roadCtx.lineTo(lanes[i] + 60, 640);
+    roadCtx.stroke();
   }
-  return audioCache[src];
+  roadCtx.setLineDash([]);
 }
 
-// 11. OPTIMIZED GAME FUNCTIONS
-function showInstruction() {
-  document.getElementById('start').style.display = 'none';
-  document.getElementById('instruction').style.display = 'flex';
-  initGame(); // Ensure game is initialized
+// Pre-render coins for performance
+let coinCanvas = document.createElement('canvas');
+coinCanvas.width = 30;
+coinCanvas.height = 30;
+let coinCtx = coinCanvas.getContext('2d');
+
+function renderCoin() {
+  coinCtx.clearRect(0, 0, 30, 30);
+  coinCtx.shadowColor = '#FFD700';
+  coinCtx.shadowBlur = 10;
+  coinCtx.drawImage(images.coin, 0, 0, 30, 30);
 }
 
-function startGame() {
+/* ===== START GAME ===== */
+function startGame(){
+  playSound('click');
   document.getElementById('instruction').style.display = 'none';
   run = true;
   lastMilestone = 0;
-  loop();
+  
+  // Pre-render static elements
+  renderRoad();
+  renderCoin();
+  
+  if (bgMusic) {
+    bgMusic.playbackRate = 1.0;
+  }
+  
+  // Start game loop with requestAnimationFrame
+  lastTime = performance.now();
+  gameLoop();
 }
 
-/* ===== OPTIMIZED GAME LOOP ===== */
-const canvas = document.getElementById('game');
-const ctx = canvas.getContext('2d');
+/* CONTROL */
+let touchStartX = 0;
+let touchStartTime = 0;
 
-function loop() {
-  if (!run) return;
-  frameCount++;
-  
-  // Clear canvas efficiently
-  ctx.clearRect(0, 0, 360, 640);
-  
-  // Draw road
-  roadY += speed;
-  if (roadY >= 640) roadY = 0;
-  
-  if (gameImages.road) {
-    ctx.drawImage(gameImages.road, 0, roadY - 640, 360, 640);
-    ctx.drawImage(gameImages.road, 0, roadY, 360, 640);
-  }
-  
-  // Draw player
-  runTick++;
-  if (runTick % 6 === 0) runFrame = (runFrame + 1) % RUN_FRAMES;
-  
-  if (gameImages.player && SW) {
-    ctx.drawImage(
-      gameImages.player,
-      runFrame * SW, 0, SW, SH,
-      lanes[player.lane] - PLAYER_OFFSET_X,
-      player.y - PLAYER_OFFSET_Y,
-      PLAYER_WIDTH,
-      PLAYER_HEIGHT
-    );
-  }
-  
-  // Draw coins
-  for (let i = coins.length - 1; i >= 0; i--) {
-    const c = coins[i];
-    c.y += speed;
-    
-    if (gameImages.coin) {
-      ctx.save();
-      ctx.translate(lanes[c.lane], c.y);
-      ctx.rotate(c.angle);
-      ctx.drawImage(gameImages.coin, -15, -15, 30, 30);
-      ctx.restore();
-    }
-    
-    // Check collision
-    if (c.lane === player.lane && Math.abs(c.y - player.y) < 45) {
-      coins.splice(i, 1);
-      coin++;
-      document.getElementById('coinEl').innerText = coin;
-      
-      // 5 xu = 1 giỏ cá
-      const milestone = Math.floor(coin / 5);
-      if (milestone > basket) {
-        basket = milestone;
-        document.getElementById('basketEl').innerText = basket;
-        document.getElementById('progress').style.width = ((coin % 5) / 5 * 100) + "%";
-      }
-      
-      speed = Math.min(baseSpeed + milestone * speedStep, maxSpeed);
-    }
-  }
-  
-  // Spawn coins
-  coinTimer++;
-  if (coinTimer > 25) {
-    coins.push({
-      lane: Math.floor(Math.random() * 3),
-      y: -40,
-      angle: Math.random() * Math.PI * 2
-    });
-    coinTimer = 0;
-  }
-  
-  requestAnimationFrame(loop);
-}
-
-// 12. SIMPLIFIED TOUCH CONTROLS
 canvas.addEventListener("touchstart", function(e) {
   e.preventDefault();
   const touch = e.touches[0];
   const rect = canvas.getBoundingClientRect();
-  player.lane = touch.clientX - rect.left < rect.width / 2 ? 
-    Math.max(0, player.lane - 1) : Math.min(2, player.lane + 1);
+  touchStartX = touch.clientX - rect.left;
+  touchStartTime = Date.now();
 });
 
-// 13. SIMPLE GAME OVER
-function endGame() {
+canvas.addEventListener("touchend", function(e) {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.changedTouches[0];
+  const touchEndX = touch.clientX - rect.left;
+  const touchEndTime = Date.now();
+  
+  const deltaX = touchEndX - touchStartX;
+  const deltaTime = touchEndTime - touchStartTime;
+  
+  // Quick tap detection
+  if (deltaTime < 200 && Math.abs(deltaX) > 10) {
+    const oldLane = player.lane;
+    if (deltaX < 0) {
+      player.lane = Math.max(0, player.lane - 1);
+    } else {
+      player.lane = Math.min(2, player.lane + 1);
+    }
+    
+    if (oldLane !== player.lane) {
+      playSound('click');
+    }
+  }
+});
+
+/* SPAWN OBJECTS */
+function spawnCoin() {
+  if (coins.length >= 15) return; // Limit coins on screen
+  
+  const coin = getCoinFromPool();
+  coin.lane = Math.floor(Math.random() * 3);
+  coin.y = -40;
+  coin.angle = Math.random() * Math.PI * 2;
+  coin.scale = 0.8 + Math.random() * 0.4;
+  coin.pulse = Math.random() * Math.PI * 2;
+  
+  coins.push(coin);
+}
+
+function spawnObstacleWave() {
+  if (obstacles.length >= 8) return; // Limit obstacles on screen
+  
+  const freeLane = Math.floor(Math.random() * 3);
+  for(let l = 0; l < 3; l++) {
+    if(l !== freeLane && Math.random() < 0.6) {
+      const obstacle = getObstacleFromPool();
+      obstacle.lane = l;
+      obstacle.y = -60;
+      obstacle.type = Math.floor(Math.random() * 3);
+      obstacle.phase = Math.random() * Math.PI * 2;
+      obstacle.shakeIntensity = 1 + Math.random() * 2;
+      obstacle.shakeSpeed = 0.08 + Math.random() * 0.15;
+      obstacle.rotation = Math.random() * 0.3 - 0.15;
+      obstacle.scale = 1.2 + Math.random() * 0.2;
+      obstacle.spawnTime = gameFrameCount;
+      
+      obstacles.push(obstacle);
+      break; // Spawn only one obstacle per wave
+    }
+  }
+}
+
+/* MAIN GAME LOOP - OPTIMIZED */
+function gameLoop(currentTime = performance.now()) {
+  if(!run) return;
+  
+  // Calculate delta time for consistent speed
+  const deltaTime = Math.min(currentTime - lastTime, 100); // Cap delta time
+  lastTime = currentTime;
+  
+  // Update FPS counter
+  updateFPS(currentTime);
+  
+  gameFrameCount++;
+  
+  // Clear canvas efficiently
+  ctx.clearRect(0, 0, 360, 640);
+  
+  /* DRAW ROAD (pre-rendered) */
+  roadY += speed * (deltaTime / 16.67); // Normalize speed to 60fps
+  if(roadY >= 640) roadY = 0;
+  
+  ctx.drawImage(roadCanvas, 0, roadY - 640);
+  ctx.drawImage(roadCanvas, 0, roadY);
+  
+  /* DRAW PLAYER */
+  runTick++;
+  if(runTick % 8 === 0) runFrame = (runFrame + 1) % RUN_FRAMES; // Slower animation for performance
+  
+  if(SW){
+    // Draw player shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+    ctx.beginPath();
+    ctx.ellipse(
+      lanes[player.lane],
+      player.y + 10,
+      20,
+      8,
+      0, 0, Math.PI * 2
+    );
+    ctx.fill();
+    
+    // Draw player with hardware acceleration
+    ctx.drawImage(
+      images.player,
+      runFrame * SW, 0, SW, SH,
+      lanes[player.lane] - 27.5, 
+      player.y - 60, 
+      55, 
+      82
+    );
+  }
+  
+  /* DRAW COINS (optimized) */
+  for(let i = coins.length - 1; i >= 0; i--){
+    const c = coins[i];
+    c.y += speed * (deltaTime / 16.67);
+    c.angle += 0.1 * (deltaTime / 16.67);
+    c.pulse += 0.1 * (deltaTime / 16.67);
+    
+    const pulseScale = 0.1 * Math.sin(c.pulse);
+    const scale = c.scale + pulseScale;
+    
+    ctx.save();
+    ctx.translate(lanes[c.lane], c.y);
+    ctx.rotate(c.angle);
+    
+    // Use pre-rendered coin or draw directly
+    ctx.drawImage(coinCanvas, -15 * scale, -15 * scale, 30 * scale, 30 * scale);
+    ctx.restore();
+    
+    const collisionDistance = 40;
+    
+    if(c.lane === player.lane && Math.abs(c.y - player.y) < collisionDistance){
+      // Return coin to pool
+      returnCoinToPool(coins[i]);
+      coins.splice(i, 1);
+      
+      coin++;
+      document.getElementById('coinEl').innerText = coin;
+      
+      playSound('coin');
+      
+      const milestone = Math.floor(coin / 5);
+      if(milestone > basket){
+        basket = milestone;
+        document.getElementById('basketEl').innerText = basket;
+        
+        playButAnimation();
+        
+        playSound('but');
+        setTimeout(() => {
+          playSound('magic');
+        }, 500);
+      }
+      
+      speed = Math.min(baseSpeed + milestone * speedStep, maxSpeed);
+      
+      if (milestone > lastMilestone) {
+        lastMilestone = milestone;
+        playSound('speedup');
+        
+        if (bgMusic) {
+          const musicSpeed = 1.0 + (speed - baseSpeed) / (maxSpeed - baseSpeed) * 0.2;
+          bgMusic.playbackRate = Math.min(musicSpeed, 1.2);
+        }
+      }
+      
+      document.getElementById('progress').style.width = ((coin % 5) / 5 * 100) + "%";
+      
+      // Create sparkle effect
+      createSparkleEffect(lanes[player.lane], player.y - 30);
+    }
+  }
+  
+  /* DRAW OBSTACLES */
+  for(let i = obstacles.length - 1; i >= 0; i--){
+    const o = obstacles[i];
+    o.y += speed * (deltaTime / 16.67);
+    o.phase += o.shakeSpeed * (deltaTime / 16.67);
+    
+    const shakeX = Math.sin(o.phase) * o.shakeIntensity;
+    const shakeY = Math.cos(o.phase * 1.5) * (o.shakeIntensity * 0.8);
+    
+    const age = gameFrameCount - o.spawnTime;
+    const blink = age < 60 ? (Math.sin(age * 0.3) * 0.5 + 0.5) : 1;
+    
+    ctx.save();
+    ctx.translate(lanes[o.lane] + shakeX, o.y + shakeY);
+    ctx.rotate(o.rotation);
+    ctx.scale(o.scale, o.scale);
+    ctx.globalAlpha = blink;
+    
+    const t = images.obstacles[o.type];
+    ctx.drawImage(t, -20, -20, 40, 40);
+    ctx.restore();
+    
+    const collisionDistance = 35;
+    
+    if(o.lane === player.lane && Math.abs(o.y - player.y) < collisionDistance){
+      endGame(); 
+      return;
+    }
+    
+    // Remove obstacles that are far off screen
+    if (o.y > 700) {
+      returnObstacleToPool(obstacles[i]);
+      obstacles.splice(i, 1);
+    }
+  }
+  
+  // Remove coins that are far off screen
+  for(let i = coins.length - 1; i >= 0; i--){
+    if (coins[i].y > 700) {
+      returnCoinToPool(coins[i]);
+      coins.splice(i, 1);
+    }
+  }
+  
+  coinTimer++; 
+  obstacleTimer++;
+  
+  if(coinTimer > 30){
+    spawnCoin(); 
+    coinTimer = 0;
+  }
+  if(obstacleTimer > 100){
+    spawnObstacleWave(); 
+    obstacleTimer = 0;
+  }
+  
+  // Use requestAnimationFrame with fixed time step
+  requestAnimationFrame(gameLoop);
+}
+
+function createSparkleEffect(x, y) {
+  if (qualityReduced) return; // Skip effects when quality is reduced
+  
+  for(let i = 0; i < 3; i++) {
+    const sparkle = document.createElement('div');
+    sparkle.style.position = 'absolute';
+    sparkle.style.width = '8px';
+    sparkle.style.height = '8px';
+    sparkle.style.background = 'radial-gradient(circle, #FFD700, #FF9100)';
+    sparkle.style.borderRadius = '50%';
+    sparkle.style.left = (x - 4) + 'px';
+    sparkle.style.top = (y - 4) + 'px';
+    sparkle.style.zIndex = '14';
+    sparkle.style.pointerEvents = 'none';
+    sparkle.style.animation = `sparkle 0.8s ease-out forwards`;
+    
+    gameWrapper.appendChild(sparkle);
+    
+    setTimeout(() => {
+      if (sparkle.parentNode) {
+        sparkle.parentNode.removeChild(sparkle);
+      }
+    }, 800);
+  }
+}
+
+function playButAnimation() {
+  const butElement = document.getElementById('but');
+  butElement.classList.add('show');
+  
+  if (butTimeout) {
+    clearTimeout(butTimeout);
+  }
+  
+  butTimeout = setTimeout(() => {
+    butElement.classList.add('hide');
+    setTimeout(() => {
+      butElement.classList.remove('show', 'hide');
+      butElement.style.top = '-200px';
+      butElement.style.opacity = '0';
+    }, 500);
+  }, 1500);
+  
+  const basketElement = document.getElementById('basketDrop');
+  basketElement.classList.add('show');
+  
+  setTimeout(() => {
+    basketElement.classList.remove('show');
+    basketElement.style.opacity = '0';
+    basketElement.style.transform = 'translateX(-50%) scale(0)';
+  }, 800);
+}
+
+function endGame(){
   run = false;
+  playSound('hit');
+  stopBackgroundMusic();
+  
+  document.getElementById('finalCoins').textContent = coin;
+  document.getElementById('finalBaskets').textContent = basket;
+  document.getElementById('finalSpeed').textContent = speed.toFixed(1);
+  
+  const butElement = document.getElementById('but');
+  if (butElement.classList.contains('show')) {
+    butElement.classList.remove('show');
+    butElement.classList.add('hide');
+    setTimeout(() => {
+      butElement.classList.remove('hide');
+      butElement.style.top = '-200px';
+      butElement.style.opacity = '0';
+    }, 500);
+  }
+  
+  if (butTimeout) {
+    clearTimeout(butTimeout);
+    butTimeout = null;
+  }
+  
+  const gameWrapper = document.getElementById('gameWrapper');
+  gameWrapper.style.animation = 'shake 0.5s ease';
+  setTimeout(() => {
+    gameWrapper.style.animation = '';
+  }, 500);
+  
   setTimeout(() => {
     document.getElementById('over').style.display = 'flex';
-    document.getElementById('finalCoins').textContent = coin;
-    document.getElementById('finalBaskets').textContent = basket;
-    document.getElementById('finalSpeed').textContent = speed.toFixed(1);
     
-    if (basket >= 3) {
-      const voucher = voucherList[Math.floor(Math.random() * voucherList.length)];
-      document.getElementById('voucherPopup').style.display = 'block';
-      document.getElementById('voucherCode').textContent = voucher.code;
-      document.getElementById('voucherBrand').textContent = voucher.brand;
-      document.getElementById('voucherValue').textContent = voucher.value;
-      document.getElementById('voucherDesc').textContent = voucher.desc;
-      document.getElementById('voucherExpiry').textContent = `Hạn sử dụng: ${voucher.expiry}`;
+    if(basket >= 3){
+      showVoucher();
+      playSound('win');
     }
-  }, 500);
+  }, 800);
 }
 
-// 14. MINIMAL SCORE SAVING
-function saveScore() {
-  const name = document.getElementById('playerName').value.trim() || "Người Chơi";
-  let lb = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-  lb.push({ name, coin, basket, speed: speed.toFixed(1) });
-  lb.sort((a, b) => b.coin - a.coin);
-  lb = lb.slice(0, 8);
-  localStorage.setItem("leaderboard", JSON.stringify(lb));
+/* SAVE SCORE */
+function saveScore(){
+ const name = document.getElementById('playerName').value.trim() || "Người Chơi";
+ let lb = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+ 
+ lb.push({
+  name, 
+  coin,
+  basket,
+  speed: speed.toFixed(1),
+  date: new Date().toLocaleDateString('vi-VN')
+ });
+ 
+ lb.sort((a, b) => b.coin - a.coin);
+ 
+ lb = lb.slice(0, 8);
+ 
+ localStorage.setItem("leaderboard", JSON.stringify(lb));
+ 
+ document.getElementById('nameBox').style.display = 'none';
+ document.getElementById('leaderboard').style.display = 'block';
+ 
+ document.getElementById('playAgainBtn').style.display = 'block';
+ 
+ const rankList = document.getElementById('rankList');
+ rankList.innerHTML = '';
+ 
+ // Header
+ const header = document.createElement('div');
+ header.className = 'rank';
+ header.style.background = 'rgba(255, 215, 0, 0.3)';
+ header.style.fontWeight = 'bold';
+ header.innerHTML = `
+  <span>TÊN</span>
+  <span>XU</span>
+  <span>GIỎ</span>
+ `;
+ rankList.appendChild(header);
+ 
+ // Ranks
+ lb.forEach((r, i) => {
+  const rankDiv = document.createElement('div');
+  rankDiv.className = `rank ${r.name === name && r.coin === coin ? 'you' : ''}`;
   
-  document.getElementById('nameBox').style.display = 'none';
-  document.getElementById('leaderboard').style.display = 'block';
+  let medal = '';
+  if(i === 0) medal = '🥇';
+  else if(i === 1) medal = '🥈';
+  else if(i === 2) medal = '🥉';
   
-  const rankList = document.getElementById('rankList');
-  rankList.innerHTML = '';
-  lb.forEach((r, i) => {
-    const rankDiv = document.createElement('div');
-    rankDiv.className = `rank ${r.name === name ? 'you' : ''}`;
-    rankDiv.innerHTML = `<span>${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : ''} ${r.name}</span><span>💰 ${r.coin}</span><span>🧺 ${r.basket}</span>`;
-    rankList.appendChild(rankDiv);
-  });
+  rankDiv.innerHTML = `
+   <span>${medal} ${r.name}</span>
+   <span>💰 ${r.coin}</span>
+   <span>🧺 ${r.basket}</span>
+  `;
+  rankList.appendChild(rankDiv);
+ });
 }
 
-// 15. SOUND SYSTEM
-let soundEnabled = true;
-function toggleSound() {
-  soundEnabled = !soundEnabled;
-  document.getElementById('soundIcon').textContent = soundEnabled ? '🔊' : '🔇';
-}
+// Initialize audio on first user interaction
+document.addEventListener('click', function initAudioOnce() {
+  initAudio();
+  document.removeEventListener('click', initAudioOnce);
+}, { once: true });
 </script>
 </body>
 </html>
