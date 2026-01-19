@@ -873,7 +873,7 @@ html {
   <ul>
    <li><b>👈👉 Tap trái/phải</b> để đổi làn đường</li>
    <li><b>🪙 Thu thập Xu</b> - Tích luỹ đổi quà MoMo</li>
-   <li><b>🧺 Mỗi 50 Xu</b> nhận <b>1 Giỏ Cá</b></li>
+   <li><b>🧺 Mỗi 5 Xu</b> nhận <b>1 Giỏ Cá</b></li>
    <li><b>⚡ Càng nhiều Xu</b> → Tốc độ càng nhanh</li>
    <li><b>❌ Tránh chướng ngại vật</b> (ly, bắp ngô)</li>
    <li><b>🎁 Đạt 3 Giỏ Cá</b> để nhận Voucher MoMo</li>
@@ -1664,7 +1664,8 @@ function loop(){
    
    playSound(sCoin);
    
-   const milestone = Math.floor(coin / 50);
+   // THAY ĐỔI TỪ 50 XU XUỐNG 5 XU CHO MỖI GIỎ CÁ
+   const milestone = Math.floor(coin / 5); // Đã thay đổi từ 50 xuống 5
    if(milestone > basket){
     basket = milestone;
     document.getElementById('basketEl').innerText = basket;
@@ -1716,7 +1717,8 @@ function loop(){
      }
    }
    
-   document.getElementById('progress').style.width = ((coin % 50) / 50 * 100) + "%";
+   // THAY ĐỔI THANH PROGRESS TỪ 50 XU XUỐNG 5 XU
+   document.getElementById('progress').style.width = ((coin % 5) / 5 * 100) + "%"; // Đã thay đổi từ 50 xuống 5
   }
  }
  
@@ -1893,4 +1895,3 @@ document.head.appendChild(style);
 </script>
 </body>
 </html>
-
