@@ -88,6 +88,121 @@ body{
  max-height:100%;
 }
 
+/* CHẶNG ĐƯỜNG SCREEN */
+#journey{
+ position:absolute;
+ top:0;
+ left:0;
+ width:100%;
+ height:100%;
+ color:#fff;
+ display:none;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
+ z-index:45;
+ text-align:center;
+ background:linear-gradient(-45deg,#A50064,#D6006E,#FF0077,#FF3399,#A50064,#D6006E,#FF0077,#FF3399);
+ background-size:400% 400%;
+ animation:gradientFlow 8s ease infinite;
+}
+.journey-container{
+ background:rgba(255,255,255,0.15);
+ backdrop-filter:blur(20px);
+ -webkit-backdrop-filter:blur(20px);
+ border:2px solid rgba(255,255,255,0.25);
+ padding:30px;
+ border-radius:25px;
+ max-width:320px;
+ width:90%;
+ box-shadow:0 20px 40px rgba(0,0,0,0.3),0 0 0 1px rgba(255,255,255,0.1) inset;
+}
+.journey-container h2{
+ margin-top:0;
+ color:#fff;
+ font-size:28px;
+ text-shadow:0 2px 10px rgba(0,0,0,0.3);
+ margin-bottom:25px;
+ padding-bottom:15px;
+ border-bottom:2px solid rgba(255,255,255,0.3);
+ position:relative;
+}
+.journey-container h2::after{
+ content:'';
+ position:absolute;
+ bottom:-2px;
+ left:50%;
+ transform:translateX(-50%);
+ width:100px;
+ height:3px;
+ background:linear-gradient(90deg,transparent,#FFD700,transparent);
+}
+.progress-text{
+ font-size:24px;
+ font-weight:bold;
+ color:#FFD700;
+ margin-bottom:20px;
+ text-shadow:0 0 10px rgba(255,215,0,0.5);
+}
+.days-container{
+ display:grid;
+ grid-template-columns:repeat(7, 1fr);
+ gap:10px;
+ margin:25px 0;
+}
+.day-item{
+ aspect-ratio:1;
+ background:rgba(255,255,255,0.1);
+ border-radius:15px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:20px;
+ font-weight:bold;
+ position:relative;
+ border:2px solid transparent;
+ transition:all 0.3s ease;
+}
+.day-item.completed{
+ background:rgba(255,215,0,0.2);
+ border-color:#FFD700;
+ color:#FFD700;
+}
+.day-item.current{
+ background:rgba(165,0,100,0.3);
+ border-color:#A50064;
+ color:#fff;
+ animation:pulse 2s infinite;
+}
+.day-item .day-number{
+ font-size:16px;
+ position:absolute;
+ top:5px;
+ left:5px;
+}
+.day-item .day-check{
+ font-size:24px;
+}
+.journey-desc{
+ margin-top:20px;
+ font-size:16px;
+ line-height:1.5;
+ color:rgba(255,255,255,0.9);
+}
+.completed-7-text{
+ display:none;
+ margin-top:20px;
+ padding:15px;
+ background:rgba(255,215,0,0.2);
+ border-radius:15px;
+ border:2px solid #FFD700;
+ color:#FFD700;
+ font-weight:bold;
+ font-size:18px;
+ animation:pulse 2s infinite;
+}
+
 /* INSTRUCTION SCREEN */
 #instruction{
  position:absolute;
@@ -435,6 +550,31 @@ canvas{
  text-shadow:0 0 10px rgba(255,215,0,0.5);
 }
 
+/* HOÀN THÀNH 7/7 CHẶNG ĐƯỜNG */
+#journeyComplete{
+ display:none;
+ background:linear-gradient(135deg,#FFD700 0%,#FFB300 100%);
+ color:#A50064;
+ padding:20px;
+ border-radius:20px;
+ width:100%;
+ margin-bottom:20px;
+ text-align:center;
+ border:3px solid rgba(255,255,255,0.7);
+ box-shadow:0 15px 30px rgba(0,0,0,0.3);
+}
+#journeyComplete h3{
+ margin-top:0;
+ color:#A50064;
+ font-size:22px;
+ margin-bottom:10px;
+}
+.journey-complete-icon{
+ font-size:40px;
+ margin:10px 0;
+ animation:float 3s ease-in-out infinite;
+}
+
 /* VOUCHER POPUP - HÌNH ẢNH FILL TOÀN BỘ CONTAINER */
 #voucherPopup{
  display:none;
@@ -733,6 +873,14 @@ canvas{
   .voucher-value {
     font-size: 18px;
   }
+  
+  .days-container {
+    gap: 5px;
+  }
+  
+  .day-item {
+    font-size: 16px;
+  }
 }
 
 /* iOS Safari 100vh fix */
@@ -809,6 +957,14 @@ html {
   .voucher-value {
     font-size: 20px;
   }
+  
+  .days-container {
+    gap: 8px;
+  }
+  
+  .day-item {
+    font-size: 18px;
+  }
 }
 
 /* For very tall screens */
@@ -841,6 +997,14 @@ html {
   .voucher-value {
     font-size: 18px;
   }
+  
+  .days-container {
+    gap: 6px;
+  }
+  
+  .day-item {
+    font-size: 16px;
+  }
 }
 
 /* Cho màn hình lớn hơn */
@@ -857,8 +1021,57 @@ html {
 <div id="gameWrapper">
 
 <!-- START SCREEN -->
-<div id="start" onclick="showInstruction()">
+<div id="start" onclick="showJourney()">
  <img src="assets/start.png" alt="MoMo Game" id="startImage">
+</div>
+
+<!-- CHẶNG ĐƯỜNG SCREEN -->
+<div id="journey" onclick="showInstruction()">
+ <div class="journey-container">
+  <h2>CHẶNG ĐƯỜNG 7 NGÀY</h2>
+  <div class="progress-text">Bạn đã hoàn thành: <span style="color:#FFD700">6/7</span></div>
+  
+  <div class="days-container">
+   <div class="day-item completed">
+    <div class="day-number">1</div>
+    <div class="day-check">✓</div>
+   </div>
+   <div class="day-item completed">
+    <div class="day-number">2</div>
+    <div class="day-check">✓</div>
+   </div>
+   <div class="day-item completed">
+    <div class="day-number">3</div>
+    <div class="day-check">✓</div>
+   </div>
+   <div class="day-item completed">
+    <div class="day-number">4</div>
+    <div class="day-check">✓</div>
+   </div>
+   <div class="day-item completed">
+    <div class="day-number">5</div>
+    <div class="day-check">✓</div>
+   </div>
+   <div class="day-item completed">
+    <div class="day-number">6</div>
+    <div class="day-check">✓</div>
+   </div>
+   <div class="day-item current">
+    <div class="day-number">7</div>
+    <div class="day-check">?</div>
+   </div>
+  </div>
+  
+  <div class="journey-desc">
+   Hoàn thành ngày thứ 7 bằng cách thu thập đủ <b>3 Giỏ Cá</b> trong trò chơi để nhận Voucher MoMo đặc biệt!
+  </div>
+  
+  <div class="completed-7-text" id="journeyCompleteText">
+   🎉 Bạn đã hoàn thành 7/7 chặng đường!
+  </div>
+  
+  <button class="btn-momo" style="margin-top:30px;" onclick="showInstruction()">Tiếp tục</button>
+ </div>
 </div>
 
 <!-- NÚT ÂM THANH -->
@@ -905,6 +1118,14 @@ html {
 <div id="over">
  <div id="over-content">
   <h2 style="color:#FFD700;font-size:36px;text-shadow:0 0 20px rgba(255,215,0,0.8);margin-bottom:30px;">✨🧙‍♂️ KẾT THÚC</h2>
+  
+  <!-- THÔNG BÁO HOÀN THÀNH 7/7 CHẶNG ĐƯỜNG -->
+  <div id="journeyComplete">
+   <h3>CHÚC MỪNG!</h3>
+   <div class="journey-complete-icon">🏆</div>
+   <p>Bạn đã hoàn thành <b>7/7 chặng đường</b>!</p>
+   <p style="font-size:14px;margin-top:10px;">Xuất sắc hoàn thành thử thách 7 ngày và nhận được Voucher MoMo đặc biệt!</p>
+  </div>
   
   <div id="summary">
    <div class="summary-item">
@@ -1057,16 +1278,22 @@ document.addEventListener('contextmenu', function(e) {
   return false;
 });
 
-/* ===== INTRO → INSTRUCTION ===== */
-function showInstruction(){
+/* ===== INTRO → JOURNEY ===== */
+function showJourney(){
  document.getElementById('start').style.display = 'none';
+ document.getElementById('journey').style.display = 'flex';
+}
+
+/* ===== JOURNEY → INSTRUCTION ===== */
+function showInstruction(){
+ document.getElementById('journey').style.display = 'none';
  document.getElementById('instruction').style.display = 'flex';
  // Bắt đầu nhạc nền khi vào màn hình hướng dẫn
  playBackgroundMusic();
 }
 
 /* ===== AUTO CLEAR ===== */
-const GAME_VERSION = "premium-vouchers-10.0";
+const GAME_VERSION = "premium-vouchers-11.0";
 if(localStorage.getItem("game_version") !== GAME_VERSION){
  localStorage.removeItem("leaderboard");
  localStorage.setItem("game_version", GAME_VERSION);
@@ -1253,6 +1480,69 @@ function showVoucher() {
   voucherPopup.style.display = 'block';
   
   console.log(`Đã chọn voucher: ${voucher.name} (fill container)`);
+}
+
+// Hàm hiển thị hoàn thành 7/7 chặng đường
+function showJourneyComplete() {
+  const journeyComplete = document.getElementById('journeyComplete');
+  journeyComplete.style.display = 'block';
+  
+  // Cập nhật lại màn hình journey nếu có
+  const journeyCompleteText = document.getElementById('journeyCompleteText');
+  if (journeyCompleteText) {
+    journeyCompleteText.style.display = 'block';
+  }
+  
+  // Phát âm thanh chiến thắng đặc biệt
+  playSound(sWin);
+  
+  // Thêm hiệu ứng lấp lánh
+  createJourneySparkleEffect();
+}
+
+// Hiệu ứng lấp lánh cho hoàn thành chặng đường
+function createJourneySparkleEffect() {
+  const journeyComplete = document.getElementById('journeyComplete');
+  const rect = journeyComplete.getBoundingClientRect();
+  const gameWrapper = document.getElementById('gameWrapper');
+  const wrapperRect = gameWrapper.getBoundingClientRect();
+  
+  const centerX = rect.left - wrapperRect.left + rect.width / 2;
+  const centerY = rect.top - wrapperRect.top + rect.height / 2;
+  
+  // Tạo 15 hạt lấp lánh
+  for (let i = 0; i < 15; i++) {
+    const sparkle = document.createElement('div');
+    sparkle.style.position = 'absolute';
+    sparkle.style.width = '12px';
+    sparkle.style.height = '12px';
+    sparkle.style.background = 'radial-gradient(circle, #FFD700, #FF9100)';
+    sparkle.style.borderRadius = '50%';
+    sparkle.style.left = (centerX - 6) + 'px';
+    sparkle.style.top = (centerY - 6) + 'px';
+    sparkle.style.zIndex = '51';
+    sparkle.style.pointerEvents = 'none';
+    sparkle.style.animation = `sparkle 1.5s ease-out forwards`;
+    sparkle.style.animationDelay = (i * 0.1) + 's';
+    
+    // Random direction
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 50 + Math.random() * 80;
+    const endX = Math.cos(angle) * distance;
+    const endY = Math.sin(angle) * distance;
+    
+    sparkle.style.setProperty('--end-x', endX + 'px');
+    sparkle.style.setProperty('--end-y', endY + 'px');
+    
+    gameWrapper.appendChild(sparkle);
+    
+    // Xóa sau khi animation kết thúc
+    setTimeout(() => {
+      if (sparkle.parentNode) {
+        sparkle.parentNode.removeChild(sparkle);
+      }
+    }, 1500 + i * 100);
+  }
 }
 
 /* ===== CANVAS SETUP ===== */
@@ -1969,6 +2259,8 @@ function endGame(){
   if(basket >= 3){
    // Hiển thị voucher ngẫu nhiên
    showVoucher();
+   // Hiển thị hoàn thành 7/7 chặng đường
+   showJourneyComplete();
    // Phát âm thanh chiến thắng
    playSound(sWin);
   }
