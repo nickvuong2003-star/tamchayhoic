@@ -518,39 +518,8 @@ canvas{
  max-width:340px;
  margin:0 auto;
 }
-#summary{
- background:rgba(255,255,255,0.15);
- backdrop-filter:blur(20px);
- -webkit-backdrop-filter:blur(20px);
- padding:25px;
- border-radius:25px;
- width:100%;
- margin-bottom:20px;
- text-align:center;
- border:2px solid rgba(255,255,255,0.25);
- box-shadow:0 20px 40px rgba(0,0,0,0.3);
-}
-.summary-item{
- display:flex;
- justify-content:space-between;
- align-items:center;
- margin-bottom:15px;
- padding-bottom:15px;
- border-bottom:1px solid rgba(255,255,255,0.2);
-}
-.summary-item:last-child{
- margin-bottom:0;
- padding-bottom:0;
- border-bottom:none;
-}
-.summary-value{
- font-size:24px;
- font-weight:bold;
- color:#FFD700;
- text-shadow:0 0 10px rgba(255,215,0,0.5);
-}
 
-/* HOÀN THÀNH 7/7 CHẶNG ĐƯỜNG */
+/* THÔNG BÁO HOÀN THÀNH 7/7 CHẶNG ĐƯỜNG - ĐƯA LÊN ĐẦU */
 #journeyComplete{
  display:none;
  background:linear-gradient(135deg,#FFD700 0%,#FFB300 100%);
@@ -575,7 +544,7 @@ canvas{
  animation:float 3s ease-in-out infinite;
 }
 
-/* VOUCHER POPUP - HÌNH ẢNH FILL TOÀN BỘ CONTAINER */
+/* VOUCHER POPUP - HÌNH ẢNH FILL TOÀN BỘ CONTAINER - ĐƯA LÊN ĐẦU */
 #voucherPopup{
  display:none;
  background:linear-gradient(135deg,#FFD700 0%,#FFB300 100%);
@@ -676,6 +645,38 @@ canvas{
  padding:8px 15px;
  border-radius:10px;
  display:inline-block;
+}
+
+#summary{
+ background:rgba(255,255,255,0.15);
+ backdrop-filter:blur(20px);
+ -webkit-backdrop-filter:blur(20px);
+ padding:25px;
+ border-radius:25px;
+ width:100%;
+ margin-bottom:20px;
+ text-align:center;
+ border:2px solid rgba(255,255,255,0.25);
+ box-shadow:0 20px 40px rgba(0,0,0,0.3);
+}
+.summary-item{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:15px;
+ padding-bottom:15px;
+ border-bottom:1px solid rgba(255,255,255,0.2);
+}
+.summary-item:last-child{
+ margin-bottom:0;
+ padding-bottom:0;
+ border-bottom:none;
+}
+.summary-value{
+ font-size:24px;
+ font-weight:bold;
+ color:#FFD700;
+ text-shadow:0 0 10px rgba(255,215,0,0.5);
 }
 
 /* NAME BOX */
@@ -1119,7 +1120,7 @@ html {
  <div id="over-content">
   <h2 style="color:#FFD700;font-size:36px;text-shadow:0 0 20px rgba(255,215,0,0.8);margin-bottom:30px;">✨🏆 KẾT THÚC</h2>
   
-  <!-- THÔNG BÁO HOÀN THÀNH 7/7 CHẶNG ĐƯỜNG -->
+  <!-- THÔNG BÁO HOÀN THÀNH 7/7 CHẶNG ĐƯỜNG - ĐƯỢC ĐƯA LÊN ĐẦU -->
   <div id="journeyComplete">
    <h3>CHÚC MỪNG!</h3>
    <div class="journey-complete-icon">🏆</div>
@@ -1127,22 +1128,7 @@ html {
    <p style="font-size:14px;margin-top:10px;">Xuất sắc hoàn thành thử thách 7 ngày và nhận được Voucher MoMo đặc biệt!</p>
   </div>
   
-  <div id="summary">
-   <div class="summary-item">
-    <span>💰 XU THU ĐƯỢC:</span>
-    <span id="finalCoins" class="summary-value">0</span>
-   </div>
-   <div class="summary-item">
-    <span>🧺 GIỎ CÁ:</span>
-    <span id="finalBaskets" class="summary-value">0</span>
-   </div>
-   <div class="summary-item">
-    <span>⚡ TỐC ĐỘ CAO NHẤT:</span>
-    <span id="finalSpeed" class="summary-value">0</span>
-   </div>
-  </div>
-
-  <!-- VOUCHER POPUP - HÌNH ẢNH FILL TOÀN BỘ CONTAINER -->
+  <!-- VOUCHER POPUP - HÌNH ẢNH FILL TOÀN BỘ CONTAINER - ĐƯỢC ĐƯA LÊN ĐẦU -->
   <div id="voucherPopup">
    <h3>🎉 CHÚC MỪNG!</h3>
    <p>Bạn đã đạt đủ <b>3 Giỏ Cá</b> 🎯</p>
@@ -1160,6 +1146,21 @@ html {
    </div>
    
    <small id="voucherExpiry">Hạn sử dụng: 31/12/2026</small>
+  </div>
+
+  <div id="summary">
+   <div class="summary-item">
+    <span>💰 XU THU ĐƯỢC:</span>
+    <span id="finalCoins" class="summary-value">0</span>
+   </div>
+   <div class="summary-item">
+    <span>🧺 GIỎ CÁ:</span>
+    <span id="finalBaskets" class="summary-value">0</span>
+   </div>
+   <div class="summary-item">
+    <span>⚡ TỐC ĐỘ CAO NHẤT:</span>
+    <span id="finalSpeed" class="summary-value">0</span>
+   </div>
   </div>
 
   <div id="nameBox">
@@ -2257,10 +2258,10 @@ function endGame(){
   document.getElementById('over').style.display = 'flex';
   
   if(basket >= 3){
-   // Hiển thị voucher ngẫu nhiên
-   showVoucher();
-   // Hiển thị hoàn thành 7/7 chặng đường
+   // Hiển thị hoàn thành 7/7 chặng đường - ĐƯỢC GỌI TRƯỚC
    showJourneyComplete();
+   // Hiển thị voucher ngẫu nhiên - ĐƯỢC GỌI SAU
+   showVoucher();
    // Phát âm thanh chiến thắng
    playSound(sWin);
   }
@@ -2350,4 +2351,3 @@ document.head.appendChild(style);
 </script>
 </body>
 </html>
-
