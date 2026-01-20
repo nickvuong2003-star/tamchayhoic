@@ -1453,23 +1453,8 @@ html {
    <small id="journeyVoucherExpiry">Hạn sử dụng: 31/12/2026</small>
   </div>
 
-  <div id="summary">
-   <div class="summary-item">
-    <span>💰 XU THU ĐƯỢC:</span>
-    <span id="finalCoins" class="summary-value">0</span>
-   </div>
-   <div class="summary-item">
-    <span>🧺 GIỎ CÁ:</span>
-    <span id="finalBaskets" class="summary-value">0</span>
-   </div>
-   <div class="summary-item">
-    <span>⚡ TỐC ĐỘ CAO NHẤT:</span>
-    <span id="finalSpeed" class="summary-value">0</span>
-   </div>
-  </div>
-
   <!-- =====================
-       PARTNERSHIP IMPROVED
+       PARTNERSHIP IMPROVED - ĐƯỢC DI CHUYỂN LÊN TRƯỚC SUMMARY
        ===================== -->
   <div id="partnership">
     <h3>ĐỐI TÁC ĐỒNG HÀNH 🤝</h3>
@@ -1521,7 +1506,7 @@ html {
         <div class="partner-item" data-index="4">
           <div class="partner-logo">
             <img src="assets/partners/starbucks-logo.png" alt="Starbucks" class="partner-logo-img"
-                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIyMCIgZmlsbD0idXJsKCNwMCkiLz48dGV4dCB4PSIyMCIgeT0iMjQiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlM8L3RleHQ+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJwMCI+PHN0b3Agc3RvcC1jb2xvcj0iIzAwNzA0QSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwOEI1QSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjwvc3ZnPg=='; this.alt='Starbucks Logo';">
+                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyMCIgcyO3PSIyMCIgcj0iMjAiIGZpbGw9InVybCgjcDApIi8+PHRleHQgeD0iMjAiIHk9IjI0IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5TPC90ZXh0PjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0icDAiPjxzdG9wIHN0b3AtY29sb3I9IiMwMDcwNEEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwMDhCNUEiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48L3N2Zz4='; this.alt='Starbucks Logo';">
           </div>
           <div class="partner-name">Starbucks</div>
           <div class="partner-offer">Giảm 50K</div>
@@ -1551,6 +1536,22 @@ html {
     <div class="partnership-note">
       Chạm vào logo để xem chi tiết ưu đãi từ đối tác
     </div>
+  </div>
+
+  <!-- PHẦN SUMMARY ĐƯỢC CHUYỂN XUỐNG DƯỚI PARTNERSHIP -->
+  <div id="summary">
+   <div class="summary-item">
+    <span>💰 XU THU ĐƯỢC:</span>
+    <span id="finalCoins" class="summary-value">0</span>
+   </div>
+   <div class="summary-item">
+    <span>🧺 GIỎ CÁ:</span>
+    <span id="finalBaskets" class="summary-value">0</span>
+   </div>
+   <div class="summary-item">
+    <span>⚡ TỐC ĐỘ CAO NHẤT:</span>
+    <span id="finalSpeed" class="summary-value">0</span>
+   </div>
   </div>
 
   <div id="nameBox">
@@ -1868,7 +1869,33 @@ function initPartnershipScroll() {
   }
 }
 
-// Hiển thị chi tiết partner khi click - ĐÃ SỬA: BỎ PHẦN MÃ VÀ NÚT
+/* ===== DANH SÁCH LOGO ĐỐI TÁC ===== */
+const partnerLogoPaths = [
+  'assets/partners/highlands-logo.png',
+  'assets/partners/grab-logo.png',
+  'assets/partners/gs25-logo.png',
+  'assets/partners/cgv-logo.png',
+  'assets/partners/starbucks-logo.png',
+  'assets/partners/beautybox-logo.png'
+];
+
+/* ===== PRELOAD LOGOS ===== */
+function preloadPartnerLogos() {
+  console.log('Đang tải logo đối tác...');
+  
+  partnerLogoPaths.forEach(src => {
+    const img = new Image();
+    img.src = src;
+    img.onload = () => {
+      console.log(`✓ Đã tải: ${src}`);
+    };
+    img.onerror = () => {
+      console.warn(`⚠ Không thể tải logo: ${src}`);
+    };
+  });
+}
+
+// Hiển thị chi tiết partner khi click - ĐÃ SỬA: HIỆN ẢNH LOGO THẬT
 function showPartnerDetails(index) {
   const partnerNames = [
     "Highlands Coffee", "Grab", "GS25", "CGV Cinema", "Starbucks", 
@@ -1891,7 +1918,7 @@ function showPartnerDetails(index) {
   
   playSound(sClick);
   
-  // Tạo popup chi tiết - ĐÃ SỬA: BỎ PHẦN MÃ VÀ NÚT
+  // Tạo popup chi tiết với ảnh logo thật
   const popup = document.createElement('div');
   popup.style.position = 'fixed';
   popup.style.top = '0';
@@ -1908,8 +1935,10 @@ function showPartnerDetails(index) {
   popup.innerHTML = `
     <div style="background: white; border-radius: 25px; padding: 30px; max-width: 300px; width: 90%; text-align: center; border: 4px solid ${partnerColors[index]}; box-shadow: 0 20px 50px rgba(0,0,0,0.5); position: relative;">
       <button style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 24px; color: #A50064; cursor: pointer;">×</button>
-      <div style="width: 80px; height: 80px; border-radius: 50%; background: ${partnerColors[index]}; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 36px; color: white; font-weight: bold;">
-        ${partnerNames[index].charAt(0)}
+      <div style="width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; background: white; border: 3px solid ${partnerColors[index]}; padding: 5px;">
+        <img src="${partnerLogoPaths[index]}" 
+             style="width: 100%; height: 100%; border-radius: 50%; object-fit: contain;"
+             onerror="this.onerror=null; this.style.display='none'; this.parentNode.innerHTML='<div style=\"width: 100%; height: 100%; border-radius: 50%; background: ${partnerColors[index]}; display: flex; align-items: center; justify-content: center; color: white; font-size: 30px; font-weight: bold;\">${partnerNames[index].charAt(0)}</div>';">
       </div>
       <h3 style="color: ${partnerColors[index]}; margin: 0 0 10px 0;">${partnerNames[index]}</h3>
       <div style="background: ${partnerColors[index]}20; padding: 15px; border-radius: 15px; margin: 15px 0; font-weight: bold; color: ${partnerColors[index]}; font-size: 20px;">
@@ -1920,6 +1949,7 @@ function showPartnerDetails(index) {
           index === 4 ? 'GIẢM 50K' : 'GIẢM 50K'}
       </div>
       <p style="color: #666; margin: 15px 0;">${partnerOffers[index]}</p>
+      <small style="color: #999; display: block; margin-top: 15px;">Chạm vào bên ngoài để đóng</small>
     </div>
   `;
   
@@ -1935,32 +1965,6 @@ function showPartnerDetails(index) {
     if (e.target === popup) {
       document.body.removeChild(popup);
     }
-  });
-}
-
-/* ===== PRELOAD LOGOS ===== */
-function preloadPartnerLogos() {
-  console.log('Đang tải logo đối tác...');
-  
-  const partnerLogos = [
-    'assets/partners/highlands-logo.png',
-    'assets/partners/grab-logo.png',
-    'assets/partners/gs25-logo.png',
-    'assets/partners/cgv-logo.png',
-    'assets/partners/starbucks-logo.png',
-    'assets/partners/beautybox-logo.png'
-    // CHỈNH SỬA: Đã bỏ 4 đối tác cuối
-  ];
-  
-  partnerLogos.forEach(src => {
-    const img = new Image();
-    img.src = src;
-    img.onload = () => {
-      console.log(`✓ Đã tải: ${src}`);
-    };
-    img.onerror = () => {
-      console.warn(`⚠ Không thể tải logo: ${src}`);
-    };
   });
 }
 
