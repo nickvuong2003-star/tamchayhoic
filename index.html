@@ -88,7 +88,7 @@ body{
  max-height:100%;
 }
 
-/* CHẶNG ĐƯỜNG SCREEN - ĐÃ ĐƯỢC THAY ĐỔI */
+/* CHẶNG ĐƯỜNG SCREEN */
 #journey{
  position:absolute;
  top:0;
@@ -138,93 +138,69 @@ body{
  height:3px;
  background:linear-gradient(90deg,transparent,#FFD700,transparent);
 }
-
-/* PHẦN VOUCHER HIỆN THỊ - ĐÃ THAY THẾ CHẶNG ĐƯỜNG */
-.voucher-display-container {
-  width: 100%;
-  margin: 20px 0;
-  padding: 20px;
-  background: linear-gradient(135deg, #FFD700 0%, #FFB300 100%);
-  border-radius: 20px;
-  border: 3px solid rgba(255,255,255,0.7);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-  position: relative;
-  overflow: hidden;
+.progress-text{
+ font-size:24px;
+ font-weight:bold;
+ color:#FFD700;
+ margin-bottom:20px;
+ text-shadow:0 0 10px rgba(255,215,0,0.5);
 }
-
-.voucher-display-container::before {
-  content: '';
-  position: absolute;
-  top: -10px;
-  left: -10px;
-  right: -10px;
-  bottom: -10px;
-  background: conic-gradient(from 0deg, #FFD700, #FF9100, #FFD700, #FF9100, #FFD700);
-  z-index: -1;
-  filter: blur(15px);
-  opacity: 0.5;
+.days-container{
+ display:grid;
+ grid-template-columns:repeat(7, 1fr);
+ gap:10px;
+ margin:25px 0;
 }
-
-.voucher-preview-image {
-  width: 100%;
-  height: 180px;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 10px 20px rgba(165,0,100,0.4);
-  border: 3px solid rgba(255,255,255,0.8);
-  margin-bottom: 15px;
-  position: relative;
-  background: rgba(255,255,255,0.9);
+.day-item{
+ aspect-ratio:1;
+ background:rgba(255,255,255,0.1);
+ border-radius:15px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:20px;
+ font-weight:bold;
+ position:relative;
+ border:2px solid transparent;
+ transition:all 0.3s ease;
 }
-
-.voucher-preview-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.day-item.completed{
+ background:rgba(255,215,0,0.2);
+ border-color:#FFD700;
+ color:#FFD700;
 }
-
-.voucher-preview-brand {
-  font-size: 20px;
-  font-weight: 900;
-  color: #A50064;
-  margin: 10px 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.day-item.current{
+ background:rgba(165,0,100,0.3);
+ border-color:#A50064;
+ color:#fff;
+ animation:pulse 2s infinite;
 }
-
-.voucher-preview-value {
-  font-size: 22px;
-  font-weight: 900;
-  color: #A50064;
-  background: rgba(255,255,255,0.9);
-  padding: 8px 15px;
-  border-radius: 10px;
-  display: inline-block;
-  margin-bottom: 10px;
+.day-item .day-number{
+ font-size:16px;
+ position:absolute;
+ top:5px;
+ left:5px;
 }
-
-.voucher-preview-desc {
-  font-size: 14px;
-  margin-top: 10px;
-  color: #A50064;
-  font-weight: bold;
-  line-height: 1.4;
+.day-item .day-check{
+ font-size:24px;
 }
-
-.journey-instruction {
-  font-size: 16px;
-  line-height: 1.5;
-  color: rgba(255,255,255,0.9);
-  margin-top: 20px;
-  padding: 15px;
-  background: rgba(165,0,100,0.2);
-  border-radius: 15px;
-  border: 2px solid rgba(255,215,0,0.3);
+.journey-desc{
+ margin-top:20px;
+ font-size:16px;
+ line-height:1.5;
+ color:rgba(255,255,255,0.9);
 }
-
-.journey-instruction b {
-  color: #FFD700;
-  font-weight: 800;
+.completed-7-text{
+ display:none;
+ margin-top:20px;
+ padding:15px;
+ background:rgba(255,215,0,0.2);
+ border-radius:15px;
+ border:2px solid #FFD700;
+ color:#FFD700;
+ font-weight:bold;
+ font-size:18px;
+ animation:pulse 2s infinite;
 }
 
 /* INSTRUCTION SCREEN */
@@ -543,33 +519,8 @@ canvas{
  margin:0 auto;
 }
 
-/* THÔNG BÁO HOÀN THÀNH 7/7 CHẶNG ĐƯỜNG - ĐƯA LÊN ĐẦU */
+/* VOUCHER POPUP CHO 7/7 CHẶNG ĐƯỜNG */
 #journeyComplete{
- display:none;
- background:linear-gradient(135deg,#FFD700 0%,#FFB300 100%);
- color:#A50064;
- padding:20px;
- border-radius:20px;
- width:100%;
- margin-bottom:20px;
- text-align:center;
- border:3px solid rgba(255,255,255,0.7);
- box-shadow:0 15px 30px rgba(0,0,0,0.3);
-}
-#journeyComplete h3{
- margin-top:0;
- color:#A50064;
- font-size:22px;
- margin-bottom:10px;
-}
-.journey-complete-icon{
- font-size:40px;
- margin:10px 0;
- animation:float 3s ease-in-out infinite;
-}
-
-/* VOUCHER POPUP - HÌNH ẢNH FILL TOÀN BỘ CONTAINER - ĐƯA LÊN ĐẦU */
-#voucherPopup{
  display:none;
  background:linear-gradient(135deg,#FFD700 0%,#FFB300 100%);
  color:#A50064;
@@ -583,7 +534,7 @@ canvas{
  position:relative;
  overflow:hidden;
 }
-#voucherPopup::before{
+#journeyComplete::before{
  content:'';
  position:absolute;
  top:-10px;
@@ -595,16 +546,16 @@ canvas{
  filter:blur(20px);
  opacity:0.5;
 }
-#voucherPopup h3{
+#journeyComplete h3{
  margin-top:0;
  color:#A50064;
  font-size:26px;
  margin-bottom:15px;
 }
-/* CONTAINER CHO HÌNH VOUCHER - VỚI KÍCH THƯỚC CỐ ĐỊNH */
-.voucher-image-container{
+/* CONTAINER CHO HÌNH VOUCHER */
+.journey-voucher-image-container{
  width:100%;
- height:220px; /* Tăng chiều cao để hiển thị rõ hơn */
+ height:220px;
  margin:15px 0;
  border-radius:15px;
  overflow:hidden;
@@ -617,23 +568,17 @@ canvas{
  justify-content:center;
 }
 /* Hình ảnh voucher - FILL TOÀN BỘ CONTAINER */
-.voucher-image{
+.journey-voucher-image{
  width:100%;
  height:100%;
- object-fit:cover; /* Thay đổi từ 'contain' thành 'cover' để fill container */
+ object-fit:cover;
  display:block;
  position:absolute;
  top:0;
  left:0;
 }
-/* Xóa các class cũ về kích thước vì giờ đã fill container */
-.voucher-image.square,
-.voucher-image.landscape,
-.voucher-image.portrait {
-  /* Tất cả sẽ fill container */
-}
 
-.voucher-code{
+.journey-voucher-code{
  font-size:28px;
  font-weight:900;
  letter-spacing:3px;
@@ -647,20 +592,20 @@ canvas{
  text-shadow:0 2px 4px rgba(0,0,0,0.1);
  animation:codePulse 2s ease-in-out infinite;
 }
-.voucher-desc{
+.journey-voucher-desc{
  font-size:14px;
  margin-top:10px;
  color:#A50064;
  font-weight:bold;
 }
-.voucher-brand{
+.journey-voucher-brand{
  font-size:20px;
  font-weight:900;
  margin:10px 0;
  text-transform:uppercase;
  letter-spacing:1px;
 }
-.voucher-value{
+.journey-voucher-value{
  font-size:24px;
  font-weight:900;
  color:#A50064;
@@ -844,12 +789,6 @@ canvas{
   100% { background-position: 200% center; }
 }
 
-@keyframes voucherPreview {
-  0% { transform: scale(0.95) rotate(-1deg); }
-  50% { transform: scale(1.05) rotate(1deg); }
-  100% { transform: scale(0.95) rotate(-1deg); }
-}
-
 /* NHÂN VẬT LỚN HƠN */
 .player-shadow {
   position: absolute;
@@ -888,24 +827,29 @@ canvas{
     transform-origin: top left;
   }
   
-  .voucher-image-container,
-  .voucher-preview-image {
-    height: 140px; /* Giảm chiều cao trong landscape */
+  .journey-voucher-image-container {
+    height: 140px;
   }
   
-  .voucher-code {
+  .journey-voucher-code {
     font-size: 20px;
     padding: 10px;
   }
   
-  .voucher-brand,
-  .voucher-preview-brand {
+  .journey-voucher-brand {
     font-size: 16px;
   }
   
-  .voucher-value,
-  .voucher-preview-value {
+  .journey-voucher-value {
     font-size: 18px;
+  }
+  
+  .days-container {
+    gap: 5px;
+  }
+  
+  .day-item {
+    font-size: 16px;
   }
 }
 
@@ -967,24 +911,29 @@ html {
     max-height: calc(100vw * (640/360));
   }
   
-  .voucher-image-container,
-  .voucher-preview-image {
-    height: 180px; /* Điều chỉnh cho màn hình nhỏ */
+  .journey-voucher-image-container {
+    height: 180px;
   }
   
-  .voucher-code {
+  .journey-voucher-code {
     font-size: 22px;
     padding: 12px;
   }
   
-  .voucher-brand,
-  .voucher-preview-brand {
+  .journey-voucher-brand {
     font-size: 18px;
   }
   
-  .voucher-value,
-  .voucher-preview-value {
+  .journey-voucher-value {
     font-size: 20px;
+  }
+  
+  .days-container {
+    gap: 8px;
+  }
+  
+  .day-item {
+    font-size: 18px;
   }
 }
 
@@ -995,43 +944,43 @@ html {
     max-width: calc(100vh * (360/640));
   }
   
-  .voucher-image-container,
-  .voucher-preview-image {
-    height: 180px; /* Điều chỉnh cho màn hình cao */
+  .journey-voucher-image-container {
+    height: 180px;
   }
 }
 
 /* Cho màn hình rất nhỏ */
 @media (max-width: 320px) {
-  .voucher-image-container,
-  .voucher-preview-image {
+  .journey-voucher-image-container {
     height: 160px;
   }
   
-  .voucher-code {
+  .journey-voucher-code {
     font-size: 20px;
     padding: 10px;
   }
   
-  .voucher-brand,
-  .voucher-preview-brand {
+  .journey-voucher-brand {
     font-size: 16px;
   }
   
-  .voucher-value,
-  .voucher-preview-value {
+  .journey-voucher-value {
     font-size: 18px;
+  }
+  
+  .days-container {
+    gap: 6px;
+  }
+  
+  .day-item {
+    font-size: 16px;
   }
 }
 
 /* Cho màn hình lớn hơn */
 @media (min-width: 361px) and (min-height: 641px) {
-  .voucher-image-container {
-    height: 240px; /* Tăng chiều cao cho màn hình lớn */
-  }
-  
-  .voucher-preview-image {
-    height: 200px; /* Tăng chiều cao cho màn hình lớn */
+  .journey-voucher-image-container {
+    height: 240px;
   }
 }
 </style>
@@ -1046,23 +995,49 @@ html {
  <img src="assets/start.png" alt="MoMo Game" id="startImage">
 </div>
 
-<!-- CHẶNG ĐƯỜNG SCREEN - ĐÃ ĐƯỢC THAY ĐỔI THÀNH VOUCHER -->
+<!-- CHẶNG ĐƯỜNG SCREEN -->
 <div id="journey" onclick="showInstruction()">
  <div class="journey-container">
   <h2>CHẶNG ĐƯỜNG 7 NGÀY</h2>
+  <div class="progress-text">Bạn đã hoàn thành: <span style="color:#FFD700">6/7</span></div>
   
-  <!-- PHẦN VOUCHER HIỆN THỊ - THAY THẾ CHẶNG ĐƯỜNG -->
-  <div class="voucher-display-container">
-    <div class="voucher-preview-image">
-      <img id="journeyVoucherImage" src="" alt="Voucher MoMo">
-    </div>
-    <div class="voucher-preview-brand" id="journeyVoucherBrand">HIGHLANDS COFFEE</div>
-    <div class="voucher-preview-value" id="journeyVoucherValue">GIẢM 30K</div>
-    <div class="voucher-preview-desc" id="journeyVoucherDesc">Giảm 30K cho hóa đơn từ 100K</div>
+  <div class="days-container">
+   <div class="day-item completed">
+    <div class="day-number">1</div>
+    <div class="day-check">✓</div>
+   </div>
+   <div class="day-item completed">
+    <div class="day-number">2</div>
+    <div class="day-check">✓</div>
+   </div>
+   <div class="day-item completed">
+    <div class="day-number">3</div>
+    <div class="day-check">✓</div>
+   </div>
+   <div class="day-item completed">
+    <div class="day-number">4</div>
+    <div class="day-check">✓</div>
+   </div>
+   <div class="day-item completed">
+    <div class="day-number">5</div>
+    <div class="day-check">✓</div>
+   </div>
+   <div class="day-item completed">
+    <div class="day-number">6</div>
+    <div class="day-check">✓</div>
+   </div>
+   <div class="day-item current">
+    <div class="day-number">7</div>
+    <div class="day-check">?</div>
+   </div>
   </div>
   
-  <div class="journey-instruction">
-    Hoàn thành ngày thứ 7 bằng cách thu thập đủ <b>3 Giỏ Cá</b> trong trò chơi để nhận Voucher MoMo đặc biệt!
+  <div class="journey-desc">
+   Hoàn thành ngày thứ 7 bằng cách thu thập đủ <b>3 Giỏ Cá</b> trong trò chơi để nhận Voucher MoMo đặc biệt!
+  </div>
+  
+  <div class="completed-7-text" id="journeyCompleteText">
+   🎉 Bạn đã hoàn thành 7/7 chặng đường!
   </div>
   
   <button class="btn-momo" style="margin-top:30px;" onclick="showInstruction()">Tiếp tục</button>
@@ -1114,32 +1089,24 @@ html {
  <div id="over-content">
   <h2 style="color:#FFD700;font-size:36px;text-shadow:0 0 20px rgba(255,215,0,0.8);margin-bottom:30px;">✨🏆 KẾT THÚC</h2>
   
-  <!-- THÔNG BÁO HOÀN THÀNH 7/7 CHẶNG ĐƯỜNG - ĐƯA LÊN ĐẦU -->
+  <!-- VOUCHER CHO 7/7 CHẶNG ĐƯỜNG -->
   <div id="journeyComplete">
-   <h3>CHÚC MỪNG!</h3>
-   <div class="journey-complete-icon">🏆</div>
-   <p>Bạn đã hoàn thành <b>7/7 chặng đường</b>!</p>
-   <p style="font-size:14px;margin-top:10px;">Xuất sắc hoàn thành thử thách 7 ngày và nhận được Voucher MoMo đặc biệt!</p>
-  </div>
-  
-  <!-- VOUCHER POPUP - HÌNH ẢNH FILL TOÀN BỘ CONTAINER - ĐƯA LÊN ĐẦU -->
-  <div id="voucherPopup">
-   <h3>🎉 CHÚC MỪNG!</h3>
-   <p>Bạn đã đạt đủ <b>3 Giỏ Cá</b> 🎯</p>
+   <h3>🎉 CHÚC MỪNG HOÀN THÀNH 7/7!</h3>
+   <p>Phần thưởng đặc biệt dành cho bạn</p>
    
-   <div class="voucher-image-container">
-     <img id="voucherImage" class="voucher-image" src="" alt="Voucher MoMo">
+   <div class="journey-voucher-image-container">
+     <img id="journeyVoucherImage" class="journey-voucher-image" src="" alt="Voucher MoMo">
    </div>
    
-   <div class="voucher-brand" id="voucherBrand"></div>
-   <div class="voucher-value" id="voucherValue"></div>
-   <div class="voucher-code" id="voucherCode">MOMO-TET-2026</div>
+   <div class="journey-voucher-brand" id="journeyVoucherBrand"></div>
+   <div class="journey-voucher-value" id="journeyVoucherValue"></div>
+   <div class="journey-voucher-code" id="journeyVoucherCode">MOMO-TET-2026</div>
    
-   <div class="voucher-desc" id="voucherDesc">
+   <div class="journey-voucher-desc" id="journeyVoucherDesc">
      Sử dụng mã trong ví MoMo để nhận ưu đãi đặc biệt! 🧧
    </div>
    
-   <small id="voucherExpiry">Hạn sử dụng: 31/12/2026</small>
+   <small id="journeyVoucherExpiry">Hạn sử dụng: 31/12/2026</small>
   </div>
 
   <div id="summary">
@@ -1273,6 +1240,27 @@ document.addEventListener('contextmenu', function(e) {
   return false;
 });
 
+/* ===== INTRO → JOURNEY ===== */
+function showJourney(){
+ document.getElementById('start').style.display = 'none';
+ document.getElementById('journey').style.display = 'flex';
+}
+
+/* ===== JOURNEY → INSTRUCTION ===== */
+function showInstruction(){
+ document.getElementById('journey').style.display = 'none';
+ document.getElementById('instruction').style.display = 'flex';
+ // Bắt đầu nhạc nền khi vào màn hình hướng dẫn
+ playBackgroundMusic();
+}
+
+/* ===== AUTO CLEAR ===== */
+const GAME_VERSION = "premium-vouchers-11.0";
+if(localStorage.getItem("game_version") !== GAME_VERSION){
+ localStorage.removeItem("leaderboard");
+ localStorage.setItem("game_version", GAME_VERSION);
+}
+
 /* ===== DANH SÁCH VOUCHER MỚI ===== */
 const voucherList = [
   {
@@ -1400,134 +1388,68 @@ function getRandomVoucher() {
   return voucherList[randomIndex];
 }
 
-// Hàm hiển thị voucher trong màn hình chặng đường
-function showJourneyVoucher() {
+// Hàm hiển thị voucher cho 7/7 chặng đường
+function showJourneyComplete() {
   const voucher = getRandomVoucher();
-  const voucherImage = document.getElementById('journeyVoucherImage');
-  const voucherBrand = document.getElementById('journeyVoucherBrand');
-  const voucherValue = document.getElementById('journeyVoucherValue');
-  const voucherDesc = document.getElementById('journeyVoucherDesc');
+  const journeyComplete = document.getElementById('journeyComplete');
+  const journeyVoucherImage = document.getElementById('journeyVoucherImage');
+  const journeyVoucherCode = document.getElementById('journeyVoucherCode');
+  const journeyVoucherDesc = document.getElementById('journeyVoucherDesc');
+  const journeyVoucherExpiry = document.getElementById('journeyVoucherExpiry');
+  const journeyVoucherBrand = document.getElementById('journeyVoucherBrand');
+  const journeyVoucherValue = document.getElementById('journeyVoucherValue');
   
   // Hiển thị hình ảnh voucher
-  voucherImage.onload = function() {
-    this.style.width = '100%';
-    this.style.height = '100%';
-    this.style.objectFit = 'cover';
-    // Thêm hiệu ứng animation
-    this.style.animation = 'voucherPreview 3s ease-in-out infinite';
-  };
-  
-  voucherImage.src = voucher.image;
-  voucherImage.alt = voucher.name;
-  
-  // Hiển thị thông tin voucher
-  voucherBrand.textContent = voucher.brand;
-  voucherValue.textContent = voucher.value;
-  voucherDesc.textContent = voucher.desc;
-  
-  // Thêm hiệu ứng màu
-  voucherBrand.style.color = voucher.color;
-  voucherBrand.style.textShadow = `0 2px 10px ${voucher.color}40`;
-  
-  voucherValue.style.background = `linear-gradient(90deg, ${voucher.color}, ${voucher.color}E6)`;
-  voucherValue.style.color = 'white';
-  
-  console.log(`Hiển thị voucher chặng đường: ${voucher.name}`);
-}
-
-/* ===== INTRO → JOURNEY ===== */
-function showJourney(){
- document.getElementById('start').style.display = 'none';
- document.getElementById('journey').style.display = 'flex';
- 
- // Hiển thị voucher ngẫu nhiên trong màn hình chặng đường
- showJourneyVoucher();
-}
-
-/* ===== JOURNEY → INSTRUCTION ===== */
-function showInstruction(){
- document.getElementById('journey').style.display = 'none';
- document.getElementById('instruction').style.display = 'flex';
- // Bắt đầu nhạc nền khi vào màn hình hướng dẫn
- playBackgroundMusic();
-}
-
-/* ===== AUTO CLEAR ===== */
-const GAME_VERSION = "premium-vouchers-11.0";
-if(localStorage.getItem("game_version") !== GAME_VERSION){
- localStorage.removeItem("leaderboard");
- localStorage.setItem("game_version", GAME_VERSION);
-}
-
-// Hàm hiển thị voucher - HÌNH ẢNH FILL TOÀN BỘ CONTAINER
-function showVoucher() {
-  const voucher = getRandomVoucher();
-  const voucherPopup = document.getElementById('voucherPopup');
-  const voucherImage = document.getElementById('voucherImage');
-  const voucherCode = document.getElementById('voucherCode');
-  const voucherDesc = document.getElementById('voucherDesc');
-  const voucherExpiry = document.getElementById('voucherExpiry');
-  const voucherBrand = document.getElementById('voucherBrand');
-  const voucherValue = document.getElementById('voucherValue');
-  
-  // Hiển thị hình ảnh voucher - fill toàn bộ container
-  voucherImage.onload = function() {
-    // Đảm bảo hình ảnh fill container
+  journeyVoucherImage.onload = function() {
     this.style.width = '100%';
     this.style.height = '100%';
     this.style.objectFit = 'cover';
   };
   
-  voucherImage.src = voucher.image;
-  voucherImage.alt = voucher.name;
-  voucherImage.className = 'voucher-image'; // Chỉ cần class cơ bản
+  journeyVoucherImage.src = voucher.image;
+  journeyVoucherImage.alt = voucher.name;
+  journeyVoucherImage.className = 'journey-voucher-image';
   
   // Hiển thị thông tin voucher
-  voucherBrand.textContent = voucher.brand;
-  voucherValue.textContent = voucher.value;
-  voucherCode.textContent = voucher.code;
-  voucherDesc.textContent = voucher.desc;
-  voucherExpiry.textContent = `Hạn sử dụng: ${voucher.expiry}`;
+  journeyVoucherBrand.textContent = voucher.brand;
+  journeyVoucherValue.textContent = voucher.value;
+  journeyVoucherCode.textContent = voucher.code;
+  journeyVoucherDesc.textContent = voucher.desc;
+  journeyVoucherExpiry.textContent = `Hạn sử dụng: ${voucher.expiry}`;
   
   // Thêm hiệu ứng màu
-  voucherCode.style.background = `linear-gradient(135deg, ${voucher.color}20 0%, ${voucher.color}40 100%)`;
-  voucherCode.style.borderColor = voucher.color;
-  voucherCode.style.color = voucher.color;
+  journeyVoucherCode.style.background = `linear-gradient(135deg, ${voucher.color}20 0%, ${voucher.color}40 100%)`;
+  journeyVoucherCode.style.borderColor = voucher.color;
+  journeyVoucherCode.style.color = voucher.color;
   
-  voucherValue.style.background = `linear-gradient(90deg, ${voucher.color}, ${voucher.color}E6)`;
-  voucherValue.style.color = 'white';
+  journeyVoucherValue.style.background = `linear-gradient(90deg, ${voucher.color}, ${voucher.color}E6)`;
+  journeyVoucherValue.style.color = 'white';
   
-  voucherBrand.style.color = voucher.color;
-  voucherBrand.style.textShadow = `0 2px 10px ${voucher.color}40`;
+  journeyVoucherBrand.style.color = voucher.color;
+  journeyVoucherBrand.style.textShadow = `0 2px 10px ${voucher.color}40`;
   
-  // Thêm hiệu ứng ánh sáng cho hình ảnh
-  voucherImage.style.animation = 'float 3s ease-in-out infinite';
+  // Thêm hiệu ứng ánh sáng
+  journeyVoucherImage.style.animation = 'float 3s ease-in-out infinite';
   
   // Thêm hiệu ứng shine cho giá trị voucher
-  voucherValue.style.background = `linear-gradient(90deg, 
+  journeyVoucherValue.style.background = `linear-gradient(90deg, 
     ${voucher.color}00, ${voucher.color}, ${voucher.color}00, ${voucher.color}, ${voucher.color}00)`;
-  voucherValue.style.backgroundSize = '200% 100%';
-  voucherValue.style.animation = 'shine 3s linear infinite';
+  journeyVoucherValue.style.backgroundSize = '200% 100%';
+  journeyVoucherValue.style.animation = 'shine 3s linear infinite';
   
   // Hiển thị popup
-  voucherPopup.style.display = 'block';
-  
-  console.log(`Đã chọn voucher: ${voucher.name} (fill container)`);
-}
-
-// Hàm hiển thị hoàn thành 7/7 chặng đường
-function showJourneyComplete() {
-  const journeyComplete = document.getElementById('journeyComplete');
   journeyComplete.style.display = 'block';
   
-  // Phát âm thanh chiến thắng đặc biệt
+  // Phát âm thanh chiến thắng
   playSound(sWin);
   
   // Thêm hiệu ứng lấp lánh
   createJourneySparkleEffect();
+  
+  console.log(`Đã hiển thị voucher cho 7/7 chặng đường: ${voucher.name}`);
 }
 
-// Hiệu ứng lấp lánh cho hoàn thành chặng đường
+// Hiệu ứng lấp lánh cho voucher
 function createJourneySparkleEffect() {
   const journeyComplete = document.getElementById('journeyComplete');
   const rect = journeyComplete.getBoundingClientRect();
@@ -2284,12 +2206,8 @@ function endGame(){
   document.getElementById('over').style.display = 'flex';
   
   if(basket >= 3){
-   // Hiển thị hoàn thành 7/7 chặng đường - ĐƯỢC GỌI TRƯỚC
+   // Hiển thị voucher cho 7/7 chặng đường
    showJourneyComplete();
-   // Hiển thị voucher ngẫu nhiên - ĐƯỢC GỌI SAU
-   showVoucher();
-   // Phát âm thanh chiến thắng
-   playSound(sWin);
   }
  }, 1000);
 }
