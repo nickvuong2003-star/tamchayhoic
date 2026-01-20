@@ -616,106 +616,127 @@ canvas{
  display:inline-block;
 }
 
-/* PARTNERSHIP SECTION */
-#partnership {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 25px;
-  padding: 25px;
-  width: 100%;
-  margin-bottom: 20px;
-  text-align: center;
-  border: 3px solid #FFD700;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-  position: relative;
-  overflow: hidden;
+/* PHẦN HIGHLIGHT PARTNERSHIP MỚI */
+#partnership{
+ background:rgba(255,255,255,0.1);
+ backdrop-filter:blur(20px);
+ -webkit-backdrop-filter:blur(20px);
+ padding:25px;
+ border-radius:25px;
+ width:100%;
+ margin:20px 0;
+ text-align:center;
+ border:2px solid rgba(255,255,255,0.25);
+ box-shadow:0 20px 40px rgba(0,0,0,0.3);
+ position:relative;
+ overflow:hidden;
 }
-
-#partnership h3 {
-  margin-top: 0;
-  color: #A50064;
-  text-align: center;
-  margin-bottom: 10px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid rgba(165,0,100,0.3);
-  font-size: 24px;
+#partnership::before{
+ content:'';
+ position:absolute;
+ top:0;
+ left:0;
+ right:0;
+ height:4px;
+ background:linear-gradient(90deg,#A50064,#FF0077,#FFD700,#FF0077,#A50064);
+ z-index:2;
 }
-
-.partnership-desc {
-  color: #A50064;
-  margin-bottom: 20px;
-  font-size: 16px;
-  font-weight: bold;
+#partnership h3{
+ margin-top:0;
+ color:#FFD700;
+ font-size:24px;
+ text-shadow:0 2px 10px rgba(0,0,0,0.3);
+ margin-bottom:20px;
+ padding-bottom:15px;
+ border-bottom:2px solid rgba(255,255,255,0.2);
+ position:relative;
 }
-
-.partners-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  margin: 20px 0;
+#partnership h3::after{
+ content:'🤝';
+ position:absolute;
+ right:0;
+ top:50%;
+ transform:translateY(-50%);
+ font-size:20px;
 }
-
-.partner-item {
-  background: white;
-  border-radius: 15px;
-  padding: 15px 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  border: 2px solid transparent;
-  transition: all 0.3s ease;
-  cursor: pointer;
+#partnership .partnership-desc{
+ color:#fff;
+ font-size:16px;
+ line-height:1.5;
+ margin-bottom:20px;
+ opacity:0.9;
 }
-
-.partner-item:hover {
-  transform: translateY(-5px);
-  border-color: #FFD700;
+.partners-grid{
+ display:grid;
+ grid-template-columns:repeat(3, 1fr);
+ gap:15px;
+ margin-top:15px;
 }
-
-.partner-logo {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
-  font-size: 24px;
-  color: white;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+.partner-item{
+ background:rgba(255,255,255,0.95);
+ border-radius:15px;
+ padding:12px;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ height:100px;
+ border:2px solid transparent;
+ transition:all 0.3s ease;
+ position:relative;
+ overflow:hidden;
+ box-shadow:0 8px 20px rgba(0,0,0,0.1);
 }
-
-.partner-name {
-  font-size: 12px;
-  font-weight: bold;
-  color: #A50064;
-  margin-bottom: 5px;
-  text-align: center;
-  line-height: 1.2;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.partner-item:hover{
+ transform:translateY(-5px);
+ border-color:#FFD700;
+ box-shadow:0 15px 30px rgba(0,0,0,0.2);
 }
-
-.partner-offer {
-  font-size: 11px;
-  font-weight: 800;
-  color: #FF9100;
-  background: rgba(255, 145, 0, 0.1);
-  padding: 4px 8px;
-  border-radius: 10px;
-  white-space: nowrap;
+.partner-logo-container{
+ width:100%;
+ height:60px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ margin-bottom:8px;
 }
+.partner-logo{
+ max-width:100%;
+ max-height:100%;
+ object-fit:contain;
+ filter:drop-shadow(0 3px 6px rgba(0,0,0,0.2));
+}
+.partner-name{
+ font-size:12px;
+ font-weight:bold;
+ color:#A50064;
+ text-align:center;
+ line-height:1.2;
+ margin-top:5px;
+}
+.partner-highlands .partner-name{ color:#8B4513; }
+.partner-starbucks .partner-name{ color:#00704A; }
+.partner-gs25 .partner-name{ color:#FF6B00; }
+.partner-beautybox .partner-name{ color:#FF69B4; }
+.partner-grab .partner-name{ color:#00B14F; }
+.partner-cgv .partner-name{ color:#E31937; }
 
-.partnership-note {
-  margin-top: 20px;
-  padding-top: 15px;
-  border-top: 1px dashed rgba(165,0,100,0.3);
-  color: #A50064;
-  font-size: 14px;
-  font-style: italic;
+/* Hiệu ứng đặc biệt cho partner items */
+.partner-item::before{
+ content:'';
+ position:absolute;
+ top:-50%;
+ left:-50%;
+ width:200%;
+ height:200%;
+ background:linear-gradient(45deg,transparent,rgba(255,255,255,0.1),transparent);
+ transform:rotate(45deg);
+ opacity:0;
+ transition:opacity 0.5s ease;
+}
+.partner-item:hover::before{
+ opacity:1;
+ animation:shine 1.5s ease;
 }
 
 #summary{
@@ -887,8 +908,13 @@ canvas{
 }
 
 @keyframes shine {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+@keyframes partnerFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
 
 /* NHÂN VẬT LỚN HƠN */
@@ -956,23 +982,21 @@ canvas{
   
   /* Partnership responsive */
   .partners-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
   
-  .partner-logo {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
+  .partner-item {
+    height: 85px;
+    padding: 10px;
+  }
+  
+  .partner-logo-container {
+    height: 50px;
   }
   
   .partner-name {
     font-size: 10px;
-    height: 20px;
-  }
-  
-  .partner-offer {
-    font-size: 9px;
   }
 }
 
@@ -1065,14 +1089,17 @@ html {
     gap: 12px;
   }
   
-  .partner-name {
-    font-size: 11px;
-    height: 26px;
+  .partner-item {
+    height: 90px;
+    padding: 10px;
   }
   
-  .partner-offer {
-    font-size: 10px;
-    padding: 3px 6px;
+  .partner-logo-container {
+    height: 55px;
+  }
+  
+  .partner-name {
+    font-size: 11px;
   }
 }
 
@@ -1116,12 +1143,22 @@ html {
   }
   
   /* Partnership responsive */
-  .partner-name {
-    font-size: 10px;
+  .partners-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
   
-  .partner-offer {
-    font-size: 9px;
+  .partner-item {
+    height: 85px;
+    padding: 8px;
+  }
+  
+  .partner-logo-container {
+    height: 50px;
+  }
+  
+  .partner-name {
+    font-size: 10px;
   }
 }
 
@@ -1272,66 +1309,6 @@ html {
    </div>
   </div>
 
-  <!-- PARTNERSHIP HIGHLIGHT -->
-  <div id="partnership">
-    <h3>ĐỐI TÁC ĐỒNG HÀNH</h3>
-    <p class="partnership-desc">Cùng MoMo mang đến ưu đãi đặc biệt cho bạn!</p>
-    
-    <div class="partners-grid">
-      <div class="partner-item">
-        <div class="partner-logo" style="background: linear-gradient(135deg, #8B4513, #A0522D);">
-          <span>☕</span>
-        </div>
-        <div class="partner-name">Highlands Coffee</div>
-        <div class="partner-offer">Giảm 30K</div>
-      </div>
-      
-      <div class="partner-item">
-        <div class="partner-logo" style="background: linear-gradient(135deg, #00B14F, #00D166);">
-          <span>🚗</span>
-        </div>
-        <div class="partner-name">Grab</div>
-        <div class="partner-offer">Giảm 50K</div>
-      </div>
-      
-      <div class="partner-item">
-        <div class="partner-logo" style="background: linear-gradient(135deg, #FF6B00, #FF8C42);">
-          <span>🏪</span>
-        </div>
-        <div class="partner-name">GS25</div>
-        <div class="partner-offer">Giảm 25k</div>
-      </div>
-      
-      <div class="partner-item">
-        <div class="partner-logo" style="background: linear-gradient(135deg, #E31937, #FF4162);">
-          <span>🎬</span>
-        </div>
-        <div class="partner-name">CGV Cinema</div>
-        <div class="partner-offer">Mua 1 Tặng 1</div>
-      </div>
-      
-      <div class="partner-item">
-        <div class="partner-logo" style="background: linear-gradient(135deg, #00704A, #008B5A);">
-          <span>🌟</span>
-        </div>
-        <div class="partner-name">Starbucks</div>
-        <div class="partner-offer">Giảm 50K</div>
-      </div>
-      
-      <div class="partner-item">
-        <div class="partner-logo" style="background: linear-gradient(135deg, #FF69B4, #FF8CC8);">
-          <span>💄</span>
-        </div>
-        <div class="partner-name">Beauty Box</div>
-        <div class="partner-offer">Giảm 50k</div>
-      </div>
-    </div>
-    
-    <div class="partnership-note">
-      Khám phá thêm nhiều ưu đãi hấp dẫn khác trên ứng dụng MoMo!
-    </div>
-  </div>
-
   <div id="nameBox">
    <label>🏷 NHẬP TÊN CỦA BẠN</label>
    <input id="playerName" placeholder="Tên người chơi">
@@ -1341,6 +1318,22 @@ html {
   <div id="leaderboard">
    <h3>🏆 BẢNG XẾP HẠNG</h3>
    <div id="rankList"></div>
+  </div>
+  
+  <!-- PHẦN HIGHLIGHT PARTNERSHIP MỚI -->
+  <div id="partnership">
+   <h3>ĐỐI TÁC ĐỒNG HÀNH</h3>
+   <div class="partnership-desc">
+    Cảm ơn các đối tác đã đồng hành cùng MoMo mang đến những ưu đãi đặc biệt cho người chơi!
+   </div>
+   
+   <div class="partners-grid" id="partnersGrid">
+    <!-- Partners will be populated by JavaScript -->
+   </div>
+   
+   <div style="margin-top:15px; font-size:14px; color:rgba(255,255,255,0.8);">
+    🎁 <b>Ưu đãi từ các đối tác</b> có sẵn trong Ví MoMo của bạn!
+   </div>
   </div>
 
   <!-- NÚT CHƠI LẠI -->
@@ -1412,6 +1405,12 @@ window.addEventListener('load', function() {
   
   // Preload voucher images
   preloadVoucherImages();
+  
+  // Preload partner images
+  preloadPartnerImages();
+  
+  // Render partnership grid
+  renderPartnership();
   
   // Fix cho iOS
   setTimeout(() => {
@@ -1551,6 +1550,64 @@ const voucherList = [
   }
 ];
 
+/* ===== DANH SÁCH ĐỐI TÁC (PARTNERS) ===== */
+const partnerList = [
+  {
+    id: 1,
+    name: "Highlands Coffee",
+    logo: "assets/voucher/highlands.png",
+    desc: "Thức uống chất lượng",
+    color: "#8B4513",
+    category: "Cà phê & Trà",
+    discount: "Giảm đến 30K"
+  },
+  {
+    id: 2,
+    name: "Starbucks",
+    logo: "assets/voucher/starbucks.png",
+    desc: "Trải nghiệm cà phê đẳng cấp",
+    color: "#00704A",
+    category: "Cà phê",
+    discount: "Giảm đến 50K"
+  },
+  {
+    id: 3,
+    name: "GS25",
+    logo: "assets/voucher/gs25.png",
+    desc: "Tiện lợi mọi lúc",
+    color: "#FF6B00",
+    category: "Tiệm tạp hóa",
+    discount: "Giảm đến 25K"
+  },
+  {
+    id: 4,
+    name: "Beauty Box",
+    logo: "assets/voucher/beautybox.png",
+    desc: "Làm đẹp toàn diện",
+    color: "#FF69B4",
+    category: "Làm đẹp",
+    discount: "Giảm đến 50K"
+  },
+  {
+    id: 5,
+    name: "Grab",
+    logo: "assets/voucher/grab.png",
+    desc: "Di chuyển thông minh",
+    color: "#00B14F",
+    category: "Di chuyển",
+    discount: "Giảm đến 50K"
+  },
+  {
+    id: 6,
+    name: "CGV",
+    logo: "assets/voucher/cgv.png",
+    desc: "Giải trí đỉnh cao",
+    color: "#E31937",
+    category: "Giải trí",
+    discount: "Mua 1 tặng 1"
+  }
+];
+
 // Preload voucher images
 function preloadVoucherImages() {
   console.log('Đang tải hình ảnh voucher...');
@@ -1567,6 +1624,43 @@ function preloadVoucherImages() {
       voucher.image = createFallbackSVG(voucher);
     };
   });
+}
+
+// Preload partner images
+function preloadPartnerImages() {
+  console.log('Đang tải hình ảnh đối tác...');
+  
+  partnerList.forEach(partner => {
+    const img = new Image();
+    img.src = partner.logo;
+    img.onload = () => {
+      console.log(`✓ Đã tải: ${partner.logo}`);
+    };
+    img.onerror = () => {
+      console.warn(`⚠ Không thể tải: ${partner.logo}`);
+      // Fallback image bằng SVG
+      partner.logo = createPartnerFallbackSVG(partner);
+    };
+  });
+}
+
+// Tạo hình SVG fallback cho partner
+function createPartnerFallbackSVG(partner) {
+  const svg = `
+    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100" height="100" rx="15" fill="${partner.color}20"/>
+      <rect x="10" y="10" width="80" height="80" rx="10" fill="${partner.color}30" stroke="${partner.color}" stroke-width="2"/>
+      <text x="50" y="40" font-family="Arial" font-size="12" font-weight="bold" fill="${partner.color}" text-anchor="middle">
+        ${partner.name.split(' ')[0]}
+      </text>
+      <text x="50" y="60" font-family="Arial" font-size="10" fill="${partner.color}" text-anchor="middle">
+        ${partner.discount}
+      </text>
+      <circle cx="50" cy="75" r="8" fill="${partner.color}"/>
+      <text x="50" y="78" font-family="Arial" font-size="8" fill="white" text-anchor="middle">✓</text>
+    </svg>
+  `;
+  return "data:image/svg+xml;base64," + btoa(svg);
 }
 
 // Tạo hình SVG fallback cho voucher
@@ -1588,6 +1682,72 @@ function createFallbackSVG(voucher) {
     </svg>
   `;
   return "data:image/svg+xml;base64," + btoa(svg);
+}
+
+// Hàm render partnership grid
+function renderPartnership() {
+  const partnersGrid = document.getElementById('partnersGrid');
+  if (!partnersGrid) return;
+  
+  partnersGrid.innerHTML = '';
+  
+  partnerList.forEach(partner => {
+    const partnerItem = document.createElement('div');
+    partnerItem.className = `partner-item partner-${partner.name.toLowerCase().replace(' ', '')}`;
+    
+    // Tạo animation delay ngẫu nhiên
+    const animationDelay = Math.random() * 0.5;
+    partnerItem.style.animationDelay = `${animationDelay}s`;
+    
+    const logoContainer = document.createElement('div');
+    logoContainer.className = 'partner-logo-container';
+    
+    const logoImg = document.createElement('img');
+    logoImg.className = 'partner-logo';
+    logoImg.src = partner.logo;
+    logoImg.alt = partner.name;
+    logoImg.onload = function() {
+      this.style.opacity = '1';
+    };
+    logoImg.style.opacity = '0';
+    logoImg.style.transition = 'opacity 0.5s ease';
+    
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'partner-name';
+    nameDiv.textContent = partner.name;
+    
+    logoContainer.appendChild(logoImg);
+    partnerItem.appendChild(logoContainer);
+    partnerItem.appendChild(nameDiv);
+    
+    // Thêm hiệu ứng hover
+    partnerItem.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-5px)';
+      this.style.boxShadow = '0 15px 30px rgba(0,0,0,0.2)';
+    });
+    
+    partnerItem.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+      this.style.boxShadow = '0 8px 20px rgba(0,0,0,0.1)';
+    });
+    
+    // Thêm hiệu ứng click
+    partnerItem.addEventListener('click', function() {
+      playSound(sClick);
+      this.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        this.style.transform = 'scale(1) translateY(-5px)';
+      }, 150);
+    });
+    
+    partnersGrid.appendChild(partnerItem);
+  });
+  
+  // Thêm hiệu ứng floating cho các partner items
+  const partnerItems = document.querySelectorAll('.partner-item');
+  partnerItems.forEach((item, index) => {
+    item.style.animation = `partnerFloat ${3 + index * 0.2}s ease-in-out infinite`;
+  });
 }
 
 // Hàm chọn voucher ngẫu nhiên
@@ -1912,34 +2072,6 @@ document.addEventListener('touchstart', function() {
     console.log("Audio đã được mở khóa");
   }).catch(e => console.log("Audio unlock error"));
 }, { once: true });
-
-// Thêm hiệu ứng hover cho partnership
-function initPartnershipHover() {
-  const partnerItems = document.querySelectorAll('.partner-item');
-  
-  partnerItems.forEach(item => {
-    item.addEventListener('mouseenter', function() {
-      if (soundEnabled) {
-        playSound(sClick);
-      }
-    });
-    
-    // Thêm touch support cho mobile
-    item.addEventListener('touchstart', function(e) {
-      e.preventDefault();
-      this.style.transform = 'translateY(-3px) scale(1.05)';
-      
-      if (soundEnabled) {
-        playSound(sClick);
-      }
-    });
-    
-    item.addEventListener('touchend', function(e) {
-      e.preventDefault();
-      this.style.transform = 'translateY(0) scale(1)';
-    });
-  });
-}
 
 /* ===== GAME STATE ===== */
 let run = false, coin = 0, basket = 0;
@@ -2445,9 +2577,6 @@ function endGame(){
    // Hiển thị voucher cho 7/7 chặng đường
    showJourneyComplete();
   }
-  
-  // Khởi tạo hiệu ứng hover cho partnership
-  initPartnershipHover();
  }, 1000);
 }
 
