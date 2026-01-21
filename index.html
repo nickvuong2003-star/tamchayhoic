@@ -502,13 +502,12 @@ canvas{
  padding:30px;
  text-align:center;
  backdrop-filter:blur(10px);
- -webkit-backdrop-filter:blur(10px);
- overflow-y:auto;
- padding-bottom:100px;
- -webkit-overflow-scrolling:touch;
+ -webkit-backdrop-scrolling:touch;
  background:linear-gradient(-45deg,rgba(165,0,100,0.95),rgba(214,0,110,0.95),rgba(255,0,119,0.95),rgba(255,51,153,0.95),rgba(165,0,100,0.95),rgba(214,0,110,0.95),rgba(255,0,119,0.95),rgba(255,51,153,0.95));
  background-size:400% 400%;
  animation:gradientFlow 8s ease infinite;
+ overflow-y:auto;
+ padding-bottom:100px;
 }
 #over-content{
  display:flex;
@@ -977,7 +976,6 @@ canvas{
 #summary{
  background:rgba(255,255,255,0.15);
  backdrop-filter:blur(20px);
- -webkit-backdrop-filter:blur(20px);
  padding:25px;
  border-radius:25px;
  width:100%;
@@ -1010,7 +1008,6 @@ canvas{
 #nameBox{
  background:rgba(255,255,255,0.15);
  backdrop-filter:blur(20px);
- -webkit-backdrop-filter:blur(20px);
  padding:25px;
  border-radius:25px;
  width:100%;
@@ -1546,9 +1543,7 @@ html {
    <small id="journeyVoucherExpiry">Hạn sử dụng: 31/12/2026</small>
   </div>
 
-  <!-- =====================
-       PARTNERSHIP IMPROVED - ĐƯỢC DI CHUYỂN LÊN TRƯỚC SUMMARY
-       ===================== -->
+  <!-- PARTNERSHIP -->
   <div id="partnership">
     <h3>ĐỐI TÁC ĐỒNG HÀNH 🤝</h3>
     <p class="partnership-desc">Ưu đãi từ các đối tác dành cho bạn!</p>
@@ -1609,7 +1604,7 @@ html {
         <div class="partner-item" data-index="5">
           <div class="partner-logo">
             <img src="assets/partners/beautybox-logo.png" alt="Beauty Box" class="partner-logo-img"
-                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIyMCIgZmlsbD0idXJsKCNwMCkiLz48dGV4dCB4PSIyMCIgeT0iMjQiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkI8L3RleHQ+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJwMCI+PHN0b3Agc3RvcC1jb2xvcj0iI0ZGNjlCNCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0ZGODhDOCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjwvc3ZnPg=='; this.alt='Beauty Box Logo';">
+                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIyMCIgZmlsbD0idXJsKCNwMCkiLz48dGV4dCB4PSIyMCIgeT0iMjQiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkI8L3RleHQ+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJwMCI+PHN0b3Agc3RvcC1jb2xvcj0iI0ZGNjlCNCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2vvcj0iI0ZGODhDOCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjwvc3ZnPg=='; this.alt='Beauty Box Logo';">
           </div>
           <div class="partner-name">Beauty Box</div>
           <div class="partner-offer">Giảm 50k</div>
@@ -1631,7 +1626,7 @@ html {
     </div>
   </div>
 
-  <!-- PHẦN SUMMARY ĐƯỢC CHUYỂN XUỐNG DƯỚI PARTNERSHIP -->
+  <!-- PHẦN SUMMARY -->
   <div id="summary">
    <div class="summary-item">
     <span>💰 XU THU ĐƯỢC:</span>
@@ -1659,7 +1654,7 @@ html {
   </div>
 
   <!-- NÚT CHƠI LẠI -->
-  <button class="btn-momo" id="playAgainBtn" onclick="location.reload()">🔄 CHƠI LẠI</button>
+  <button class="btn-momo" id="playAgainBtn" onclick="stopAllMusic(); location.reload()">🔄 CHƠI LẠI</button>
  </div>
 </div>
 
@@ -2119,13 +2114,15 @@ function showPartnerDetails(index) {
 function showJourney(){
  document.getElementById('start').style.display = 'none';
  document.getElementById('journey').style.display = 'flex';
+ 
+ // PHÁT NHẠC NỀN KHI CHUYỂN TỪ INTRO SANG JOURNEY
+ playBackgroundMusic();
 }
 
 /* ===== JOURNEY → INSTRUCTION ===== */
 function showInstruction(){
  document.getElementById('journey').style.display = 'none';
  document.getElementById('instruction').style.display = 'flex';
- playBackgroundMusic();
 }
 
 /* ===== AUTO CLEAR ===== */
@@ -2409,17 +2406,27 @@ let soundEnabled = true;
 
 function playBackgroundMusic() {
   if (soundEnabled && bgMusic) {
-    bgMusic.play().catch(e => {
-      console.log("Nhạc nền cần tương tác người dùng:", e);
-      document.addEventListener('click', function playOnce() {
-      bgMusic.play().catch(e => console.log("Vẫn không thể phát nhạc nền"));
-        document.removeEventListener('click', playOnce);
-      }, { once: true });
-    });
+    // Đảm bảo nhạc không bị pause khi chuyển màn hình
+    if (bgMusic.paused) {
+      bgMusic.play().catch(e => {
+        console.log("Nhạc nền cần tương tác người dùng:", e);
+        // Thêm listener để phát khi user tương tác
+        const playOnce = () => {
+          bgMusic.play().catch(e => console.log("Vẫn không thể phát nhạc nền"));
+          document.removeEventListener('click', playOnce);
+          document.removeEventListener('touchstart', playOnce);
+        };
+        document.addEventListener('click', playOnce, { once: true });
+        document.addEventListener('touchstart', playOnce, { once: true });
+      });
+    } else {
+      // Nếu đang phát, đảm bảo volume đúng
+      bgMusic.volume = 0.5;
+    }
   }
 }
 
-function stopBackgroundMusic() {
+function stopAllMusic() {
   if (bgMusic) {
     bgMusic.pause();
     bgMusic.currentTime = 0;
@@ -2434,9 +2441,11 @@ function toggleSound() {
   
   if (soundEnabled) {
     playSound(sClick);
-  }
-  
-  if (soundEnabled) {
+    
+    // Nếu bật âm thanh, phát nhạc nền nếu chưa phát
+    playBackgroundMusic();
+    
+    // Đặt volume cho các âm thanh
     bgMusic.volume = 0.5;
     sCoin.volume = 0.3;
     sBasket.volume = 0.4;
@@ -2446,11 +2455,8 @@ function toggleSound() {
     sBut.volume = 0.6;
     sMagic.volume = 0.5;
     sWin.volume = 0.6;
-    
-    if (run) {
-      playBackgroundMusic();
-    }
   } else {
+    // Nếu tắt âm thanh, chỉ mute chứ không pause nhạc nền
     bgMusic.volume = 0;
     sCoin.volume = 0;
     sBasket.volume = 0;
@@ -2460,20 +2466,6 @@ function toggleSound() {
     sBut.volume = 0;
     sMagic.volume = 0;
     sWin.volume = 0;
-  }
-}
-
-function playSound(sound) {
-  if (!soundEnabled || !sound) return;
-  
-  try {
-    sound.currentTime = 0;
-    sound.play().catch(e => {
-      console.log("Lỗi âm thanh, thử tải lại:", e);
-      sound.load();
-    });
-  } catch (e) {
-    console.log("Không thể phát âm thanh:", e);
   }
 }
 
@@ -2527,6 +2519,20 @@ function createSparkleEffect() {
         sparkle.parentNode.removeChild(sparkle);
       }
     }, 1000 + i * 100);
+  }
+}
+
+function playSound(sound) {
+  if (!soundEnabled || !sound) return;
+  
+  try {
+    sound.currentTime = 0;
+    sound.play().catch(e => {
+      console.log("Lỗi âm thanh, thử tải lại:", e);
+      sound.load();
+    });
+  } catch (e) {
+    console.log("Không thể phát âm thanh:", e);
   }
 }
 
@@ -2705,7 +2711,11 @@ function startGame(){
  initializeObjectPools();
  
  if (bgMusic) {
+   // Đảm bảo nhạc nền vẫn đang phát và đúng tốc độ
    bgMusic.playbackRate = 1.0;
+   if (bgMusic.paused && soundEnabled) {
+     bgMusic.play().catch(e => console.log("Lỗi phát nhạc nền:", e));
+   }
  }
  
  lastTime = performance.now();
@@ -2959,7 +2969,7 @@ function loop(timestamp = 0){
 function endGame(){
  run = false;
  playSound(sHit);
- stopBackgroundMusic();
+ // KHÔNG dừng nhạc nền ở đây để nhạc tiếp tục chạy qua màn hình game over
  
  document.getElementById('finalCoins').textContent = coin;
  document.getElementById('finalBaskets').textContent = basket;
