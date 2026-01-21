@@ -776,11 +776,14 @@ canvas{
   transform: scale(1.1);
 }
 
-/* TÊN ĐỐI TÁC */
+/* ====================
+   MÀU SẮC THEO THƯƠNG HIỆU CHO PARTNERSHIP
+   ==================== */
+
+/* TÊN ĐỐI TÁC - Màu sẽ được đặt theo từng đối tác */
 .partner-name {
   font-size: 12px;
   font-weight: bold;
-  color: #A50064;
   margin-bottom: 5px;
   text-align: center;
   line-height: 1.2;
@@ -790,31 +793,121 @@ canvas{
   justify-content: center;
 }
 
-/* TÊN HIGHLANDS LỚN HƠN */
-.partner-item.featured .partner-name {
-  font-size: 14px;
-  font-weight: 900;
-  color: #8B4513; /* Màu nâu đặc trưng của Highlands */
+/* Highlands Coffee - Màu nâu đặc trưng */
+.partner-item[data-index="0"] .partner-name {
+  color: #8B4513 !important;
   text-shadow: 0 1px 2px rgba(139, 69, 19, 0.2);
+}
+
+.partner-item[data-index="0"] .partner-offer {
+  color: #8B4513 !important;
+  background: rgba(139, 69, 19, 0.15) !important;
+  border: 1px solid rgba(139, 69, 19, 0.3) !important;
+}
+
+/* Grab - Màu xanh Grab */
+.partner-item[data-index="1"] .partner-name {
+  color: #00B14F !important;
+  text-shadow: 0 1px 2px rgba(0, 177, 79, 0.2);
+}
+
+.partner-item[data-index="1"] .partner-offer {
+  color: #00B14F !important;
+  background: rgba(0, 177, 79, 0.15) !important;
+  border: 1px solid rgba(0, 177, 79, 0.3) !important;
+}
+
+/* GS25 - Màu cam đặc trưng */
+.partner-item[data-index="2"] .partner-name {
+  color: #FF6B00 !important;
+  text-shadow: 0 1px 2px rgba(255, 107, 0, 0.2);
+}
+
+.partner-item[data-index="2"] .partner-offer {
+  color: #FF6B00 !important;
+  background: rgba(255, 107, 0, 0.15) !important;
+  border: 1px solid rgba(255, 107, 0, 0.3) !important;
+}
+
+/* CGV Cinema - Màu đỏ CGV */
+.partner-item[data-index="3"] .partner-name {
+  color: #E31937 !important;
+  text-shadow: 0 1px 2px rgba(227, 25, 55, 0.2);
+}
+
+.partner-item[data-index="3"] .partner-offer {
+  color: #E31937 !important;
+  background: rgba(227, 25, 55, 0.15) !important;
+  border: 1px solid rgba(227, 25, 55, 0.3) !important;
+}
+
+/* Starbucks - Màu xanh Starbucks */
+.partner-item[data-index="4"] .partner-name {
+  color: #00704A !important;
+  text-shadow: 0 1px 2px rgba(0, 112, 74, 0.2);
+}
+
+.partner-item[data-index="4"] .partner-offer {
+  color: #00704A !important;
+  background: rgba(0, 112, 74, 0.15) !important;
+  border: 1px solid rgba(0, 112, 74, 0.3) !important;
+}
+
+/* Beauty Box - Màu hồng */
+.partner-item[data-index="5"] .partner-name {
+  color: #FF69B4 !important;
+  text-shadow: 0 1px 2px rgba(255, 105, 180, 0.2);
+}
+
+.partner-item[data-index="5"] .partner-offer {
+  color: #FF69B4 !important;
+  background: rgba(255, 105, 180, 0.15) !important;
+  border: 1px solid rgba(255, 105, 180, 0.3) !important;
 }
 
 /* ƯU ĐÃI */
 .partner-offer {
   font-size: 11px;
   font-weight: 800;
-  color: #FF9100;
-  background: rgba(255, 145, 0, 0.1);
   padding: 4px 8px;
   border-radius: 10px;
   white-space: nowrap;
+  background: rgba(255, 145, 0, 0.1);
+  border: 1px solid rgba(255, 145, 0, 0.3);
 }
 
 /* ƯU ĐÃI HIGHLANDS */
 .partner-item.featured .partner-offer {
   font-size: 12px;
   padding: 6px 10px;
-  background: rgba(255, 145, 0, 0.2);
-  border: 1px solid rgba(255, 145, 0, 0.3);
+  background: rgba(139, 69, 19, 0.2) !important;
+  border: 1px solid rgba(139, 69, 19, 0.3) !important;
+  color: #8B4513 !important;
+}
+
+/* Hiệu ứng hover theo màu thương hiệu */
+.partner-item[data-index="0"]:hover {
+  border-color: #8B4513 !important;
+}
+
+.partner-item[data-index="1"]:hover {
+  border-color: #00B14F !important;
+}
+
+.partner-item[data-index="2"]:hover {
+  border-color: #FF6B00 !important;
+}
+
+.partner-item[data-index="3"]:hover {
+  border-color: #E31937 !important;
+}
+
+.partner-item[data-index="4"]:hover {
+  border-color: #00704A !important;
+}
+
+.partner-item[data-index="5"]:hover {
+  border-color: #FF69B4 !important;
 }
 
 /* NAVIGATION ARROWS CHO CUỘN */
@@ -1677,7 +1770,7 @@ document.addEventListener('contextmenu', function(e) {
 /* ===== PARTNERSHIP SCROLL IMPROVEMENTS ===== */
 let currentPartnerIndex = 0;
 let partnersPerView = 3;
-const totalPartners = 6; // Sửa: Đổi từ let sang const
+const totalPartners = 6;
 
 function initPartnershipScroll() {
   const partnersGrid = document.getElementById('partnersGrid');
@@ -1732,7 +1825,7 @@ function initPartnershipScroll() {
     } else if (width < 400) {
       partnersPerView = 3;
     } else {
-      partnersPerView = 3; // Giữ nguyên 3 cho desktop nhỏ
+      partnersPerView = 3;
     }
     
     // Cập nhật lại indicator nếu cần
@@ -1776,8 +1869,8 @@ function initPartnershipScroll() {
   }
   
   function scrollToIndex() {
-    const partnerWidth = 120; // Chiều rộng mỗi partner item
-    const gap = 15; // Khoảng cách giữa các item
+    const partnerWidth = 120;
+    const gap = 15;
     const scrollPosition = currentPartnerIndex * (partnerWidth + gap);
     
     partnersScroll.scrollTo({
@@ -1792,10 +1885,8 @@ function initPartnershipScroll() {
     
     if (Math.abs(diff) > swipeThreshold) {
       if (diff > 0) {
-        // Swipe left
         scrollRight();
       } else {
-        // Swipe right
         scrollLeft();
       }
     }
@@ -1805,7 +1896,6 @@ function initPartnershipScroll() {
     scrollLeftBtn.disabled = currentPartnerIndex === 0;
     scrollRightBtn.disabled = currentPartnerIndex >= totalPartners - partnersPerView;
     
-    // Thêm hiệu ứng visual cho nút disabled
     scrollLeftBtn.style.opacity = currentPartnerIndex === 0 ? '0.5' : '1';
     scrollRightBtn.style.opacity = currentPartnerIndex >= totalPartners - partnersPerView ? '0.5' : '1';
   }
@@ -1825,7 +1915,6 @@ function initPartnershipScroll() {
     updateScrollButtons();
   }
   
-  // Tự động cập nhật khi scroll
   partnersScroll.addEventListener('scroll', function() {
     const scrollLeft = partnersScroll.scrollLeft;
     const partnerWidth = 120;
@@ -1862,7 +1951,7 @@ function preloadPartnerLogos() {
   });
 }
 
-// Hiển thị chi tiết partner khi click - ĐÃ SỬA: HIỆN ẢNH LOGO THẬT
+// Hiển thị chi tiết partner khi click với màu thương hiệu
 function showPartnerDetails(index) {
   const partnerNames = [
     "Highlands Coffee", "Grab", "GS25", "CGV Cinema", "Starbucks", 
@@ -1885,7 +1974,7 @@ function showPartnerDetails(index) {
   
   playSound(sClick);
   
-  // Tạo popup chi tiết với ảnh logo thật
+  // Tạo popup chi tiết
   const popup = document.createElement('div');
   popup.style.position = 'fixed';
   popup.style.top = '0';
@@ -1899,11 +1988,6 @@ function showPartnerDetails(index) {
   popup.style.zIndex = '1000';
   popup.style.backdropFilter = 'blur(10px)';
   
-  const partnerColor = partnerColors[index];
-  const partnerName = partnerNames[index];
-  const partnerOffer = partnerOffers[index];
-  
-  // Tạo nội dung popup an toàn
   const popupContent = document.createElement('div');
   popupContent.style.background = 'white';
   popupContent.style.borderRadius = '25px';
@@ -1911,7 +1995,7 @@ function showPartnerDetails(index) {
   popupContent.style.maxWidth = '300px';
   popupContent.style.width = '90%';
   popupContent.style.textAlign = 'center';
-  popupContent.style.border = '4px solid ' + partnerColor;
+  popupContent.style.border = '4px solid ' + partnerColors[index];
   popupContent.style.boxShadow = '0 20px 50px rgba(0,0,0,0.5)';
   popupContent.style.position = 'relative';
   
@@ -1937,7 +2021,7 @@ function showPartnerDetails(index) {
   logoContainer.style.alignItems = 'center';
   logoContainer.style.justifyContent = 'center';
   logoContainer.style.background = 'white';
-  logoContainer.style.border = '3px solid ' + partnerColor;
+  logoContainer.style.border = '3px solid ' + partnerColors[index];
   logoContainer.style.padding = '5px';
   
   const logoImg = document.createElement('img');
@@ -1952,27 +2036,28 @@ function showPartnerDetails(index) {
     fallbackDiv.style.width = '100%';
     fallbackDiv.style.height = '100%';
     fallbackDiv.style.borderRadius = '50%';
-    fallbackDiv.style.background = partnerColor;
+    fallbackDiv.style.background = partnerColors[index];
     fallbackDiv.style.display = 'flex';
     fallbackDiv.style.alignItems = 'center';
     fallbackDiv.style.justifyContent = 'center';
     fallbackDiv.style.color = 'white';
     fallbackDiv.style.fontSize = '30px';
     fallbackDiv.style.fontWeight = 'bold';
-    fallbackDiv.textContent = partnerName.charAt(0);
+    fallbackDiv.textContent = partnerNames[index].charAt(0);
     logoContainer.innerHTML = '';
     logoContainer.appendChild(fallbackDiv);
   };
   
   logoContainer.appendChild(logoImg);
   
-  // Tên đối tác
+  // Tên đối tác với màu thương hiệu
   const nameHeading = document.createElement('h3');
-  nameHeading.textContent = partnerName;
-  nameHeading.style.color = partnerColor;
+  nameHeading.textContent = partnerNames[index];
+  nameHeading.style.color = partnerColors[index];
   nameHeading.style.margin = '0 0 10px 0';
+  nameHeading.style.fontWeight = 'bold';
   
-  // Ưu đãi
+  // Ưu đãi với màu thương hiệu
   const offerDiv = document.createElement('div');
   let offerText = '';
   if(index === 0) offerText = 'GIẢM 30K';
@@ -1983,19 +2068,21 @@ function showPartnerDetails(index) {
   else offerText = 'GIẢM 50K';
   
   offerDiv.textContent = offerText;
-  offerDiv.style.background = partnerColor + '20';
+  offerDiv.style.background = partnerColors[index] + '20';
+  offerDiv.style.color = partnerColors[index];
   offerDiv.style.padding = '15px';
   offerDiv.style.borderRadius = '15px';
   offerDiv.style.margin = '15px 0';
   offerDiv.style.fontWeight = 'bold';
-  offerDiv.style.color = partnerColor;
   offerDiv.style.fontSize = '20px';
+  offerDiv.style.border = '2px solid ' + partnerColors[index];
   
   // Mô tả
   const descP = document.createElement('p');
-  descP.textContent = partnerOffer;
+  descP.textContent = partnerOffers[index];
   descP.style.color = '#666';
   descP.style.margin = '15px 0';
+  descP.style.fontSize = '14px';
   
   // Hướng dẫn đóng
   const closeHint = document.createElement('small');
@@ -2003,6 +2090,7 @@ function showPartnerDetails(index) {
   closeHint.style.color = '#999';
   closeHint.style.display = 'block';
   closeHint.style.marginTop = '15px';
+  closeHint.style.fontSize = '12px';
   
   // Gắn các phần tử vào popup
   popupContent.appendChild(closeButton);
@@ -2037,7 +2125,6 @@ function showJourney(){
 function showInstruction(){
  document.getElementById('journey').style.display = 'none';
  document.getElementById('instruction').style.display = 'flex';
- // Bắt đầu nhạc nền khi vào màn hình hướng dẫn
  playBackgroundMusic();
 }
 
@@ -2058,8 +2145,8 @@ const voucherList = [
     brand: "HIGHLANDS COFFEE",
     value: "GIẢM 30K",
     desc: "Giảm 30K cho hóa đơn từ 100K",
-    color: "#8B4513", // Màu nâu cafe
-    type: "portrait", // Hình dọc
+    color: "#8B4513",
+    type: "portrait",
     expiry: "31/03/2026",
     sticker: "CAFE ☕"
   },
@@ -2071,8 +2158,8 @@ const voucherList = [
     brand: "GRAB",
     value: "GIẢM 50K",
     desc: "Giảm 50K cho chuyến xe Grab",
-    color: "#00B14F", // Màu xanh Grab
-    type: "landscape", // Hình ngang
+    color: "#00B14F",
+    type: "landscape",
     expiry: "31/03/2026",
     sticker: "XE 🚗"
   },
@@ -2084,8 +2171,8 @@ const voucherList = [
     brand: "GS25",
     value: "GIẢM 25k",
     desc: "Giảm 25k cho hóa đơn từ 80K",
-    color: "#FF6B00", // Màu cam GS25
-    type: "square", // Hình vuông
+    color: "#FF6B00",
+    type: "square",
     expiry: "31/03/2026",
     sticker: "TIỆM 🏪"
   },
@@ -2097,8 +2184,8 @@ const voucherList = [
     brand: "CGV CINEMA",
     value: "MUA 1 TẶNG 1",
     desc: "Mua 1 vé tặng 1 vé xem phim",
-    color: "#E31937", // Màu đỏ CGV
-    type: "landscape", // Hình ngang
+    color: "#E31937",
+    type: "landscape",
     expiry: "31/03/2026",
     sticker: "PHIM 🎬"
   },
@@ -2110,8 +2197,8 @@ const voucherList = [
     brand: "STARBUCKS",
     value: "GIẢM 50K",
     desc: "Giảm 50K cho hóa đơn từ 150K",
-    color: "#00704A", // Màu xanh Starbucks
-    type: "portrait", // Hình dọc
+    color: "#00704A",
+    type: "portrait",
     expiry: "31/03/2026",
     sticker: "VIP 🌟"
   },
@@ -2123,8 +2210,8 @@ const voucherList = [
     brand: "BEAUTY BOX",
     value: "GIẢM 50k",
     desc: "Giảm 50k cho sản phẩm làm đẹp 300k",
-    color: "#FF69B4", // Màu hồng
-    type: "square", // Hình vuông
+    color: "#FF69B4",
+    type: "square",
     expiry: "31/03/2026",
     sticker: "ĐẸP 💄"
   }
@@ -2142,13 +2229,11 @@ function preloadVoucherImages() {
     };
     img.onerror = () => {
       console.warn(`⚠ Không thể tải: ${voucher.image}`);
-      // Fallback image bằng SVG
       voucher.image = createFallbackSVG(voucher);
     };
   });
 }
 
-// Tạo hình SVG fallback cho voucher
 function createFallbackSVG(voucher) {
   const svg = `
     <svg width="300" height="220" viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
@@ -2169,13 +2254,11 @@ function createFallbackSVG(voucher) {
   return "data:image/svg+xml;base64," + btoa(svg);
 }
 
-// Hàm chọn voucher ngẫu nhiên
 function getRandomVoucher() {
   const randomIndex = Math.floor(Math.random() * voucherList.length);
   return voucherList[randomIndex];
 }
 
-// Hàm hiển thị voucher cho 7/7 chặng đường
 function showJourneyComplete() {
   const voucher = getRandomVoucher();
   const journeyComplete = document.getElementById('journeyComplete');
@@ -2186,7 +2269,6 @@ function showJourneyComplete() {
   const journeyVoucherBrand = document.getElementById('journeyVoucherBrand');
   const journeyVoucherValue = document.getElementById('journeyVoucherValue');
   
-  // Hiển thị hình ảnh voucher
   journeyVoucherImage.onload = function() {
     this.style.width = '100%';
     this.style.height = '100%';
@@ -2197,14 +2279,12 @@ function showJourneyComplete() {
   journeyVoucherImage.alt = voucher.name;
   journeyVoucherImage.className = 'journey-voucher-image';
   
-  // Hiển thị thông tin voucher
   journeyVoucherBrand.textContent = voucher.brand;
   journeyVoucherValue.textContent = voucher.value;
   journeyVoucherCode.textContent = voucher.code;
   journeyVoucherDesc.textContent = voucher.desc;
   journeyVoucherExpiry.textContent = `Hạn sử dụng: ${voucher.expiry}`;
   
-  // Thêm hiệu ứng màu
   journeyVoucherCode.style.background = `linear-gradient(135deg, ${voucher.color}20 0%, ${voucher.color}40 100%)`;
   journeyVoucherCode.style.borderColor = voucher.color;
   journeyVoucherCode.style.color = voucher.color;
@@ -2215,28 +2295,22 @@ function showJourneyComplete() {
   journeyVoucherBrand.style.color = voucher.color;
   journeyVoucherBrand.style.textShadow = `0 2px 10px ${voucher.color}40`;
   
-  // Thêm hiệu ứng ánh sáng
   journeyVoucherImage.style.animation = 'float 3s ease-in-out infinite';
   
-  // Thêm hiệu ứng shine cho giá trị voucher
   journeyVoucherValue.style.background = `linear-gradient(90deg, 
     ${voucher.color}00, ${voucher.color}, ${voucher.color}00, ${voucher.color}, ${voucher.color}00)`;
   journeyVoucherValue.style.backgroundSize = '200% 100%';
   journeyVoucherValue.style.animation = 'shine 3s linear infinite';
   
-  // Hiển thị popup
   journeyComplete.style.display = 'block';
   
-  // Phát âm thanh chiến thắng
   playSound(sWin);
   
-  // Thêm hiệu ứng lấp lánh
   createJourneySparkleEffect();
   
   console.log(`Đã hiển thị voucher cho 7/7 chặng đường: ${voucher.name}`);
 }
 
-// Hiệu ứng lấp lánh cho voucher
 function createJourneySparkleEffect() {
   const journeyComplete = document.getElementById('journeyComplete');
   const rect = journeyComplete.getBoundingClientRect();
@@ -2246,7 +2320,6 @@ function createJourneySparkleEffect() {
   const centerX = rect.left - wrapperRect.left + rect.width / 2;
   const centerY = rect.top - wrapperRect.top + rect.height / 2;
   
-  // Tạo 15 hạt lấp lánh
   for (let i = 0; i < 15; i++) {
     const sparkle = document.createElement('div');
     sparkle.style.position = 'absolute';
@@ -2261,7 +2334,6 @@ function createJourneySparkleEffect() {
     sparkle.style.animation = `sparkle 1.5s ease-out forwards`;
     sparkle.style.animationDelay = (i * 0.1) + 's';
     
-    // Random direction
     const angle = Math.random() * Math.PI * 2;
     const distance = 50 + Math.random() * 80;
     const endX = Math.cos(angle) * distance;
@@ -2272,7 +2344,6 @@ function createJourneySparkleEffect() {
     
     gameWrapper.appendChild(sparkle);
     
-    // Xóa sau khi animation kết thúc
     setTimeout(() => {
       if (sparkle.parentNode) {
         sparkle.parentNode.removeChild(sparkle);
@@ -2311,13 +2382,11 @@ const imagesToLoad = [roadImg, playerImg, coinImg,
                      obstacleTypes[0].img, obstacleTypes[1].img, obstacleTypes[2].img];
 
 /* ===== ÂM THANH ===== */
-// Nhạc nền
 const bgMusic = new Audio();
 bgMusic.src = "assets/background.mp3";
 bgMusic.loop = true;
 bgMusic.volume = 0.5;
 
-// Hiệu ứng âm thanh
 const sCoin = new Audio("assets/coin.mp3");
 const sBasket = new Audio("assets/basket.mp3");
 const sHit = new Audio("assets/hit.mp3");
@@ -2327,7 +2396,6 @@ const sBut = new Audio("assets/but.mp3");
 const sMagic = new Audio("assets/magic.mp3");
 const sWin = new Audio("assets/win.mp3");
 
-// Thiết lập volume
 sCoin.volume = 0.3;
 sBasket.volume = 0.4;
 sHit.volume = 0.5;
@@ -2337,15 +2405,12 @@ sBut.volume = 0.6;
 sMagic.volume = 0.5;
 sWin.volume = 0.6;
 
-// Biến kiểm soát âm thanh
 let soundEnabled = true;
 
-// Hàm phát nhạc nền
 function playBackgroundMusic() {
   if (soundEnabled && bgMusic) {
     bgMusic.play().catch(e => {
       console.log("Nhạc nền cần tương tác người dùng:", e);
-      // Thử lại khi người dùng click
       document.addEventListener('click', function playOnce() {
       bgMusic.play().catch(e => console.log("Vẫn không thể phát nhạc nền"));
         document.removeEventListener('click', playOnce);
@@ -2354,7 +2419,6 @@ function playBackgroundMusic() {
   }
 }
 
-// Hàm dừng nhạc nền
 function stopBackgroundMusic() {
   if (bgMusic) {
     bgMusic.pause();
@@ -2362,20 +2426,16 @@ function stopBackgroundMusic() {
   }
 }
 
-// Hàm bật/tắt âm thanh
 function toggleSound() {
   soundEnabled = !soundEnabled;
   
-  // Cập nhật icon
   const soundIcon = document.getElementById('soundIcon');
   soundIcon.textContent = soundEnabled ? '🔊' : '🔇';
   
-  // Phát âm thanh click khi bật/tắt
   if (soundEnabled) {
     playSound(sClick);
   }
   
-  // Áp dụng trạng thái âm thanh
   if (soundEnabled) {
     bgMusic.volume = 0.5;
     sCoin.volume = 0.3;
@@ -2387,7 +2447,6 @@ function toggleSound() {
     sMagic.volume = 0.5;
     sWin.volume = 0.6;
     
-    // Tiếp tục nhạc nền nếu đang trong game
     if (run) {
       playBackgroundMusic();
     }
@@ -2404,15 +2463,12 @@ function toggleSound() {
   }
 }
 
-// Hàm phát âm thanh an toàn
 function playSound(sound) {
   if (!soundEnabled || !sound) return;
   
   try {
-    // Nếu âm thanh đang phát, reset để phát lại
     sound.currentTime = 0;
     sound.play().catch(e => {
-      // Nếu lỗi, thử tải lại file
       console.log("Lỗi âm thanh, thử tải lại:", e);
       sound.load();
     });
@@ -2421,34 +2477,27 @@ function playSound(sound) {
   }
 }
 
-// Hàm phát âm thanh ông Bụt với hiệu ứng đặc biệt
 function playButSound() {
   if (!soundEnabled) return;
   
-  // Phát âm thanh ông Bụt
   playSound(sBut);
   
-  // Sau 0.5 giây, phát âm thanh phép thuật
   setTimeout(() => {
     playSound(sMagic);
   }, 500);
   
-  // Tạo hiệu ứng lấp lánh khi ông Bụt xuất hiện
   createSparkleEffect();
 }
 
-// Hàm tạo hiệu ứng lấp lánh
 function createSparkleEffect() {
   const butElement = document.getElementById('but');
   const butRect = butElement.getBoundingClientRect();
   const gameWrapper = document.getElementById('gameWrapper');
   const wrapperRect = gameWrapper.getBoundingClientRect();
   
-  // Vị trí ông Bụt
   const butX = butRect.left - wrapperRect.left + butRect.width / 2;
   const butY = butRect.top - wrapperRect.top;
   
-  // Tạo 10 hạt lấp lánh
   for (let i = 0; i < 10; i++) {
     const sparkle = document.createElement('div');
     sparkle.style.position = 'absolute';
@@ -2457,13 +2506,12 @@ function createSparkleEffect() {
     sparkle.style.background = 'radial-gradient(circle, #FFD700, #FF9100)';
     sparkle.style.borderRadius = '50%';
     sparkle.style.left = (butX - 5) + 'px';
-    sparkle.style.top = (butY + 50) + 'px'; // Dưới chân ông Bụt
+    sparkle.style.top = (butY + 50) + 'px';
     sparkle.style.zIndex = '14';
     sparkle.style.pointerEvents = 'none';
     sparkle.style.animation = `sparkle 1s ease-out forwards`;
     sparkle.style.animationDelay = (i * 0.1) + 's';
     
-    // Random direction
     const angle = Math.random() * Math.PI * 2;
     const distance = 30 + Math.random() * 50;
     const endX = Math.cos(angle) * distance;
@@ -2474,7 +2522,6 @@ function createSparkleEffect() {
     
     gameWrapper.appendChild(sparkle);
     
-    // Xóa sau khi animation kết thúc
     setTimeout(() => {
       if (sparkle.parentNode) {
         sparkle.parentNode.removeChild(sparkle);
@@ -2483,7 +2530,6 @@ function createSparkleEffect() {
   }
 }
 
-// Unlock audio trên mobile
 document.addEventListener('touchstart', function() {
   const silentAudio = new Audio();
   silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==';
@@ -2513,25 +2559,19 @@ playerImg.onload = () => {
  SH = playerImg.height;
 };
 
-/* ===== NHÂN VẬT LỚN HƠN ===== */
 const PLAYER_WIDTH = 55;
 const PLAYER_HEIGHT = 82;
 const PLAYER_OFFSET_X = PLAYER_WIDTH / 2;
 const PLAYER_OFFSET_Y = 60;
 
-/* ===== TỐI ƯU HIỆU SUẤT ===== */
-// Thêm biến để kiểm soát FPS
 let lastTime = 0;
 const targetFPS = 60;
 const frameInterval = 1000 / targetFPS;
 
-// Object pooling cho coins và obstacles để tái sử dụng
 const coinPool = [];
 const obstaclePool = [];
 
-// Tạo sẵn object pool
 function initializeObjectPools() {
-  // Tạo sẵn 20 coin objects
   for (let i = 0; i < 20; i++) {
     coinPool.push({
       lane: 0,
@@ -2543,7 +2583,6 @@ function initializeObjectPools() {
     });
   }
   
-  // Tạo sẵn 15 obstacle objects
   for (let i = 0; i < 15; i++) {
     obstaclePool.push({
       lane: 0,
@@ -2560,7 +2599,6 @@ function initializeObjectPools() {
   }
 }
 
-// Lấy coin từ pool
 function getCoinFromPool() {
   for (let i = 0; i < coinPool.length; i++) {
     if (!coinPool[i].active) {
@@ -2569,7 +2607,6 @@ function getCoinFromPool() {
     }
   }
   
-  // Nếu hết, tạo thêm
   const newCoin = {
     lane: 0,
     y: 0,
@@ -2582,7 +2619,6 @@ function getCoinFromPool() {
   return newCoin;
 }
 
-// Lấy obstacle từ pool
 function getObstacleFromPool() {
   for (let i = 0; i < obstaclePool.length; i++) {
     if (!obstaclePool[i].active) {
@@ -2591,7 +2627,6 @@ function getObstacleFromPool() {
     }
   }
   
-  // Nếu hết, tạo thêm
   const newObstacle = {
     lane: 0,
     y: 0,
@@ -2608,7 +2643,6 @@ function getObstacleFromPool() {
   return newObstacle;
 }
 
-// Hàm spawn coin tối ưu
 const spawnCoin = () => {
   const lane = Math.floor(Math.random() * 3);
   const coinObj = getCoinFromPool();
@@ -2623,7 +2657,6 @@ const spawnCoin = () => {
   coins.push(coinObj);
 };
 
-// Hàm spawn obstacle tối ưu
 const spawnObstacleWave = () => {
   const freeLane = Math.floor(Math.random() * 3);
   for(let l = 0; l < 3; l++) {
@@ -2647,36 +2680,30 @@ const spawnObstacleWave = () => {
   }
 };
 
-// Hàm kiểm tra và xóa vật thể không cần thiết
 function cleanupObjects() {
-  // Xóa coins đã ra khỏi màn hình và đánh dấu không active
   for (let i = coins.length - 1; i >= 0; i--) {
-    if (coins[i].y > 700) { // Ra khỏi màn hình
+    if (coins[i].y > 700) {
       coins[i].active = false;
       coins.splice(i, 1);
     }
   }
   
-  // Xóa obstacles đã ra khỏi màn hình
   for (let i = obstacles.length - 1; i >= 0; i--) {
-    if (obstacles[i].y > 700) { // Ra khỏi màn hình
+    if (obstacles[i].y > 700) {
       obstacles[i].active = false;
       obstacles.splice(i, 1);
     }
   }
 }
 
-/* ===== START GAME ===== */
 function startGame(){
  playSound(sClick);
  document.getElementById('instruction').style.display = 'none';
  run = true;
  lastMilestone = 0;
  
- // Khởi tạo object pools
  initializeObjectPools();
  
- // Tăng tốc độ nhạc nền khi bắt đầu game
  if (bgMusic) {
    bgMusic.playbackRate = 1.0;
  }
@@ -2685,11 +2712,10 @@ function startGame(){
  loop();
 }
 
-/* CONTROL - Tối ưu touch */
 let touchStartX = 0;
 let touchStartTime = 0;
-const TAP_THRESHOLD = 200; // ms
-const SWIPE_THRESHOLD = 50; // pixels
+const TAP_THRESHOLD = 200;
+const SWIPE_THRESHOLD = 50;
 
 canvas.addEventListener("touchstart", function(e) {
  e.preventDefault();
@@ -2712,16 +2738,12 @@ canvas.addEventListener("touchend", function(e) {
    const oldLane = player.lane;
    
    if (Math.abs(swipeDistance) > SWIPE_THRESHOLD) {
-     // Swipe rõ ràng
      if (swipeDistance > 0) {
-       // Swipe sang phải
        player.lane = Math.min(2, player.lane + 1);
      } else {
-       // Swipe sang trái
        player.lane = Math.max(0, player.lane - 1);
      }
    } else {
-     // Tap đơn giản
      const halfWidth = rect.width / 2;
      if (touchEndX < halfWidth) {
        player.lane = Math.max(0, player.lane - 1);
@@ -2730,18 +2752,15 @@ canvas.addEventListener("touchend", function(e) {
      }
    }
    
-   // Phát âm thanh khi chuyển lane
    if (oldLane !== player.lane) {
      playSound(sClick);
    }
  }
 });
 
-/* MAIN GAME LOOP - TỐI ƯU */
 function loop(timestamp = 0){
  if(!run) return;
  
- // Điều chỉnh FPS để game chạy mượt hơn
  const elapsed = timestamp - lastTime;
  
  if (elapsed < frameInterval) {
@@ -2755,11 +2774,9 @@ function loop(timestamp = 0){
  
  ctx.clearRect(0, 0, 360, 640);
  
- /* DRAW ROAD - Tối ưu bằng cách chỉ vẽ 1 lần */
  roadY += speed;
  if(roadY >= 640) roadY = 0;
  
- // Tạo gradient nền để giảm việc vẽ ảnh
  const gradient = ctx.createLinearGradient(0, 0, 0, 640);
  gradient.addColorStop(0, '#1a0033');
  gradient.addColorStop(0.5, '#330066');
@@ -2767,13 +2784,11 @@ function loop(timestamp = 0){
  ctx.fillStyle = gradient;
  ctx.fillRect(0, 0, 360, 640);
  
- // Vẽ road với hiệu ứng mờ
  ctx.globalAlpha = 0.8;
  ctx.drawImage(roadImg, 0, roadY - 640, 360, 640);
  ctx.drawImage(roadImg, 0, roadY, 360, 640);
  ctx.globalAlpha = 1.0;
  
- /* DRAW LANE MARKERS - Đơn giản hóa */
  ctx.strokeStyle = 'rgba(255, 215, 0, 0.2)';
  ctx.lineWidth = 1;
  for(let i = 0; i < lanes.length; i++) {
@@ -2787,12 +2802,10 @@ function loop(timestamp = 0){
   ctx.stroke();
  }
  
- /* DRAW PLAYER - Tối ưu animation */
  runTick++;
- if(runTick % 8 === 0) runFrame = (runFrame + 1) % RUN_FRAMES; // Giảm tốc độ animation
+ if(runTick % 8 === 0) runFrame = (runFrame + 1) % RUN_FRAMES;
  
  if(SW){
-  // Vẽ bóng đơn giản
   ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
   ctx.beginPath();
   ctx.ellipse(
@@ -2804,7 +2817,6 @@ function loop(timestamp = 0){
   );
   ctx.fill();
   
-  // Vẽ nhân vật với kích thước mới
   ctx.drawImage(
    playerImg,
    runFrame * SW, 0, SW, SH,
@@ -2815,12 +2827,11 @@ function loop(timestamp = 0){
   );
  }
  
- /* DRAW COINS - Tối ưu */
  for(let i = coins.length - 1; i >= 0; i--){
   const c = coins[i];
   c.y += speed;
-  c.angle += 0.08; // Giảm tốc độ xoay
-  c.pulse += 0.08; // Giảm tốc độ pulse
+  c.angle += 0.08;
+  c.pulse += 0.08;
   
   const pulseScale = 0.1 * Math.sin(c.pulse);
   
@@ -2829,7 +2840,6 @@ function loop(timestamp = 0){
   ctx.rotate(c.angle);
   ctx.scale(c.scale + pulseScale, c.scale + pulseScale);
   
-  // Giảm hiệu ứng shadow để tăng hiệu suất
   ctx.shadowColor = '#FFD700';
   ctx.shadowBlur = 10;
   ctx.drawImage(coinImg, -15, -15, 30, 30);
@@ -2839,22 +2849,19 @@ function loop(timestamp = 0){
   
   if(c.lane === player.lane && Math.abs(c.y - player.y) < collisionDistance){
    coins.splice(i, 1);
-   c.active = false; // Đánh dấu coin không active
+   c.active = false;
    coin++;
    document.getElementById('coinEl').innerText = coin;
    
    playSound(sCoin);
    
-   // THAY ĐỔI TỪ 50 XU XUỐNG 5 XU CHO MỖI GIỎ CÁ
-   const milestone = Math.floor(coin / 5); // Đã thay đổi từ 50 xuống 5
+   const milestone = Math.floor(coin / 5);
    if(milestone > basket){
     basket = milestone;
     document.getElementById('basketEl').innerText = basket;
     
-    // PHÁT ÂM THANH ÔNG BỤT KHI NHẬN GIỎ CÁ MỚI
     playButSound();
     
-    // Hiển thị ông Bụt
     const butElement = document.getElementById('but');
     butElement.classList.add('show');
     
@@ -2871,7 +2878,6 @@ function loop(timestamp = 0){
       }, 500);
     }, 2000);
     
-    // Hiển thị giỏ cá
     const basketElement = document.getElementById('basketDrop');
     basketElement.classList.add('show');
     
@@ -2882,33 +2888,28 @@ function loop(timestamp = 0){
     }, 1000);
    }
    
-   // Tăng tốc độ
    const oldSpeed = speed;
    speed = Math.min(baseSpeed + milestone * speedStep, maxSpeed);
    
-   // Phát âm thanh tăng tốc nếu có sự thay đổi tốc độ và milestone mới
    if (milestone > lastMilestone) {
      lastMilestone = milestone;
      playSound(sSpeedUp);
      
-     // Tăng tốc độ nhạc nền theo tốc độ game
      if (bgMusic) {
        const musicSpeed = 1.0 + (speed - baseSpeed) / (maxSpeed - baseSpeed) * 0.3;
        bgMusic.playbackRate = Math.min(musicSpeed, 1.3);
      }
    }
    
-   // THAY ĐỔI THANH PROGRESS TỪ 50 XU XUỐNG 5 XU
-   document.getElementById('progress').style.width = ((coin % 5) / 5 * 100) + "%"; // Đã thay đổi từ 50 xuống 5
+   document.getElementById('progress').style.width = ((coin % 5) / 5 * 100) + "%";
   }
  }
  
- /* DRAW OBSTACLES - Tối ưu */
  for(let i = obstacles.length - 1; i >= 0; i--){
   const o = obstacles[i];
   const t = obstacleTypes[o.type];
   o.y += speed;
-  o.phase += o.shakeSpeed * 0.8; // Giảm tốc độ rung
+  o.phase += o.shakeSpeed * 0.8;
   
   const shakeX = Math.sin(o.phase) * o.shakeIntensity;
   
@@ -2921,7 +2922,6 @@ function loop(timestamp = 0){
   ctx.scale(o.scale, o.scale);
   ctx.globalAlpha = blink;
   
-  // Giảm hiệu ứng shadow
   ctx.shadowColor = t.color;
   ctx.shadowBlur = 8;
   ctx.drawImage(t.img, -t.size/2, -t.size/2, t.size, t.size);
@@ -2935,13 +2935,11 @@ function loop(timestamp = 0){
   }
  }
  
- // Dọn dẹp vật thể không cần thiết
  cleanupObjects();
  
  coinTimer++; 
  obstacleTimer++;
  
- // Điều chỉnh spawn rate dựa trên tốc độ
  const coinSpawnRate = Math.max(15, 30 - Math.floor(speed));
  const obstacleSpawnRate = Math.max(50, 100 - Math.floor(speed * 5));
  
@@ -2993,13 +2991,11 @@ function endGame(){
   document.getElementById('over').style.display = 'flex';
   
   if(basket >= 3){
-   // Hiển thị voucher cho 7/7 chặng đường
    showJourneyComplete();
   }
  }, 1000);
 }
 
-/* SAVE SCORE */
 function saveScore(){
  const name = document.getElementById('playerName').value.trim() || "Người Chơi";
  let lb = JSON.parse(localStorage.getItem("leaderboard") || "[]");
@@ -3026,7 +3022,6 @@ function saveScore(){
  const rankList = document.getElementById('rankList');
  rankList.innerHTML = '';
  
- // Header
  const header = document.createElement('div');
  header.className = 'rank';
  header.style.background = 'rgba(255, 215, 0, 0.3)';
@@ -3038,7 +3033,6 @@ function saveScore(){
  `;
  rankList.appendChild(header);
  
- // Ranks
  lb.forEach((r, i) => {
   const rankDiv = document.createElement('div');
   rankDiv.className = `rank ${r.name === name && r.coin === coin ? 'you' : ''}`;
@@ -3057,7 +3051,6 @@ function saveScore(){
  });
 }
 
-// Thêm animation cho sparkle effect
 const style = document.createElement('style');
 style.textContent = `
 @keyframes sparkle {
